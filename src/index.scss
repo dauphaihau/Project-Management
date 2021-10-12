@@ -1,0 +1,115 @@
+#root {
+    > .ant-layout {
+        height: 100vh;
+    }
+
+.ant-layout-header {
+    .right-content {
+        > * {
+            display: inline-block;
+            margin-left: 1rem;
+        }
+    }
+}
+}
+
+#task-list {
+        overflow-y:auto;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+
+        > * {
+            padding: 0px 10px;
+        }
+        .task-col {
+            width: 300px;
+            padding:20px 10px;
+            margin:10px;
+            border-radius: 10px;
+            background-color: lightgrey;
+            .task-list-name {
+                font-size: .875rem;
+                font-weight: bold;
+            }
+            .MuiCardContent-root {
+                display:flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .MuiCardContent-root:last-child {
+                padding: 5px;
+            }
+        }
+    
+}
+
+.my-account {
+    > * {
+        width: 50%;
+    }
+}
+
+
+
+
+//1399 - 1200
+@media screen and (max-width: 1399px) {}
+
+
+//1199 - 992
+@media screen and (max-width: 1199px) {}
+
+
+//991 - 768
+@media screen and (max-width: 991px) {
+    .project-list tr .ant-table-cell:nth-child(3), .project-list tr .ant-table-cell:nth-child(4) {
+        display: none;
+    }
+}
+
+//767 - 576
+@media screen and (max-width: 767px) {
+    .my-account {
+        .left-content { 
+            display: none;
+        }
+        > * {
+            width: 100%;
+        }
+    }
+    
+    .ant-layout-has-sider {
+        > aside.ant-layout-sider-collapsed {
+            margin-left: -80px;
+        }
+    }
+
+    .ant-drawer-content-wrapper {
+        width: 100% !important;
+    }
+
+    .ant-layout-content {
+        padding: 0 !important;
+    }
+}
+
+//575 and below
+@media screen and (max-width: 575px) {
+    .project-list {
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap; 
+             
+            thead, tbody {
+                width: 100%;
+            }
+        }
+    } 
+
+    .ant-drawer-body {
+        padding: 0 !important;
+    }
+}
+
