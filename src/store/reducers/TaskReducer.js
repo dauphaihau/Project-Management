@@ -12,7 +12,49 @@ import {
 
 
 const initialState = {
-    taskDetailModal: {},
+    taskDetailModal: {
+        "priorityTask": {
+            "priorityId": 3,
+            "priority": "Low"
+        },
+        "taskTypeDetail": {
+            "id": 2,
+            "taskType": "new task"
+        },
+        "assigness": [
+            {
+                "id": 116,
+                "avatar": "https://ui-avatars.com/api/?name=Man xanh",
+                "name": "Man xanh",
+                "alias": "man-nguyen"
+            },
+            {
+                "id": 6,
+                "avatar": "https://ui-avatars.com/api/?name=sacacadadxxca",
+                "name": "sacacadadxxca",
+                "alias": "khai"
+            },
+            {
+                "id": 248,
+                "avatar": "https://ui-avatars.com/api/?name=thangaccacaaca",
+                "name": "thangaccacaaca",
+                "alias": "thang"
+            }
+        ],
+        "lstComment": [],
+        "taskId": 1280,
+        "taskName": "acaca",
+        "alias": "acaca",
+        "description": "<p>adada</p>",
+        "statusId": "3",
+        "originalEstimate": 24,
+        "timeTrackingSpent": 38,
+        "timeTrackingRemaining": 0,
+        "typeId": 2,
+        "priorityId": 3,
+        "projectId": 1452
+
+    },
     taskList: [
         {
             id: `list-1`,
@@ -54,10 +96,11 @@ export const TaskReducer = (state = initialState, action) => {
         }
         case CHANGE_TASK_MODAL: {
             const {name, value} = action;
+            console.log('state-task-detail-modal', state.taskDetailModal)
             return {...state, taskDetailModal: {...state.taskDetailModal, [name]: value}}
         }
         case CHANGE_ASSIGN : {
-            state.taskDetailModal.assigness = [...state.taskDetailModal.assigness, action.assigness]
+            state.taskDetailModal.assigness = [...state.taskDetailModal.assigness, action.userSelected]
             return {...state}
         }
         case REMOVE_USER_ASSIGN: {

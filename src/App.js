@@ -29,6 +29,7 @@ function App() {
                 <AdminTemplate exact path="/project/create" component={ProjectCreate}/>
                 <AdminTemplate exact path="/project/detail/:id" component={ProjectDetail}/>
                 <AdminTemplate exact path="/project/task/:id" component={ProjectTasks}/>
+
                 <AdminTemplate exact path="/users" component={UserList}/>
                 <AdminTemplate exact path="/profile" component={Profile}/>
 

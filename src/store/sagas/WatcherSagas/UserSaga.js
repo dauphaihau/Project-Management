@@ -166,7 +166,7 @@ function* editUserSaga(action) {
                 type: CLOSE_DRAWER
             })
         }
-        notifiFuntion('success', 'Edit user successfully')
+        notifiFuntion('success', 'Edit successfully')
 
         yield put({
             type: HIDE_LOADING

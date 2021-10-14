@@ -1,16 +1,16 @@
-import React, { Fragment, useState } from 'react'
+import React, {Fragment, useState} from 'react'
 import Icon from '@material-ui/core/Icon';
 import Textarea from 'react-textarea-autosize';
 import Card from "@material-ui/core/Card";
 import Button from '@material-ui/core/Button';
-import { ADD_LIST, ADD_CARD } from '../../store/types/Type';
-import { useDispatch } from 'react-redux';
+import {ADD_LIST, ADD_CARD} from '../../store/types/Type';
+import {useDispatch} from 'react-redux';
 
 export default function ActionButton(props) {
 
     const dispatch = useDispatch();
 
-    const [state,setState] = useState({
+    const [state, setState] = useState({
         formOpen: false,
         text: ''
     })
@@ -41,8 +41,8 @@ export default function ActionButton(props) {
 
     const handleAddList = () => {
         const text = state.text;
-        console.log('text',text);
-        if(text) {
+        console.log('text', text);
+        if (text) {
             dispatch({
                 type: ADD_LIST,
                 listTitle: text
@@ -57,13 +57,13 @@ export default function ActionButton(props) {
     const handleAddCard = () => {
         const taskId = props.taskId;
         const text = state.text;
-        console.log('text',text);
+        console.log('text', text);
         const card = {
             taskListId: taskId,
             cardId: 5,
             text: text
         }
-        if(text) {
+        if (text) {
             dispatch({
                 type: ADD_CARD,
                 card: {card}
@@ -94,18 +94,19 @@ export default function ActionButton(props) {
     }
 
     const renderAddButton = () => {
-        const { list } = props;
+        const {list} = props;
         const buttonText = list ? "Add another list" : "Add another task";
         const buttonTextOpacitiy = list ? 1 : 0.5;
         const buttonTextColor = list ? 'white' : 'inherit';
         const buttonTextBackground = list ? 'rgba(0,0,0,.15)' : 'inherit';
 
         return (
-            <div 
-            onClick={openForm}
-            style={{
-                ...styles.openFormButtonGroup,
-                opacity: buttonTextOpacitiy, color: buttonTextColor, backgroundColor: buttonTextBackground}}>
+            <div
+                onClick={openForm}
+                style={{
+                    ...styles.openFormButtonGroup,
+                    opacity: buttonTextOpacitiy, color: buttonTextColor, backgroundColor: buttonTextBackground
+                }}>
                 <Icon>add</Icon>
                 <p>{buttonText}</p>
             </div>
@@ -113,7 +114,7 @@ export default function ActionButton(props) {
     }
 
     const renderForm = () => {
-        const { list } = props;
+        const {list} = props;
         const placeHolder = list ? "Enter list title ..." : "Enter a title for this card ...";
 
         const buttonTitle = list ? "Add list" : "Add card";
@@ -124,9 +125,9 @@ export default function ActionButton(props) {
                 minWidth: 272,
                 padding: '6px 8px 2px'
             }}>
-                <Textarea 
-                    placeholder={placeHolder} 
-                    autoFocus 
+                <Textarea
+                    placeholder={placeHolder}
+                    autoFocus
                     //onBlur={closeForm}
                     value={state.text}
                     onChange={handleInputChange}
@@ -140,15 +141,16 @@ export default function ActionButton(props) {
                 />
             </Card>
             <div style={styles.formButtonGroup}>
-                <Button onClick={ list ? handleAddList : handleAddCard} variant="container" style={{color:"white", backgroundColor: "#5aac44"}}>{buttonTitle}{" "}</Button>
-                <Icon style={{ marginLeft: 8, cursor: "pointer" }}>close</Icon>
+                <Button onClick={list ? handleAddList : handleAddCard} variant="container"
+                        style={{color: "white", backgroundColor: "#5aac44"}}>{buttonTitle}{" "}</Button>
+                <Icon style={{marginLeft: 8, cursor: "pointer"}}>close</Icon>
             </div>
         </div>
     }
 
     return (
         <Fragment>
-        {state.formOpen ? renderForm() : renderAddButton()}
+            {state.formOpen ? renderForm() : renderAddButton()}
         </Fragment>
     )
 }

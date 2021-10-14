@@ -49,8 +49,7 @@ function Login(props) {
                     <p className='text-danger'>{errors.password}</p>
                 ) : null}
 
-                <Button className='mt-3' size='large' htmlType='submit'
-                        style={{backgroundColor: '#7583D9', color: '#fff'}}>Login</Button>
+                <Button className='mt-3' size='large' htmlType='submit' type='primary'>Login</Button>
 
                 <div className='social mt-4 my-3 text-center'>
                     <Button style={{backgroundColor: '#42609A', marginLeft: '44', color:'#fff'}} shape="circle" icon={<IconFont type="icon-facebook"/>} size={"large"}/>

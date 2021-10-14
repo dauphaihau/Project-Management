@@ -57,18 +57,16 @@ export default function ProjectList(props) {
 
     const searchRef = useRef(null)
 
-    const handleProjectDelete = (projectId) => {
-    };
-
-    const handleProjectUpdate = (projectId) => {
-    };
-
     const columns = [
         {
             title: "ID",
             dataIndex: "id",
             key: "id",
             // render: (record) => <a href="#">{record}</a>,
+            sorter: (item2, item1) => {
+                return item2.id - item1.id;
+            },
+            sortDirections: ['descend']
         },
         {
             title: "Project Name",
@@ -77,11 +75,27 @@ export default function ProjectList(props) {
             render: (text, record) => (
                 <a href={"/project/task/" + record.id}>{text}</a>
             ),
+            sorter: (item2, item1) => {
+                let projectName1 = item1.projectName.trim().toLowerCase();
+                let projectName2 = item2.projectName.trim().toLowerCase();
+                if (projectName2 < projectName1) {
+                    return -1
+                }
+                return 1
+            }
         },
         {
             title: "Category",
             dataIndex: "categoryName",
             key: "categoryName",
+            sorter: (item2, item1) => {
+                let categoryName1 = item1.categoryName?.trim().toLowerCase();
+                let categoryName2 = item2.categoryName?.trim().toLowerCase();
+                if (categoryName2 < categoryName1) {
+                    return -1
+                }
+                return 1
+            }
         },
         {
             title: "Creator",
@@ -92,6 +106,14 @@ export default function ProjectList(props) {
                   <Tag color="green">{records.name.toUpperCase()}</Tag>
                 </span>
             ),
+            sorter: (item2, item1) => {
+                let creator1 = item1.creator.name?.trim().toLowerCase();
+                let creator2 = item2.creator.name?.trim().toLowerCase();
+                if (creator2 < creator1) {
+                    return -1
+                }
+                return 1
+            }
         },
         {
             title: "Members",
@@ -123,7 +145,6 @@ export default function ProjectList(props) {
                     <Popconfirm
                         title="Are you sure to delete this project?"
                         onConfirm={() => {
-                            console.log('record', record);
                             dispatch({
                                 type: DELETE_PROJECT_SAGA,
                                 idProject: record.id
@@ -190,7 +211,7 @@ export default function ProjectList(props) {
 
     const renderActionButtons = () => {
         return (
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div className="d-flex justify-content-between align-items-center mb-2">
                 <Button
                     type="primary"
                     onClick={() => {
@@ -211,19 +232,6 @@ export default function ProjectList(props) {
                             keyWord: keyWord
                         })
                     }} enterButton/>
-                    {/*<Form.Item name="searchProject">*/}
-                    {/*    <Input placeholder="Search project"/>*/}
-                    {/*</Form.Item>*/}
-                    {/*<Form.Item>*/}
-                    {/*    <Tooltip title="search">*/}
-                    {/*        <Button*/}
-                    {/*            type="primary"*/}
-                    {/*            shape="circle"*/}
-                    {/*            icon={<SearchOutlined/>}*/}
-                    {/*            size="large"*/}
-                    {/*        />*/}
-                    {/*    </Tooltip>*/}
-                    {/*</Form.Item>*/}
                 </Form>
             </div>
         );
@@ -285,11 +293,11 @@ export default function ProjectList(props) {
                                         {member.name[0].toUpperCase()}
                                     </Avatar>
                                 </Tooltip>
-
                             </Popover>
                         );
                     })}
                 </Avatar.Group>
+
                 <Popover placement="top" title={'Add user'} trigger="click" content={() => {
                     return <AutoComplete
                         style={{width: '100%'}}
@@ -302,9 +310,6 @@ export default function ProjectList(props) {
                             setValueLable(text)
                         }}
                         onSelect={(valueSelect, option) => {
-
-                            // console.log('option', option)
-                            // console.log('valueSelect', valueSelect)
                             setValueLable(option.label)
                             dispatch({
                                 type: ADD_USER_SAGA,
