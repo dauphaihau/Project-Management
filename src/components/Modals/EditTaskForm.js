@@ -21,22 +21,23 @@ import * as Yup from "yup";
 import {Editor} from '@tinymce/tinymce-react';
 import makeAnimated from 'react-select/animated';
 import reactHtmlParse from 'react-html-parser'
-import {Form, Input, InputNumber, Select} from "antd";
+import {
+    Form, Input, InputNumber,
+    Select
+} from "antd";
 import {AiOutlinePlus} from 'react-icons/ai'
 import {CloseOutlined, PlusOutlined} from "@ant-design/icons";
+import {
+    FormControl, InputLabel, MenuItem, TextField,
+    // Select
+} from "@material-ui/core";
 
-const {Option} = Select;
+// const {Option} = Select;
 
 function EditTaskForm(props) {
 
     // const [componentSize, setComponentSize] = useState('default');
     const animatedComponents = makeAnimated();
-    // const editorRef = useRef(null);
-    // const log = () => {
-    //     if (editorRef.current) {
-    //         console.log(editorRef.current.getContent());
-    //     }
-    // }
 
     const {taskDetailModal} = useSelector(state => state.TaskReducer);
     const {arrStatus} = useSelector(state => state.StatusReducer);
@@ -51,69 +52,18 @@ function EditTaskForm(props) {
 
     const dispatch = useDispatch();
 
-    // console.log('task-detail-modal', taskDetailModal)
-    console.log('detail-project', detailProject)
-
     useEffect(() => {
-        // dispatch({
-        //     type: SET_SUBMIT_CONTENT,
-        //     submitFn: handleSubmit
-        // })
+        dispatch({type: GET_ALL_STATUS_SAGA})
+        dispatch({type: GET_ALL_PRIORITY_SAGA,})
+        dispatch({type: GET_ALL_TASK_TYPE_SAGA})
         dispatch({
-            type: GET_ALL_STATUS_SAGA
+            type: GET_USER_SAGA,
+            idProject: props.projectId
         })
-        dispatch({
-            type: GET_ALL_PRIORITY_SAGA,
-            // id: 0
-        })
-        dispatch({
-            type: GET_ALL_TASK_TYPE_SAGA
-        })
-        // dispatch({
-        //     type: GET_USER_SAGA,
-            //idProject : props.projectId
-        // })
 
         // setFieldValue('projectId', parseInt(props.projectId))
     }, [])
 
-
-    // const formik = useFormik({
-    //     enableReinitialize: true,
-    //     initialValues: {
-    //         taskId: taskDetailModal.taskId,
-    //         taskName: taskDetailModal.taskName,
-    //         statusId: taskDetailModal.statusId,
-    //         priorityId: taskDetailModal.priorityId,
-    //         typeId: taskDetailModal.typeId,
-    //         // listUserAsign: [],
-    //         listUserAsign: taskDetailModal.assigness[0],
-    //         // assigness: taskDetailModal.assigness,
-    //         originalEstimate: taskDetailModal.originalEstimate,
-    //         timeTrackingSpent: 0,
-    //         timeTrackingRemaining: 0,
-    //         description: '',
-    //         projectId: 0
-    //     },
-    //     validationSchema: Yup.object({
-    //         // id: Yup.string().required('Tài khoản không được bỏ trống').min(6, 'Tài khoản ít nhất phải 6 ký tự').max(32, 'Tài khoản không được quá 32 ký tự'),
-    //         // passWord: Yup.string().required('Mật khẩu không được để trống').min(6, 'Mật khẩu ít nhất phải 6 ký tự').max(32, 'Mật khẩu không được quá 32 ký tự'),
-    //         // email: Yup.string().required('Email không được để trống').email('Email không hợp lệ'),
-    //         // name: Yup.string().required('Họ tên không được để trống').matches(/^[A-Z a-z]+$/, 'Tên không được chứa số !'),
-    //         // phoneNumber: Yup.string().required('Số điện thoại không được để trống').matches(/^[0-9]*$/, 'Số điện thoại không được chứa chữ').min(9, 'Số điện thoại ít nhất phải 9 số').max(12, 'Số điện thoại không được quá 12 số'),
-    //     }),
-    //     onSubmit: (newData) => {
-    //         console.log('new-data', newData)
-    //         dispatch({
-    //             type: UPDATE_STATUS_TASK_SAGA,
-    //             taskUpdateStatus: newData
-    //         })
-    //     }
-    // })
-    // const handleEditorChange = (content, editor) => {
-    //     formik.setFieldValue('description', content)
-    //     // console.log(props)
-    // }
 
     const options = []
     // const handleAddUser = (selectedOptions) => {
@@ -134,11 +84,6 @@ function EditTaskForm(props) {
     //     //console.log('options',options);
     // }
 
-    const handleDropdownChange = (e) => {
-        //console.log(e.target.name,e.target.value);
-        // setFieldValue(e.target.name, parseInt(e.target.value));
-    }
-
     const renderDescription = () => {
         const jsxDescription = reactHtmlParse(taskDetailModal.description);
         return <div>
@@ -147,7 +92,7 @@ function EditTaskForm(props) {
                         name='description'
                         initialValue={taskDetailModal.description}
                         init={{
-                            height: 500,
+                            height: 300,
                             menubar: false,
                             plugins: [
                                 "advlist autolink lists link image charmap print preview anchor",
@@ -217,10 +162,14 @@ function EditTaskForm(props) {
             </div>
             <div className='row'>
                 <div className='col-6'>
-                    <input className='form-control' name='timeTrackingSpent' onChange={handleChange}/>
+                    <input className='form-control' name='timeTrackingSpent'
+                           onChange={handleChange}
+                    />
                 </div>
                 <div className='col-6'>
-                    <input className='form-control' name='timeTrackingSpent' onChange={handleChange}/>
+                    <input className='form-control' name='timeTrackingSpent'
+                           onChange={handleChange}
+                    />
                 </div>
             </div>
         </div>
@@ -229,7 +178,6 @@ function EditTaskForm(props) {
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        console.log('eeeee', e)
         dispatch({
             type: HANDLE_CHANGE_POST_API_SAGA,
             actionType: CHANGE_TASK_MODAL,
@@ -253,11 +201,11 @@ function EditTaskForm(props) {
                             <p className="font-weight-bold">Task Id: {taskDetailModal.taskId}</p>
                         </div>
                         <h1 className="font-weight-bold">{taskDetailModal.taskName}</h1>
-                        {/*<input*/}
-                        {/*    onChange={handleChange}*/}
-                        {/*    className="form-control"*/}
-                        {/*    name="taskName"*/}
-                        {/*/>*/}
+                        <input
+                            onChange={handleChange}
+                            className="form-control"
+                            name="taskName"
+                        />
                     </div>
                     <div className="form-group">
                         <p className="font-weight-bold">Description</p>
@@ -332,8 +280,25 @@ function EditTaskForm(props) {
                     </div>
                 </div>
                 <div className="col-4">
+                    {/*<div className="form-group">*/}
+                    {/*    <TextField fullWidth select variant="outlined"*/}
+                    {/*               name='statusId' color='primary' label='Status'*/}
+                    {/*               value={taskDetailModal.statusId}*/}
+                    {/*               onChange={(e) => {*/}
+
+                    {/*                   formik.setFieldValue('statusId', e.target.value)*/}
+                    {/*               }}*/}
+                    {/*    >*/}
+                    {/*        {arrStatus.map((status, index) => {*/}
+                    {/*            return <MenuItem key={index} value={status.statusId}>*/}
+                    {/*                {status.statusName}*/}
+                    {/*            </MenuItem>*/}
+                    {/*        })}*/}
+                    {/*    </TextField>*/}
+                    {/*</div>*/}
+
                     <Form.Item label='Status'>
-                        <select class="custom-select" className="custom-select" name="statusId"
+                        <select class="custom-select" name="statusId"
                             // options={handleChange}
                                 onChange={handleChange}
                                 value={taskDetailModal.statusId}
@@ -349,8 +314,7 @@ function EditTaskForm(props) {
                         <div style={{display: 'flex', flexWrap: 'wrap'}}>
                             {
                                 taskDetailModal.assigness.map((user, index) => {
-                                    return <div key={index} style={{display: 'flex', marginBottom: 7}}
-                                                className='item' >
+                                    return <div key={index} style={{display: 'flex', marginBottom: 7}} className='item'>
                                         <div className='avatar'>
                                             <img src={user?.avatar} alt={user?.avatar}/>
                                         </div>
@@ -379,7 +343,7 @@ function EditTaskForm(props) {
                                         }).map((mem, index) => {
                                             return {value: mem.userId, label: mem.name}
                                         })}
-                                        optionFilterProp='label'
+                                        optionFilterProp='label' // when select -> occur label
                                         style={{width: '100%'}}
                                         value='+ Add more'
                                         onSelect={(value) => {
@@ -400,8 +364,11 @@ function EditTaskForm(props) {
                         </div>
                     </Form.Item>
                     <Form.Item label='Priority'>
-                        <select class="custom-select" name="priorityId" value={taskDetailModal.priorityId}
+                        <select class="custom-select"
+                                name="priorityId"
                                 onChange={handleChange}
+                                value={taskDetailModal.priorityId}
+
                             // onSelect={handleChangeAnt}
                             //     fieldNames='priorityId'
                             // options={handleChangeAnt}
@@ -414,8 +381,10 @@ function EditTaskForm(props) {
                         </select>
                     </Form.Item>
                     <Form.Item label='Task Type'>
-                        <select class="custom-select" name="typeId" value={taskDetailModal.typeId}
-                                onChange={handleChange}>
+                        <select class="custom-select"
+                                name="typeId" value={taskDetailModal.typeId}
+                                onChange={handleChange}
+                        >
                             {arrTaskType.map((taskType, index) => {
                                 return <option key={index} value={taskType.id}>
                                     {taskType.taskType}
@@ -423,34 +392,16 @@ function EditTaskForm(props) {
                             })}
                         </select>
                     </Form.Item>
-
                     <Form.Item label='ORIGINAL ESTIMATE (HOURS)'>
-                        <InputNumber
+                        <input
                             onChange={handleChange}
                             name="originalEstimate"
                             value={taskDetailModal.originalEstimate}
                         />
                     </Form.Item>
-
-
                     <Form.Item label='TIME TRACKING'>
                         {renderTimeTracking()}
-                        {/*<input*/}
-                        {/*    type="number"*/}
-                        {/*    onChange={handleChange}*/}
-                        {/*    className="form-control"*/}
-                        {/*    name="timeTrackingSpent"*/}
-                        {/*/>*/}
                     </Form.Item>
-                    {/*<div className="form-group">*/}
-                    {/*    <h6 className="font-weight-bold">Time Remains</h6>*/}
-                    {/*    <input*/}
-                    {/*        type="number"*/}
-                    {/*        onChange={handleChange}*/}
-                    {/*        className="form-control"*/}
-                    {/*        name="timeTrackingRemaining"*/}
-                    {/*    />*/}
-                    {/*</div>*/}
                     <div style={{color: '#929398'}}>Created at 18 hours ago</div>
                     <div style={{color: '#929398'}}>Updated at 4 hours ago</div>
                 </div>
@@ -458,44 +409,5 @@ function EditTaskForm(props) {
         </Form>
     );
 }
-
-
-// const EditTaskFormByFormik = withFormik({
-//     enableReinitialize: true,
-//     mapPropsToValues: (props) => ({
-//         taskId: '',
-//         taskName: '',
-//         statusId: '',
-//         priorityId: 0,
-//         typeId: 0,
-//         listUserAsign: [],
-//         originalEstimate: 0,
-//         timeTrackingSpent: 0,
-//         timeTrackingRemaining: 0,
-//         description: '',
-//         projectId: 0
-//     }),
-//     validationSchema: Yup.object().shape({
-//         // taskName: Yup.string().required('Task name is required'),
-//         // statusId: Yup.string().required('Status is required'),
-//         // priorityId: Yup.string().required('Priority is required'),
-//         // typeId: Yup.string().required('Type is required'),
-//         // userAssign: Yup.string().required('User assign is required'),
-//         // originalEstimate: Yup.string().required('Original estimate is required'),
-//         // timeTrackingSpent: Yup.string().required('Time tracking spent is required'),
-//         // timeTrackingRemaining: Yup.string().required('Time tracking remains is required'),
-//         // description: Yup.string().required('Description is required'),
-//     }),
-//     handleSubmit: (values, {props, setSubmitting}) => {
-//         //console.log('task create props', JSON.stringify(values))
-//         props.dispatch({
-//             type: UPDATE_STATUS_TASK_SAGA,
-//             taskUpdateStatus: values
-//         })
-//     },
-//     displayName: 'EditTaskForm'
-// })(EditTaskForm)
-//
-// export default connect()(EditTaskFormByFormik);
 
 export default EditTaskForm

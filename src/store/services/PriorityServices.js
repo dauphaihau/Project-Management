@@ -6,8 +6,8 @@ export class PriorityServices extends baseService {
         super();
     }
 
-    getAllPriority = (id) => {
-        return this.get(`Priority/getAll?id=${id}`)
+    getAllPriority = () => {
+        return this.get(`Priority/getAll`)
     }
 }
 

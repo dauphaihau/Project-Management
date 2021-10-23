@@ -13,7 +13,7 @@ export default function TaskCard(props) {
     const taskDetail = props.taskDetail;
     const index = props.index;
 
-    console.log('task-detail', taskDetail)
+    // console.log('task-detail', taskDetail)
 
     const styles = {
         container: {

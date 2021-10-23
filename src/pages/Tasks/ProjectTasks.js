@@ -10,6 +10,8 @@ export default function ProjectTasks() {
     const {detailProject} = useSelector(state => state.ProjectReducer);
     const dispatch = useDispatch();
 
+    console.log('detail-project', detailProject)
+
     useEffect(() => {
         dispatch({
             type: GET_DETAIL_PROJECT_SAGA,
@@ -21,7 +23,7 @@ export default function ProjectTasks() {
         <div>
             <h3 style={{marginLeft: 26}}>Task list: {id}</h3>
             <div className="container-fluid">
-                <TaskList projectId={id} lstTask={detailProject?.lstTask}/>
+                <TaskList projectId={id} lstTask={detailProject.lstTask}/>
             </div>
         </div>
     )

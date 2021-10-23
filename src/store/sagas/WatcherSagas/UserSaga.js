@@ -33,7 +33,7 @@ function* registerSaga(action) {
 
         yield delay(500)
         const {data, status} = yield call(() => userServices.register(action.dataRegister))
-        console.log('data',data)
+        console.log('data', data)
 
         if (data.statusCode === STATUS_CODE.SUCCESS) {
             yield put({
@@ -108,7 +108,7 @@ export function* WatcherLogin() {
 
 // ---------------- get user ( user management )
 function* getUserSaga(action) {
-    
+
     let {keyWord} = action
     try {
         const {data, status} = yield call(() => userServices.getUser(keyWord))
@@ -130,7 +130,7 @@ export function* WatcherGetUser() {
 // ---------------- add user
 function* addUserSaga(action) {
 
-    console.log('action',action)
+    console.log('action', action)
     try {
         yield call(() => userServices.addUserProject(action.userProject))
         yield put({
@@ -139,7 +139,7 @@ function* addUserSaga(action) {
     } catch (error) {
         console.log('error', error.statusCode)
         if (error.statusCode === 403) {
-          alert('User is unthorization!')
+            alert('User is unthorization!')
         }
         alert('User already exists in the project!')
     }
@@ -216,13 +216,10 @@ export function* WatcherDeleteUserFromProject() {
     yield takeLatest(DELETE_USER_FROM_PROJECT_SAGA, deleteUserFromProjectSaga)
 }
 
-// ---------------- get user by project id
-function* getUserByProjectIdSaga(action) {
-
-    const {idProject} = action;
-
+// ---------------- get user by project id ( users in project )
+function* getUserByProjectIdSaga({projectId}) {
     try {
-        const {data, status} = yield call(() => userServices.getUserByProjectId(idProject))
+        const {data, status} = yield call(() => userServices.getUserByProjectId(projectId))
         if (status === STATUS_CODE.SUCCESS) {
             yield put({
                 type: GET_USER_BY_PROJECT_ID,
@@ -230,7 +227,7 @@ function* getUserByProjectIdSaga(action) {
             })
         }
     } catch (error) {
-        console.log(error);
+        console.log({error});
         console.log(error.response?.data)
         if (error.response?.data.statusCode === STATUS_CODE.NOT_FOUND) {
             yield put({

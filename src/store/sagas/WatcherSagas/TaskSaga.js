@@ -24,6 +24,7 @@ function* createTaskSaga(action) {
         // }
 
         console.log({result})
+        alert('success')
         yield put({type: CLOSE_DRAWER})
 
         // window.location.href = `/project/task/${action.projectId}`
@@ -33,9 +34,10 @@ function* createTaskSaga(action) {
         //     projectId: action.projectId
         // })
 
-        history.push(`/project/task/${action.taskObj.projectId}`)
+        // history.push(`/project/task/${action.taskObj.projectId}`)
 
     } catch (error) {
+        console.log({error})
         if (error.response.status === 403) {
             // alert(error.response.data.message)
             alert('you are not authorized to create tasks')
@@ -90,11 +92,11 @@ export function* WatcherUpdateStatusTask() {
 
 // ------------------------ handle change post api
 export function* handleChangePostApiSaga(action) {
-    // console.log('action', action)
+    console.log('action', action)
     // invoke action to change taskDetailModal
-    const {name, value} = action;
     switch (action.actionType) {
         case CHANGE_TASK_MODAL: {
+            const {name, value} = action;
             yield put({
                 type: CHANGE_TASK_MODAL,
                 name,
@@ -127,25 +129,26 @@ export function* handleChangePostApiSaga(action) {
     console.log('taskDetailModal after change', taskDetailModal)
 
     // convert data to API's data require
-    const listUserAssign = taskDetailModal.assigness?.map((user, index) => {
+    const listUserAsign = taskDetailModal.assigness?.map((user, index) => {
         return user.id
     })
 
-    const taskUpdateApi = {...taskDetailModal, listUserAssign}
+    taskDetailModal = {...taskDetailModal, listUserAsign: listUserAsign}
+    console.log('task-detail-modalll', taskDetailModal)
 
     try {
-        const {data, status} = yield call(() => taskServices.updateTask(taskUpdateApi))
+        const {status} = yield call(() => taskServices.updateTask(taskDetailModal))
 
         if (status === STATUS_CODE.SUCCESS) {
             // refresh page
             yield put({
-                type: GET_DETAIL_PROJECT,
-                projectId: taskUpdateApi.projectId
+                type: GET_DETAIL_PROJECT_SAGA,
+                projectId: taskDetailModal.projectId
             })
-            yield put({
-                type: GET_TASK_DETAIL_SAGA,
-                taskId: taskUpdateApi.taskId
-            })
+            // yield put({
+            //     type: GET_TASK_DETAIL_SAGA,
+            //     taskId: taskUpdateApi.taskId
+            // })
         }
     } catch (e) {
         console.log(e.response?.data)

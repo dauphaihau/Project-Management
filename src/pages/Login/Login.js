@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Input} from "antd";
-import {UserOutlined,GoogleOutlined, LockOutlined, TwitterOutlined , createFromIconfontCN} from '@ant-design/icons';
+import {UserOutlined, GoogleOutlined, LockOutlined, TwitterOutlined, createFromIconfontCN} from '@ant-design/icons';
 import {withFormik} from "formik";
 import * as yup from 'yup';
 import {connect} from "react-redux";
@@ -14,7 +14,6 @@ const IconFont = createFromIconfontCN({
 function Login(props) {
 
     if (localStorage.getItem('accessToken')) {
-        // alert('you are logged in')
         return <Redirect to='/'/>
     }
 
@@ -23,7 +22,7 @@ function Login(props) {
         errors,
         handleChange,
         handleBlur,
-        handleSubmit,
+        handleSubmit
     } = props;
 
     return (
@@ -52,11 +51,14 @@ function Login(props) {
                 <Button className='mt-3' size='large' htmlType='submit' type='primary'>Login</Button>
 
                 <div className='social mt-4 my-3 text-center'>
-                    <Button style={{backgroundColor: '#42609A', marginLeft: '44', color:'#fff'}} shape="circle" icon={<IconFont type="icon-facebook"/>} size={"large"}/>
+                    <Button style={{backgroundColor: '#42609A', marginLeft: '44', color: '#fff'}} shape="circle"
+                            icon={<IconFont type="icon-facebook"/>} size={"large"}/>
                     <Button type="primary ml-3" shape="circle" icon={<TwitterOutlined/>} size={"large"}/>
-                    <Button style={{backgroundColor: 'rgb(216, 78, 63)', color: '#fff'}} type=" ml-3" shape="circle" icon={<GoogleOutlined />} size={"large"}/>
+                    <Button style={{backgroundColor: 'rgb(216, 78, 63)', color: '#fff'}} type=" ml-3" shape="circle"
+                            icon={<GoogleOutlined/>} size={"large"}/>
                 </div>
-                <p className='text-center mt-3'>Don’t have an account? <a className='font-weight-bold' href={'/register'}>Create Account</a></p>
+                <p className='text-center mt-3'>Don’t have an account? <a className='font-weight-bold'
+                                                                          href={'/register'}>Create Account</a></p>
             </div>
         </form>
     );

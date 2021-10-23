@@ -22,8 +22,15 @@ import {
 function* getAllProjectSaga(action) {
     let {keyWord} = action
     try {
+        yield put({
+            type: DISPLAY_LOADING
+        })
+        yield delay(600)
         const {data, status} = yield call(() => projectServices.getAllProject(keyWord))
         if (status === STATUS_CODE.SUCCESS) {
+            yield put({
+                type: HIDE_LOADING
+            })
             yield put({
                 type: GET_ALL_PROJECT,
                 listProject: data.content

@@ -74,11 +74,11 @@ export default function TaskList(props) {
                                 visible={state.modal2Visible}
                                 onOk={() => setModal2Visible(false)}
                                 onCancel={() => setModal2Visible(false)}
-                                width={1200}
+                                width={1000}
                                 footer={null}
                             >
                                 <EditTaskForm
-                                    // projectId={props.projectId} taskId={taskDetail.taskId}
+                                    projectId={props.projectId} taskId={taskDetail.taskId}
                                 />
                             </Modal>
                         </>
@@ -147,12 +147,12 @@ export default function TaskList(props) {
             {/*<Modal/>*/}
             {/*<DragDropContext onDragEnd={onDragEnd}>*/}
 
-                <div>
-                    <div id="task-list">
-                        {renderTaskList()}
-                        {/*<ActionButton list/>*/}
-                    </div>
+            <div>
+                <div id="task-list">
+                    {renderTaskList()}
+                    {/*<ActionButton list/>*/}
                 </div>
+            </div>
             {/*</DragDropContext>*/}
         </Fragment>
 

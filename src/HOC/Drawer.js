@@ -25,7 +25,7 @@ function DrawerModal(props) {
             >
                 {ComponentContentDrawer}
                 <div className='form-group'>
-                    <button onClick={callBackSubmit} type='submit' className='btn-success btn ml-3 mt-3'>Submit</button>
+                    <Button onClick={callBackSubmit} size='large' type='primary' htmlType='submit' className='btn-success btn ml-3 mt-3'>Submit</Button>
                 </div>
             </Drawer>
         </>

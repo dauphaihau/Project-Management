@@ -44,10 +44,6 @@ export const AdminTemplate = (props) => {
                 return (
                     <Fragment>
                         <Layout>
-                            {/*<Sider trigger={null} collapsible collapsed={state.collapsed}*/}
-                            {/*       // style={{padding: '.5rem 0'}}*/}
-                            {/*       className="site-layout-background"*/}
-                            {/*>*/}
                             <Sider width={200} className="site-layout-background"
                                    trigger={null}
                                    collapsible
