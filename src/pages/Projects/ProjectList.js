@@ -244,8 +244,8 @@ export default function ProjectList(props) {
                 <Avatar.Group
                     maxCount={2}
                     maxStyle={{
-                        color: "#f56a00",
-                        backgroundColor: "#fde3cf",
+                        color: "#4091f7",
+                        backgroundColor: "#cfe4fd",
                     }}
                 >
                     {members.map((member, index) => {
@@ -289,7 +289,7 @@ export default function ProjectList(props) {
                                 <Tooltip
                                     // title={member.name}
                                     key={index} placement="top">
-                                    <Avatar style={{backgroundColor: "#f56a00",}}>
+                                    <Avatar style={{backgroundColor: "#3a87f7",}}>
                                         {member.name[0].toUpperCase()}
                                     </Avatar>
                                 </Tooltip>

@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {useParams} from "react-router-dom";
-// import {DragDropContext, Droppable} from "react-beautiful-dnd"
 import TaskList from './TaskList'
 import {GET_DETAIL_PROJECT_SAGA} from '../../store/types/Type';
 
@@ -9,8 +8,6 @@ export default function ProjectTasks() {
     let {id} = useParams();
     const {detailProject} = useSelector(state => state.ProjectReducer);
     const dispatch = useDispatch();
-
-    console.log('detail-project', detailProject)
 
     useEffect(() => {
         dispatch({
@@ -21,9 +18,9 @@ export default function ProjectTasks() {
 
     return (
         <div>
-            <h3 style={{marginLeft: 26}}>Task list: {id}</h3>
+            <h3 style={{marginLeft: 26}}>Project: {id}</h3>
             <div className="container-fluid">
-                <TaskList projectId={id} lstTask={detailProject.lstTask}/>
+                <TaskList projectId={id} lstTask={detailProject.lstTask} member={detailProject.members}/>
             </div>
         </div>
     )

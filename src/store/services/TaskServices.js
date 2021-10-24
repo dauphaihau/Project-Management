@@ -14,12 +14,16 @@ export class TaskServices extends baseService {
         return this.get(`Project/getTaskDetail?taskId=${taskId}`)
     }
 
-    updateStatusTask = (taskUpdate) => {
-      return this.post(`Project/updateTask`,taskUpdate)
+    updateStatusTask = (task) => {
+      return this.put(`Project/updateStatus`,task)
     }
 
     updateTask = (taskUpdate) => {
         return this.post(`Project/updateTask`,taskUpdate)
+    }
+
+    removeTask = (idTask) => {
+        return this.delete(`Project/removeTask?taskId=${idTask}`)
     }
 }
 

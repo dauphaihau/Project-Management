@@ -9,15 +9,14 @@ import {statusServices} from "../../services/StatusServices";
 function* getAllStatusSaga() {
     console.log('get all stats');
     try {
-        const {data, status} = yield call(() => statusServices.getAllStatus())
+        const {data} = yield call(() => statusServices.getAllStatus())
         console.log('status',data);
         yield put({
             type: GET_ALL_STATUS,
             arrStatus: data.content
         })
     } catch (error) {
-        console.log('error',error);
-        console.log(error.response?.data);
+        console.log({error})
     }
 }
 

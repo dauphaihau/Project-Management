@@ -41,96 +41,94 @@ export const AdminTemplate = (props) => {
         <Route
             path={props.path}
             render={() => {
-                return (
-                    <Fragment>
-                        <Layout>
-                            <Sider width={200} className="site-layout-background"
-                                   trigger={null}
-                                   collapsible
-                                   breakpoint="lg"
-                                   collapsedWidth="0"
-                                   onBreakpoint={broken => {
-                                       console.log(broken);
-                                   }}
-                                   onCollapse={(collapsed, type) => {
-                                       console.log(collapsed, type);
-                                   }}
+                return <Fragment>
+                    <Layout>
+                        <Sider width={200} className="site-layout-background"
+                               // trigger={null}
+                               // collapsible
+                               breakpoint="lg"
+                               collapsedWidth="0"
+                               onBreakpoint={broken => {
+                                   console.log(broken);
+                               }}
+                               onCollapse={(collapsed, type) => {
+                                   console.log(collapsed, type);
+                               }}
+                        >
+                            <Menu
+                                mode="inline"
+                                defaultSelectedKeys={['1']}
+                                defaultOpenKeys={['1']}
+                                style={{height: '100%', borderRight: 0}}
                             >
-                                <Menu
-                                    mode="inline"
-                                    defaultSelectedKeys={['1']}
-                                    defaultOpenKeys={['1']}
-                                    style={{height: '100%', borderRight: 0}}
-                                >
-                                    <Menu.Item key="1" icon={<ProjectOutlined/>}>
-                                        <NavLink to='/projects'>Projects</NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="2" icon={<UsergroupAddOutlined/>}>
-                                        <NavLink to="/users">
-                                            User Management
-                                        </NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="3" icon={<UserOutlined/>}>
-                                        <NavLink to="/profile">
-                                            My profile
-                                        </NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="5" icon={<PoweroffOutlined/>}
-                                               onClick={() => {
-                                                   localStorage.clear();
-                                                   window.location.href = '/login'
-                                               }}>
-                                        Đăng xuất
-                                    </Menu.Item>
-                                </Menu>
+                                <Menu.Item key="1" icon={<ProjectOutlined/>}>
+                                    <NavLink to='/projects'>Projects</NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="2" icon={<UsergroupAddOutlined/>}>
+                                    <NavLink to="/users">
+                                        User Management
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="3" icon={<UserOutlined/>}>
+                                    <NavLink to="/profile">
+                                        My profile
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="5" icon={<PoweroffOutlined/>}
+                                           onClick={() => {
+                                               localStorage.clear();
+                                               window.location.href = '/login'
+                                           }}>
+                                    Đăng xuất
+                                </Menu.Item>
+                            </Menu>
 
-                            </Sider>
-                            <Layout className="site-layout">
-                                {/*<Header*/}
-                                {/*    className="site-layout-background d-flex align-items-center justify-content-between"*/}
-                                {/*    style={{padding: '0 1rem', backgroundColor: 'white'}}*/}
-                                {/*>*/}
-                                {/*    <div className="left-content">*/}
-                                {/*        {React.createElement(*/}
-                                {/*            state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,*/}
-                                {/*            {*/}
-                                {/*                className: "trigger left-content",*/}
-                                {/*                onClick: toggle,*/}
-                                {/*                style: {color: "#fff", fontSize: "20px"},*/}
-                                {/*            }*/}
-                                {/*        )}*/}
-                                {/*    </div>*/}
-                                {/*    <div className="right-content">*/}
-                                {/*        /!*<div className="notification">*!/*/}
-                                {/*        /!*    <NotificationOutlined style={{color: "#fff", fontSize: "20px"}}/>*!/*/}
-                                {/*        /!*</div>*!/*/}
-                                {/*        <div className="logo text-center">*/}
+                        </Sider>
+                        <Layout className="site-layout">
+                            {/*<Header*/}
+                            {/*    className="site-layout-background d-flex align-items-center justify-content-between"*/}
+                            {/*    style={{padding: '0 1rem', backgroundColor: 'white'}}*/}
+                            {/*>*/}
+                            {/*    <div className="left-content">*/}
+                            {/*        {React.createElement(*/}
+                            {/*            state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,*/}
+                            {/*            {*/}
+                            {/*                className: "trigger left-content",*/}
+                            {/*                onClick: toggle,*/}
+                            {/*                style: {color: "#fff", fontSize: "20px"},*/}
+                            {/*            }*/}
+                            {/*        )}*/}
+                            {/*    </div>*/}
+                            {/*    <div className="right-content">*/}
+                            {/*        /!*<div className="notification">*!/*/}
+                            {/*        /!*    <NotificationOutlined style={{color: "#fff", fontSize: "20px"}}/>*!/*/}
+                            {/*        /!*</div>*!/*/}
+                            {/*        <div className="logo text-center">*/}
 
-                                {/*            <img*/}
-                                {/*                className="m-2"*/}
-                                {/*                width={50}*/}
-                                {/*                height={50}*/}
-                                {/*                style={{borderRadius: "50%"}}*/}
-                                {/*                src="https://picsum.photos/200/200"*/}
-                                {/*                alt="..."*/}
-                                {/*            />*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*</Header>*/}
-                                <Content
-                                    className="site-layout-background"
-                                    style={{
-                                        margin: "24px 16px",
-                                        padding: 24,
-                                        minHeight: 280,
-                                    }}
-                                >
-                                    {renderLayout(props)}
-                                </Content>
-                            </Layout>
+                            {/*            <img*/}
+                            {/*                className="m-2"*/}
+                            {/*                width={50}*/}
+                            {/*                height={50}*/}
+                            {/*                style={{borderRadius: "50%"}}*/}
+                            {/*                src="https://picsum.photos/200/200"*/}
+                            {/*                alt="..."*/}
+                            {/*            />*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</Header>*/}
+                            <Content
+                                className="site-layout-background"
+                                style={{
+                                    margin: "24px 16px",
+                                    padding: 24,
+                                    minHeight: 280,
+                                }}
+                            >
+                                {renderLayout(props)}
+                            </Content>
                         </Layout>
-                    </Fragment>
-                );
+                    </Layout>
+                </Fragment>
             }}
         />
     );

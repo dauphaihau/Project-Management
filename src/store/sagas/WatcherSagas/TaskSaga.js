@@ -1,6 +1,6 @@
 import {call, put, select} from "redux-saga/effects";
 import {taskServices} from "../../services/TaskServices";
-import {takeLatest} from "redux-saga/effects";
+import {takeLatest, takeEvery} from "redux-saga/effects";
 import {
     CHANGE_ASSIGN,
     CHANGE_TASK_MODAL, CLOSE_DRAWER,
@@ -8,50 +8,13 @@ import {
     GET_DETAIL_PROJECT_SAGA,
     GET_TASK_DETAIL,
     GET_TASK_DETAIL_SAGA,
-    HANDLE_CHANGE_POST_API_SAGA, REMOVE_USER_ASSIGN, UPDATE_STATUS_TASK_SAGA
+    HANDLE_CHANGE_POST_API_SAGA, REMOVE_TASK_SAGA, REMOVE_USER_ASSIGN, UPDATE_STATUS_TASK_SAGA
 } from "../../types/Type";
 import {history, STATUS_CODE} from "../../../util/settings";
-
-// ---------------------- create task
-function* createTaskSaga(action) {
-
-    console.log('action', action)
-    try {
-        console.log('create task values', action.taskObj);
-        const result = yield call(() => taskServices.createTask(action.taskObj))
-        // if (status === STATUS_CODE.SUCCESS) {
-        //     console.log(data);
-        // }
-
-        console.log({result})
-        alert('success')
-        yield put({type: CLOSE_DRAWER})
-
-        // window.location.href = `/project/task/${action.projectId}`
-
-        // yield put({
-        //     type: GET_DETAIL_PROJECT_SAGA,
-        //     projectId: action.projectId
-        // })
-
-        // history.push(`/project/task/${action.taskObj.projectId}`)
-
-    } catch (error) {
-        console.log({error})
-        if (error.response.status === 403) {
-            // alert(error.response.data.message)
-            alert('you are not authorized to create tasks')
-        }
-    }
-}
-
-export function* WatcherCreateTask() {
-    yield takeLatest(CREATE_TASK_SAGA, createTaskSaga)
-}
+import {notifiFuntion} from "../../../util/Notification";
 
 // ---------------------- get task detail
-function* getTaskDetailSaga(action) {
-    const {taskId} = action
+function* getTaskDetailSaga({taskId}) {
     try {
         const {data, status} = yield call(() => taskServices.getTaskDetail(taskId))
         yield put({
@@ -64,23 +27,80 @@ function* getTaskDetailSaga(action) {
 }
 
 export function* WatcherGetTaskDetail() {
-    yield takeLatest(GET_TASK_DETAIL_SAGA, getTaskDetailSaga)
+    yield takeEvery(GET_TASK_DETAIL_SAGA, getTaskDetailSaga)
 }
 
-// ------------------------ update status task
-function* updateStatusTaskSaga(action) {
+// ---------------------- create task
+function* createTaskSaga({ taskObj }) {
 
-    const {taskUpdateStatus} = action
+    console.log('taskObj', taskObj)
     try {
-        const {data, status} = yield call(() => taskServices.updateStatusTask(taskUpdateStatus))
+        const result = yield call(() => taskServices.createTask(taskObj))
+        // if (status === STATUS_CODE.SUCCESS) {
+        //     console.log(data);
+        // }
+
+        console.log({result})
+        alert('success')
+
+        yield put({type: CLOSE_DRAWER})
+        yield put({
+            type: GET_DETAIL_PROJECT_SAGA,
+            projectId: taskObj.projectId
+        })
+
+    } catch (error) {
+        console.log({error})
+        if (error.response.status === 403) {
+            alert('you are not authorized to create tasks')
+        }
+    }
+}
+
+export function* WatcherCreateTask() {
+    yield takeLatest(CREATE_TASK_SAGA, createTaskSaga)
+}
+
+
+function* removeTaskSaga({taskId, projectId}) {
+    try {
+        yield call(() => taskServices.removeTask(taskId))
+        yield put({
+            type: GET_DETAIL_PROJECT_SAGA,
+            projectId: projectId
+        })
+        notifiFuntion('success', 'delete project successfully')
+    } catch (error) {
+        if (error.response.status === 403) {
+            alert('you are not authorized to delete tasks')
+        }
+    }
+}
+
+export function* WatcherRemoveTask() {
+    yield takeLatest(REMOVE_TASK_SAGA, removeTaskSaga)
+}
+
+
+// ------------------------ update status task
+function* updateStatusTaskSaga({taskUpdateStatus}) {
+
+    console.log('task-update-status', taskUpdateStatus)
+
+    try {
+        const {status} = yield call(() => taskServices.updateStatusTask(taskUpdateStatus))
         if (status === STATUS_CODE.SUCCESS) {
             yield put({
                 type: GET_DETAIL_PROJECT,
                 projectId: taskUpdateStatus.projectId
             })
+            yield put({
+                type: GET_TASK_DETAIL_SAGA,
+                taskId: taskUpdateStatus.taskId
+            })
         }
     } catch (error) {
-        console.log('error', error)
+        console.log({error})
         console.log('error', error.response?.data)
     }
 }

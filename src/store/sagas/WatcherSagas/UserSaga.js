@@ -112,7 +112,6 @@ function* getUserSaga(action) {
     let {keyWord} = action
     try {
         const {data, status} = yield call(() => userServices.getUser(keyWord))
-        console.log('data', data)
         yield put({
             type: GET_USER,
             listUser: data.content

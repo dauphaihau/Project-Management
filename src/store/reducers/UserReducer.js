@@ -1,8 +1,7 @@
-import {EMAIL_EXIST, USER_LOGIN} from "../../util/settings";
+import {USER_LOGIN} from "../../util/settings";
 import {
     EDIT_USER,
     GET_USER,
-    GET_USER_BY_KEYWORD,
     GET_USER_BY_PROJECT_ID,
     LOGIN,
 } from "../types/Type";

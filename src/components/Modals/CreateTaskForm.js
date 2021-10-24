@@ -15,7 +15,7 @@ import {
 import {withFormik} from "formik";
 import * as Yup from "yup";
 import {Editor} from '@tinymce/tinymce-react';
-import SelectLinhTinh from 'react-select'
+import SelectReact from 'react-select'
 import makeAnimated from 'react-select/animated';
 import {
     // Slider,
@@ -115,7 +115,10 @@ function CreateTaskForm(props) {
                 <div className="col-6">
                     <div className="form-group">
                         <p className="font-weight-bold">Assignees</p>
-                        <SelectLinhTinh
+                        <SelectReact
+                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            menuPortalTarget={document.body}
+                            placeholder={<div>Select Users</div>}
                             onChange={handleAddUser}
                             name="userAssign"
                             closeMenuOnSelect={false}

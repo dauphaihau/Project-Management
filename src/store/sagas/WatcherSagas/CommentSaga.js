@@ -8,32 +8,34 @@ import {
 import {commentServices} from "../../services/CommentServices";
 
 // ----------------- get all Comment
-function* getAllCommentSaga(action) {
+function* getAllCommentSaga({idTask}) {
+    console.log('id-task', idTask)
     try {
-        const {data, status} = yield call(() => commentServices.getAllComment(action.id))
+        const {data} = yield call(() => commentServices.getAllComment(idTask))
         yield put({
             type: GET_ALL_COMMENT,
-            dataComment: data
+            dataComment: data.content
         })
     } catch (error) {
-        console.log(error);
+        console.log({error});
     }
-
 }
 
-export function* WatcherGetAllProject() {
+export function* WatcherGetAllComment() {
     yield takeEvery(GET_ALL_COMMENT_SAGA, getAllCommentSaga)
 }
 
 // ----------------- insert Comment
-function* insertCommentSaga(action) {
+function* insertCommentSaga({infoComment}) {
+    console.log('info-comment', infoComment)
     try {
-        const {data, status} = yield call(() => commentServices.insertComment(action))
-        yield put({
-            type: GET_ALL_COMMENT_SAGA
-        })
+        yield call(() => commentServices.insertComment(infoComment))
+        // yield put({
+        //     type: GET_ALL_COMMENT_SAGA,
+        //     idTask: infoComment.idTask
+        // })
     } catch (error) {
-        console.log(error);
+        console.log({error});
     }
 }
 
@@ -42,15 +44,16 @@ export function* WatcherInsertComment() {
 }
 
 // ------------------ update comment
-function* updateCommentSaga(action) {
-    const {id, content} = action;
+function* updateCommentSaga({infoComment}) {
+    console.log('info-comment', infoComment)
     try {
-        const {data, status} = yield call(() => commentServices.updateComment(id, content))
-        yield put({
-            type: GET_ALL_COMMENT_SAGA
-        })
+        const {data, status} = yield call(() => commentServices.updateComment(infoComment))
+        // yield put({
+        //     type: GET_ALL_COMMENT_SAGA
+        // })
+        // alert('success')
     } catch (error) {
-        console.log(error);
+        console.log({error});
     }
 }
 
@@ -60,17 +63,19 @@ export function* WatcherUpdateComment() {
 
 
 // ------------------ del comment
-function* deleteCommentSaga(action) {
+function* deleteCommentSaga({idComment}) {
+
+    console.log('id-comment', idComment)
     try {
-        const {data, status} = yield call(() => commentServices.deleteComment(action.id))
-        yield put({
-            type: GET_ALL_COMMENT_SAGA
-        })
+        const {status} = yield call(() => commentServices.deleteComment(idComment))
+        // yield put({
+        //     type: GET_ALL_COMMENT_SAGA
+        // })
     } catch (error) {
-        console.log(error);
+        console.log({error});
     }
 }
 
 export function* WatcherDeleteComment() {
-    yield takeLatest(DELETE_COMMENT_SAGA, deleteCommentSaga)
+    yield takeEvery(DELETE_COMMENT_SAGA, deleteCommentSaga)
 }

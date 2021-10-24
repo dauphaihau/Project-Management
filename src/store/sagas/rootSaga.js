@@ -32,13 +32,13 @@ export function *rootSaga() {
 
         TaskSaga.WatcherGetTaskDetail(),
         TaskSaga.WatcherCreateTask(),
+        TaskSaga.WatcherRemoveTask(),
         TaskSaga.WatcherUpdateStatusTask(), // update status task
         TaskSaga.WatcherHandleChangePostApi(), // update all task
 
-        CommentSaga.WatcherGetAllProject(),
+        CommentSaga.WatcherGetAllComment(),
         CommentSaga.WatcherDeleteComment(),
         CommentSaga.WatcherInsertComment(),
         CommentSaga.WatcherUpdateComment(),
-
     ])
 } 
