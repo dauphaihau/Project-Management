@@ -63,7 +63,7 @@ export const AdminTemplate = (props) => {
                                 </Menu.Item>
                                 <Menu.Item key="2" icon={<UsergroupAddOutlined/>}>
                                     <NavLink to="/users">
-                                        User Management
+                                        Users
                                     </NavLink>
                                 </Menu.Item>
                                 <Menu.Item key="3" icon={<UserOutlined/>}>
@@ -76,7 +76,7 @@ export const AdminTemplate = (props) => {
                                                localStorage.clear();
                                                window.location.href = '/login'
                                            }}>
-                                    Đăng xuất
+                                    Logout
                                 </Menu.Item>
                             </Menu>
 
