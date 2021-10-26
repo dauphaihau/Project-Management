@@ -1,9 +1,9 @@
 import {baseService} from "./baseServices";
 
 export class UserServices extends baseService {
-    constructor() {
-        super();
-    }
+    // constructor() {
+    //     super();
+    // }
 
     assignUserTask = (userTask) => {
         return this.post(`Project/assignUserTask`, userTask)

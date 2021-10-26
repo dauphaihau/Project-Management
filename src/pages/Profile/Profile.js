@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Form, InputNumber, Radio, Input, Button} from 'antd';
+import {Form, InputNumber,  Input, Button} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {EDIT_USER_SAGA} from "../../store/types/Type";
 

@@ -47,7 +47,7 @@ export function* WatcherInsertComment() {
 function* updateCommentSaga({infoComment}) {
     console.log('info-comment', infoComment)
     try {
-        const {data, status} = yield call(() => commentServices.updateComment(infoComment))
+        yield call(() => commentServices.updateComment(infoComment))
         // yield put({
         //     type: GET_ALL_COMMENT_SAGA
         // })
@@ -58,7 +58,7 @@ function* updateCommentSaga({infoComment}) {
 }
 
 export function* WatcherUpdateComment() {
-    yield takeEvery(UPDATE_COMMENT_SAGA, updateCommentSaga)
+    yield takeLatest(UPDATE_COMMENT_SAGA, updateCommentSaga)
 }
 
 
@@ -67,7 +67,7 @@ function* deleteCommentSaga({idComment}) {
 
     console.log('id-comment', idComment)
     try {
-        const {status} = yield call(() => commentServices.deleteComment(idComment))
+        yield call(() => commentServices.deleteComment(idComment))
         // yield put({
         //     type: GET_ALL_COMMENT_SAGA
         // })
@@ -77,5 +77,5 @@ function* deleteCommentSaga({idComment}) {
 }
 
 export function* WatcherDeleteComment() {
-    yield takeEvery(DELETE_COMMENT_SAGA, deleteCommentSaga)
+    yield takeLatest(DELETE_COMMENT_SAGA, deleteCommentSaga)
 }

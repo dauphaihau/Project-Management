@@ -2,7 +2,6 @@ import {
     EDIT_PROJECT,
     GET_ALL_PROJECT,
     GET_DETAIL_PROJECT,
-    GET_PROJECT_BY_KEYWORD,
     GET_PROJECT_CATEGORY,
 } from "../types/Type";
 

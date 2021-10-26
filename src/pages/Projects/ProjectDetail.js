@@ -1,12 +1,10 @@
 import { useParams } from "react-router-dom";
-import React, { useRef, useState, useEffect } from "react";
+import React, {  useEffect } from "react";
 import { Form, Input, Select, Button } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
-import { CREATE_PROJECT_SAGA, GET_DETAIL_PROJECT_SAGA } from "../../store/types/Type";
-import { update } from "immutable";
+import { GET_DETAIL_PROJECT_SAGA } from "../../store/types/Type";
 
 export default function ProjectDetail() {
   let { id } = useParams();
@@ -55,23 +53,23 @@ export default function ProjectDetail() {
   };
   
 
-  const renderCategoryList = () => {
-
-    return (
-      <Form.Item
-        name="category"
-        label="Category"
-        rules={[{ required: true, message: 'Please select a category!' }]}
-      >
-        <Select defaultValue={detailProject.projectCategory?.id} placeholder="Select a category" >
-          <Option value="1">Test</Option>
-          <Option value="2">Test2</Option>
-          <Option value="3">Test3</Option>
-        </Select>
-      </Form.Item>
-    );
-  };
-
+  // const renderCategoryList = () => {
+  //
+  //   return (
+  //     <Form.Item
+  //       name="category"
+  //       label="Category"
+  //       rules={[{ required: true, message: 'Please select a category!' }]}
+  //     >
+  //       <Select defaultValue={detailProject.projectCategory?.id} placeholder="Select a category" >
+  //         <Option value="1">Test</Option>
+  //         <Option value="2">Test2</Option>
+  //         <Option value="3">Test3</Option>
+  //       </Select>
+  //     </Form.Item>
+  //   );
+  // };
+  //
   return (
     <div>
       <h3>Edit project: {id}</h3>

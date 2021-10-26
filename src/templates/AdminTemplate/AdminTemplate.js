@@ -76,7 +76,7 @@ export const AdminTemplate = (props) => {
                                                localStorage.clear();
                                                window.location.href = '/login'
                                            }}>
-                                    Logout
+                                    Log out
                                 </Menu.Item>
                             </Menu>
 

@@ -110,6 +110,7 @@ export function* WatcherUpdateStatusTask() {
 export function* handleChangePostApiSaga(action) {
     console.log('action', action)
     // invoke action to change taskDetailModal
+    // eslint-disable-next-line default-case
     switch (action.actionType) {
         case CHANGE_TASK_MODAL: {
             const {name, value} = action;

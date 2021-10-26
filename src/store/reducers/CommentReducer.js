@@ -1,4 +1,4 @@
-import {GET_ALL_COMMENT, GET_ALL_COMMENT_SAGA, GET_ALL_PROJECT} from "../types/Type";
+import {GET_ALL_COMMENT} from "../types/Type";
 
 const initialState = {
     dataComment: []

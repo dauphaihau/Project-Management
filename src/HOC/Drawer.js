@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Drawer, Form, Button, Col, Row, Input, Select, DatePicker, Space} from 'antd';
+import React from 'react';
+import {Drawer, Button, Space} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
-import {CLOSE_DRAWER, OPEN_DRAWER} from "../store/types/Type";
+import {CLOSE_DRAWER} from "../store/types/Type";
 
 
 function DrawerModal(props) {

@@ -141,7 +141,7 @@ export const TaskReducer = (state = initialState, action) => {
                 droppableIdEnd,
                 droppableIndexStart,
                 droppableIndexEnd,
-                draggableId,
+                // draggableId,
                 type
             } = action.sortItem;
             const newState = {...state};

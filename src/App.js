@@ -4,7 +4,7 @@ import Login from './pages/Login/Login';
 import {UserTemplate} from './templates/UserTemplate/UserTemplate';
 import Register from './pages/Register/Register';
 import {AdminTemplate} from './templates/AdminTemplate/AdminTemplate';
-import Dashboard from './pages/Dashboard/Dashboard';
+// import Dashboard from './pages/Dashboard/Dashboard';
 import ProjectList from './pages/Projects/ProjectList';
 import ProjectDetail from './pages/Projects/ProjectDetail';
 import ProjectTasks from './pages/Tasks/ProjectTasks';
