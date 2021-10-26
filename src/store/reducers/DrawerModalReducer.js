@@ -1,13 +1,10 @@
 import {
     CLOSE_DRAWER,
     OPEN_DRAWER,
-    OPEN_FORM_CREATE_USER,
-    OPEN_FORM_EDIT_USER,
     OPEN_FORM_CREATE_PROJECT,
     OPEN_FORM_EDIT_PROJECT,
     SET_SUBMIT_CONTENT,
-    OPEN_FORM_EDIT_TASK,
-    OPEN_FORM_CREATE_TASK,
+    OPEN_FORM_EDIT_TASK, OPEN_FORM_CREATE_TASK,
 } from "../types/Type";
 import React from 'react'
 
@@ -28,20 +25,8 @@ export const DrawerModalReducer = (state = initialState, action) => {
         case CLOSE_DRAWER: {
             return {...state, visible: false}
         }
-        case OPEN_FORM_EDIT_USER: {
-            return {
-                ...state, visible: true, ComponentContentDrawer: action.Component
-                , title: action.title
-            }
-        }
         case SET_SUBMIT_CONTENT: {
             return {...state, callBackSubmit: action.submitFn}
-        }
-        case OPEN_FORM_CREATE_USER: {
-            return {
-                ...state, visible: true, ComponentContentDrawer: action.Component,
-                title: action.title
-            }
         }
         case OPEN_FORM_EDIT_PROJECT: {
             return {

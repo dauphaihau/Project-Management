@@ -12,6 +12,7 @@ import {CommentReducer} from "./reducers/CommentReducer";
 import {LoadingReducer} from "./reducers/LoadingReducer";
 import {ModalReducer} from "./reducers/ModalReducer";
 import {DrawerModalReducer} from "./reducers/DrawerModalReducer";
+import {NotificationReducer} from "./reducers/NotificationReducer";
 
 const rootReducer = combineReducers({
     UserReducer,
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     CommentReducer,
     LoadingReducer,
     ModalReducer,
-    DrawerModalReducer
+    DrawerModalReducer,
+    NotificationReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk, middleWareSaga));

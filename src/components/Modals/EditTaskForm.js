@@ -11,7 +11,7 @@ import {
     GET_ALL_TASK_TYPE_SAGA,
     GET_USER_SAGA,
     HANDLE_CHANGE_POST_API_SAGA,
-    INSERT_COMMENT_SAGA, REMOVE_TASK_SAGA,
+    REMOVE_TASK_SAGA,
     REMOVE_USER_ASSIGN
 } from "../../store/types/Type";
 import {Editor} from '@tinymce/tinymce-react';
@@ -22,9 +22,8 @@ import {Box, MenuItem, Modal, TextField,} from "@material-ui/core";
 import EditTaskComment from "../Comment/EditTaskComment";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import {useSpring, animated} from "react-spring";
 import PropTypes from "prop-types";
-
+import {Fade} from '../../HOC/UserModal'
 
 const style = {
     position: 'absolute',
@@ -33,35 +32,10 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 600,
     bgcolor: 'white',
-    // border: '2px solid #000',
     borderRadius: 7,
     boxShadow: 24,
     p: 4,
 };
-
-const Fade = React.forwardRef(function Fade(props, ref) {
-    const {in: open, children, onEnter, onExited, ...other} = props;
-    const style = useSpring({
-        from: {opacity: 0},
-        to: {opacity: open ? 1 : 0},
-        onStart: () => {
-            if (open && onEnter) {
-                onEnter();
-            }
-        },
-        onRest: () => {
-            if (!open && onExited) {
-                onExited();
-            }
-        },
-    });
-
-    return (
-        <animated.div ref={ref} style={style} {...other}>
-            {children}
-        </animated.div>
-    );
-});
 
 Fade.propTypes = {
     children: PropTypes.element,
@@ -76,7 +50,6 @@ function EditTaskForm(props) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-
     const {taskDetailModal} = useSelector(state => state.TaskReducer);
     const {arrStatus} = useSelector(state => state.StatusReducer);
     const {arrPriority} = useSelector(state => state.PriorityReducer);
@@ -88,6 +61,7 @@ function EditTaskForm(props) {
     const [content, setContent] = useState(taskDetailModal.description)
 
     const dispatch = useDispatch();
+    console.log('task-detail-modal', taskDetailModal)
 
     useEffect(() => {
         dispatch({type: GET_ALL_STATUS_SAGA})
@@ -173,7 +147,7 @@ function EditTaskForm(props) {
             <i className="far fa-clock"/>
             <div style={{width: '100%'}}>
                 <div className='progress'>
-                    <div className='progress-bar' role='progressbar' style={{width: `${percent}%`}}
+                    <div className='progress-bar' role='progressbar' style={{width: `${percent}%`, backgroundColor: '#1b55c5'}}
                          aria-valuenow={Number(timeTrackingSpent)}
                          aria-valuemin={Number(timeTrackingRemaining)}
                          aria-valuemax={max}/>
@@ -215,13 +189,16 @@ function EditTaskForm(props) {
 
     const handleChange = (e) => {
         const {name, value} = e.target;
+        console.log('name', name)
+        console.log('value', value)
         dispatch({
             type: HANDLE_CHANGE_POST_API_SAGA,
             actionType: CHANGE_TASK_MODAL,
             name, value
         })
     }
-    return (
+
+    return <>
         <form>
             <div style={{textAlign: 'right'}}>
                 <DeleteIcon style={{marginRight: "27px", paddingBottom: "7px"}} onClick={handleOpen}/>
@@ -263,12 +240,12 @@ function EditTaskForm(props) {
                 </Modal>
             </div>
             <div className='row mt-4'>
-                <div className='col-8'>
+                <div className='col-md-8'>
                     <div className="row">
-                        <div className="form-group col-4">
+                        <div className="form-group col-6 col-sm-4">
                             <TextField
                                 fullWidth
-                                select
+                                select name='typeId'
                                 variant="standard"
                                 color='primary' label={`TASK ${taskDetailModal.taskId} - TYPE: `}
                                 onChange={handleChange}
@@ -282,7 +259,7 @@ function EditTaskForm(props) {
                             </TextField>
                         </div>
 
-                        <div className="form-group col-4">
+                        <div className="form-group col-6 col-sm-4">
                             <TextField onChange={handleChange} name="taskName" defaultValue={taskDetailModal.taskName}
                                        id="standard-basic" label="TASK NAME" variant="standard"/>
                         </div>
@@ -294,7 +271,7 @@ function EditTaskForm(props) {
                     {/*Comment*/}
                     <EditTaskComment taskId={props.taskId}/>
                 </div>
-                <div className="col-4">
+                <div className="col-md-4">
                     <div className="form-group">
                         <TextField fullWidth select variant="outlined"
                                    name='statusId'
@@ -323,6 +300,7 @@ function EditTaskForm(props) {
                             })}
                         </TextField>
                     </div>
+
                     <div className="form-group">
                         <TextField
                             inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
@@ -343,19 +321,15 @@ function EditTaskForm(props) {
                                         marginBottom: 7,
                                         JustifyContent: 'space-evenly'
                                     }} className='item'>
-                                        <Avatar size='small' style={{backgroundColor: "#1b55c5"}}>
-                                            {user.name[0].toUpperCase()}
-                                        </Avatar>
-                                        <p className='name ml-1'>
-                                            {user.name.slice(0, 8)}
-                                            <CloseOutlined style={{marginLeft: 17}} onClick={() => {
+                                        <Avatar size='small' alt="Cindy Baker" src={`https://i.pravatar.cc/150?u=${user.avatar}`} />
+                                        <p className='name ml-1'>{user.name.slice(0, 7)}</p>
+                                            <CloseOutlined style={{marginLeft: 17, lineHeight: 'inherit'}} onClick={() => {
                                                 dispatch({
                                                     type: HANDLE_CHANGE_POST_API_SAGA,
                                                     actionType: REMOVE_USER_ASSIGN,
                                                     userId: user.id
                                                 })
                                             }}/>
-                                        </p>
                                     </div>
                                 })
                             }
@@ -393,8 +367,7 @@ function EditTaskForm(props) {
                     </div>
 
                     <h6 style={{fontSize: '13px', marginBottom: '-10px'}} color={`rgba(0, 0, 0, 0.54)`}>
-                        <TimerIcon/>
-                        TIME TRACKING</h6>
+                        <TimerIcon/>TIME TRACKING</h6>
                     {renderTimeTracking()}
                     <hr/>
                     <div style={{color: '#929398', fontSize: 13}}>Created at {Math.floor(Math.random() * 24)} hours
@@ -406,7 +379,7 @@ function EditTaskForm(props) {
                 </div>
             </div>
         </form>
-    );
+    </>
 }
 
 export default EditTaskForm

@@ -10,18 +10,23 @@ import * as yup from 'yup';
 import {connect} from "react-redux";
 import * as Yup from "yup";
 import {Editor} from "@tinymce/tinymce-react";
+import {FormControl, FormHelperText, MenuItem, TextField} from "@material-ui/core";
 
 function EditProjectForm(props) {
 
+    useEffect(() => {
+        setFieldValue('description', values.description)
+        dispatch({type: GET_PROJECT_CATEGORY_SAGA})
+
+        dispatch({
+            type: SET_SUBMIT_CONTENT,
+            submitFn: handleSubmit
+        })
+    }, [])
     const {projectCategory} = useSelector(state => state.ProjectReducer)
     const dispatch = useDispatch();
 
     const editorRef = useRef(null);
-    const log = () => {
-        if (editorRef.current) {
-        // console.log(editorRef.current.getContent());
-        }
-    }
 
     const {
         values,
@@ -30,60 +35,51 @@ function EditProjectForm(props) {
         handleChange,
         handleSubmit, setFieldValue
     } = props;
-    // console.log('vvvv', values)
-
-    useEffect(() => {
-        setFieldValue('description', values.description)
-
-        dispatch({ // call API load project category
-            type: GET_PROJECT_CATEGORY_SAGA
-        })
-
-        dispatch({
-            type: SET_SUBMIT_CONTENT,
-            submitFn: handleSubmit
-        })
-    }, [])
 
 
     const handleEditorChange = (content, editor) => {
         setFieldValue('description', content)
-        // console.log(props)
     }
 
     return (
         <form className='container' onSubmit={handleSubmit}>
             <div className='row'>
                 <div className='col-md-4 col-12'>
-                    <div className='form-group'>
-                        <p className='font-weight-bold'>Id</p>
-                        <input disabled value={values.id} className='form-control' name='id'/>
-                    </div>
+                    <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                        <TextField defaultValue={values.id} disabled fullWidth name="id"
+                                   id="outlined-error-helper-text"
+                                   label="Id Project" variant="outlined"
+                        />
+                    </FormControl>
                 </div>
                 <div className='col-md-4 col-12'>
-                    <div className='form-group'>
-                        <p className='font-weight-bold'>Project Name</p>
-                        <input value={values.projectName} onChange={handleChange} className='form-control'
-                               name='projectName'/>
-                        {touched.projectName && errors.projectName ? (
-                            <p className='text-danger'>{errors.projectName}</p>
-                        ) : null}
-                    </div>
+                    <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                        <TextField defaultValue={values.projectName} onChange={handleChange} fullWidth
+                                   name="projectName"
+                                   id="outlined-error-helper-text"
+                                   label="Project Name" variant="outlined"
+                        />
+                        <FormHelperText
+                            error>{touched.projectName && errors.projectName ? `${errors.projectName}` : null}</FormHelperText>
+                    </FormControl>
                 </div>
                 <div className='col-md-4 col-12'>
-                    <div className='form-group'>
-                        <p className='font-weight-bold'>Project Category</p>
-                        {/*<input type="text" value={values.categoryId} name='categoryId'/>*/}
-                        <select name='categoryId' value={values.categoryId} className='form-control' >
-                            {projectCategory?.map((item, index) => {
-                                return <option value={item.id} key={index}>
+                    <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                        <TextField select variant="outlined" color='primary' name='categoryId' label='Category'
+                                   defaultValue={values.categoryId}
+                                   onChange={(e) => {
+                                       setFieldValue('typeId', e.target.value)
+                                   }}
+                        >
+                            {projectCategory.map((item, index) => {
+                                return <MenuItem key={index} value={item.id}>
                                     {item.projectCategoryName}
-                                </option>
+                                </MenuItem>
                             })}
-                        </select>
-                    </div>
+                        </TextField>
+                    </FormControl>
                 </div>
-                <div className='col-12'>
+                <div className='col-12 mt-3'>
                     <div className='form-group'>
                         <p className='font-weight-bold'>Description</p>
                         <Editor
@@ -125,7 +121,6 @@ const EditProjectFormByFormik = withFormik({
             description: formProjectEdit.description,
             categoryId: formProjectEdit.categoryId
         }
-
     },
     validationSchema: yup.object().shape({
         projectName: Yup.string().required('Project name is required'),

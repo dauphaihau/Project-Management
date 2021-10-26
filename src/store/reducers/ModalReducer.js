@@ -2,15 +2,18 @@
 //     return <p>Default Component</p>
 // }
 
-import { configConsumerProps } from "antd/lib/config-provider";
-import redux from "redux";
+import {
+    CLOSE_USER_MODAL,
+    OPEN_FORM_CREATE_USER, OPEN_FORM_EDIT_USER,
+    OPEN_USER_MODAL,
+    SET_SUBMIT_CONTENT_MODAL
+} from "../types/Type";
 
 const initialState = {
-    // Component: Default,
     Component: <p>Default</p>,
-    handleSubmit: () => {
-
-    }
+    handleSubmit: () => {},
+    title: '',
+    visible: false
 }
 
 export const ModalReducer = (state = initialState, action) => {
@@ -25,6 +28,21 @@ export const ModalReducer = (state = initialState, action) => {
             state.Component = action.Component;
             state.handleSubmit = action.handleSubmit;
             return {...state};
+        }
+        case OPEN_USER_MODAL : {
+            return {...state, visible: false}
+        }
+        case CLOSE_USER_MODAL : {
+            return {...state, visible: false}
+        }
+        case OPEN_FORM_CREATE_USER :{
+            return {...state, visible: true, Component: action.Component, title: action.title}
+        }
+        case OPEN_FORM_EDIT_USER :{
+            return {...state, visible: true, Component: action.Component, title: action.title}
+        }
+        case SET_SUBMIT_CONTENT_MODAL: {
+            return {...state, handleSubmit: action.submitFn}
         }
         default: return {...state};
     }

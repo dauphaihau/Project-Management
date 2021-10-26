@@ -1,5 +1,3 @@
-import {CardMedia} from "@material-ui/core";
-import {ContactSupportOutlined} from "@material-ui/icons";
 import {
     CHANGE_ASSIGN,
     CHANGE_TASK_MODAL,
@@ -9,7 +7,6 @@ import {
     ADD_LIST,
     DRAG_HAPPENED
 } from "../types/Type";
-
 
 const initialState = {
     taskDetailModal: {
@@ -77,6 +74,7 @@ const initialState = {
     lstTask: [],
     formTaskEdit: {
         listUserAsign: [],
+        taskId: '',
         taskName: '',
         description: '',
         statusId: '',

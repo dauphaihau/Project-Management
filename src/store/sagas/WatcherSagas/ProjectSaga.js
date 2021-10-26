@@ -1,11 +1,10 @@
 import {call, put, takeLatest, takeEvery, delay} from 'redux-saga/effects'
-import {history, STATUS_CODE} from '../../../util/settings'
+import {STATUS_CODE} from '../../../util/settings'
 import {projectServices} from '../../services/ProjectServices'
-import {notifiFuntion} from "../../../util/Notification";
 import {
     CLOSE_DRAWER,
     CREATE_PROJECT_SAGA,
-    DELETE_PROJECT_SAGA,
+    DELETE_PROJECT_SAGA, DISPLAY_ALERT,
     DISPLAY_LOADING,
     GET_ALL_PROJECT,
     GET_ALL_PROJECT_SAGA,
@@ -18,19 +17,14 @@ import {
     UPDATE_PROJECT_SAGA
 } from '../../types/Type'
 
-// --------get all project
-function* getAllProjectSaga(action) {
-    let {keyWord} = action
+// -------- get all project
+function* getAllProjectSaga({keyWord}) {
     try {
-        yield put({
-            type: DISPLAY_LOADING
-        })
+        yield put({type: DISPLAY_LOADING})
         yield delay(600)
+        yield put({type: HIDE_LOADING})
         const {data, status} = yield call(() => projectServices.getAllProject(keyWord))
         if (status === STATUS_CODE.SUCCESS) {
-            yield put({
-                type: HIDE_LOADING
-            })
             yield put({
                 type: GET_ALL_PROJECT,
                 listProject: data.content
@@ -41,7 +35,7 @@ function* getAllProjectSaga(action) {
             })
         }
     } catch (error) {
-        console.log(error);
+        console.log({error});
     }
 
 }
@@ -50,20 +44,17 @@ export function* WatcherGetAllProject() {
     yield takeEvery(GET_ALL_PROJECT_SAGA, getAllProjectSaga)
 }
 
-// -------- detail project
-function* getDetailProjectSaga(action) {
-
+// -------- get detail project
+function* getDetailProjectSaga({projectId}) {
     try {
-        const {data, status} = yield call(() => projectServices.getProjectDetail(action.projectId))
+        const {data} = yield call(() => projectServices.getProjectDetail(projectId))
         yield put({
             type: GET_DETAIL_PROJECT,
             detailProject: data.content
         })
     } catch (error) {
-        console.log(error);
-        // history.push('/')
+        console.log({error});
     }
-
 }
 
 export function* WatcherGetDetailProject() {
@@ -71,18 +62,18 @@ export function* WatcherGetDetailProject() {
 }
 
 
-// -------- project category
-function* getProjectCategorySaga(action) {
+// -------- get project category
+function* getProjectCategorySaga() {
 
     try {
-        const {data, status} = yield call(() => projectServices.getProjectCategory())
+        const {data} = yield call(() => projectServices.getProjectCategory())
         yield put({
             type: GET_PROJECT_CATEGORY,
             projectCategory: data.content
         })
 
     } catch (error) {
-        console.log(error);
+        console.log({error});
     }
 }
 
@@ -91,16 +82,14 @@ export function* WatcherGetProjectCategory() {
 }
 
 
-// --------create project
-function* createProjectSaga(action) {
+// -------- create project
+function* createProjectSaga({newProject}) {
 
     try {
         yield delay(500)
-        yield call(() => projectServices.createProjectAuthorization(action.newProject))
-
+        yield call(() => projectServices.createProjectAuthorization(newProject))
         yield put({type: CLOSE_DRAWER})
-        notifiFuntion('success', 'create project successfully')
-
+        yield put({type: DISPLAY_ALERT, message: 'Create project successfully'})
         yield put({type: GET_ALL_PROJECT_SAGA /* refresh data after change*/})
     } catch (error) {
         if (error.response.status === 500) {
@@ -115,28 +104,18 @@ export function* WatcherCreateProject() {
 
 
 // -------- update project
-function* updateProjectSaga(action) {
+function* updateProjectSaga({dataEdited}) {
 
     try {
-        const {data, status} = yield call(() => projectServices.updateProject(action.dataEdited))
-        console.log(data, status)
+        const {status} = yield call(() => projectServices.updateProject(dataEdited))
         if (status === STATUS_CODE.SUCCESS) {
-            notifiFuntion('success', 'Update project successfully')
-        } else {
-            notifiFuntion('error', 'Update project fail')
+            yield put({type: GET_ALL_PROJECT_SAGA})
+            yield put({type: CLOSE_DRAWER})
+            yield put({type: DISPLAY_ALERT, message: 'Update project successfully'})
         }
-        if (data.statusCode === STATUS_CODE.SUCCESS) {
-            yield put({
-                type: CLOSE_DRAWER
-            })
-        }
-        yield put({
-            type: GET_ALL_PROJECT_SAGA // refresh data after change
-        })
-        history.push('/projects')
     } catch (error) {
-        console.log(error);
-        notifiFuntion('error', 'Update project fail')
+        console.log({error});
+        yield put({type: DISPLAY_ALERT, message: 'Update project fail'})
     }
 }
 
@@ -146,23 +125,17 @@ export function* WatcherUpdateProject() {
 
 
 // -------- delete project
-function* deleteProjectSaga(action) {
+function* deleteProjectSaga({idProject}) {
 
     try {
-        console.log('id', action.idProject);
-        const {data, status} = yield call(() => projectServices.deleteProject(action.idProject))
-
+        const {status} = yield call(() => projectServices.deleteProject(idProject))
         if (status === STATUS_CODE.SUCCESS) {
-            notifiFuntion('success', 'Delete project successfully')
-        } else {
-            notifiFuntion('error', 'Delete project fail')
+            yield put({type: GET_ALL_PROJECT_SAGA})
+            yield put({type: DISPLAY_ALERT, message: 'Delete project successfully'})
         }
-        yield put({
-            type: GET_ALL_PROJECT_SAGA // refresh data after change
-        })
     } catch (error) {
-        console.log(error);
-        notifiFuntion('error', 'Delete project fail')
+        console.log({error});
+        yield put({type: DISPLAY_ALERT, message: 'Delete project fail'})
     }
 }
 

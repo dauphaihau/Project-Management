@@ -12,11 +12,11 @@ function EditTaskComment(props) {
     const [visibleComment, setVisibleComment] = useState(false)
     // const [historyComment, setHistoryComment] = useState('')
 
-    console.log('data-comment', dataComment)
+    // console.log('data-comment', dataComment)
 
     return <>
         <div className="form-group">
-            <div className="container mt-5 mb-5">
+            <div className="container mt-1 mb-5">
                 <div className="d-flex justify-content-center row">
                     <div className="coment-bottom bg-white w-100">
                         <div className="d-flex flex-row add-comment-section mt-4 mb-4">

@@ -8,30 +8,25 @@ import {
 import {withFormik} from "formik";
 import * as Yup from "yup";
 import {Editor} from '@tinymce/tinymce-react';
-import {ProjectReducer} from "../../store/reducers/ProjectReducer";
+import {FormControl, FormHelperText, MenuItem, TextField} from "@material-ui/core";
 
 function CreateProjectForm(props) {
     const editorRef = useRef(null);
-    const log = () => {
-        if (editorRef.current) {
-            console.log(editorRef.current.getContent());
-        }
-    }
     const {projectCategory} = useSelector(state => state.ProjectReducer)
     const dispatch = useDispatch();
+
+    console.log('project-category', projectCategory)
 
     useEffect(() => {
         dispatch({
             type: SET_SUBMIT_CONTENT,
             submitFn: handleSubmit
         })
-    }, [])
-
-    useEffect(() => {
         dispatch({
             type: GET_PROJECT_CATEGORY_SAGA
         })
     }, [])
+
 
     const {
         touched,
@@ -42,25 +37,25 @@ function CreateProjectForm(props) {
     } = props;
 
     const handleEditorChange = (content, editor) => {
-        setFieldValue('description',content)
-        // console.log(props)
+        setFieldValue('description', content)
     }
 
     return (
         <form className='container' onSubmit={handleSubmit}>
+            <FormControl fullWidth sx={{ m: 1, minWidth: 120 }} error>
+                <TextField onChange={handleChange} fullWidth name="projectName"
+                           id="outlined-error-helper-text"
+                           label="Project Name" variant="outlined"
+                />
+                <FormHelperText error>{touched.projectName && errors.projectName ? `${errors.projectName}` : null}</FormHelperText>
+            </FormControl>
+
             <div className='form-group'>
-                <p className='font-weight-bold'>Project Name</p>
-                <input onChange={handleChange} className='form-control' name='projectName'/>
-                {touched.projectName && errors.projectName ? (
-                    <p className='text-danger'>{errors.projectName}</p>
-                ) : null}
-            </div>
-            <div className='form-group'>
-                <p className='font-weight-bold'>Description</p>
-                {/*<input className='form-control' name='description'/>*/}
+                <p className='font-monospace mt-3'>Description</p>
                 <Editor
                     onInit={(evt, editor) => editorRef.current = editor}
                     initialValue=""
+                    style={{borderRadius : 6}}
                     init={{
                         height: 500,
                         menubar: false,
@@ -78,13 +73,22 @@ function CreateProjectForm(props) {
                     onEditorChange={handleEditorChange}
                 />
             </div>
-            <div className='form-group'>
-                <select name='categoryId' className='form-control' onChange={handleChange}>
+
+
+            <FormControl fullWidth sx={{ m: 1, minWidth: 120 }} error>
+                <TextField  select variant="outlined" color='primary' name='categoryId' label='Category'
+                           defaultValue={1}
+                           onChange={(e) => {
+                               setFieldValue('typeId', e.target.value)
+                           }}
+                >
                     {projectCategory.map((item, index) => {
-                        return <option value={item.id} key={index}>{item.projectCategoryName}</option>
+                        return <MenuItem  key={index} value={item.id}>
+                            {item.projectCategoryName}
+                        </MenuItem>
                     })}
-                </select>
-            </div>
+                </TextField>
+            </FormControl>
         </form>
     );
 }
@@ -92,7 +96,6 @@ function CreateProjectForm(props) {
 const CreateProjectFormByFormik = withFormik({
     enableReinitialize: true,
     mapPropsToValues: (props) => {
-        console.log('props', props)
         return {
             projectName: '',
             description: '',
@@ -102,11 +105,8 @@ const CreateProjectFormByFormik = withFormik({
     validationSchema: Yup.object().shape({
         projectName: Yup.string().required('Project name is required'),
         description: Yup.string().required('Description is required'),
-        // category: Yup.string().required('Category is required')
     }),
     handleSubmit: (values, {props, setSubmitting}) => {
-        console.log('props', values)
-
         props.dispatch({
             type: CREATE_PROJECT_SAGA,
             newProject: values

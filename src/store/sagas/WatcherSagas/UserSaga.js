@@ -1,60 +1,36 @@
 import {
     ADD_USER_SAGA,
-    ASSIGN_USER,
-    ASSIGN_USER_SAGA,
-    ASSIGN_USER_TASK_SAGA, CLOSE_DRAWER,
+    ASSIGN_USER_TASK_SAGA, CLOSE_USER_MODAL,
     DELETE_USER_FROM_PROJECT_SAGA,
-    DELETE_USER_SAGA,
+    DELETE_USER_SAGA, DISPLAY_ALERT,
     DISPLAY_LOADING,
     EDIT_USER_SAGA,
     GET_ALL_PROJECT_SAGA,
-    GET_USER, GET_USER_BY_KEYWORD, GET_USER_BY_KEYWORD_SAGA,
+    GET_USER,
     GET_USER_BY_PROJECT_ID,
     GET_USER_BY_PROJECT_ID_SAGA,
     GET_USER_SAGA,
-    GET_USER_SEARCH,
     HIDE_LOADING,
     LOGIN,
     USER_LOGIN_SAGA, USER_REGISTER_SAGA
 } from "../../types/Type";
 import {call, takeLatest, put, delay} from 'redux-saga/effects'
-import {ACCESS_TOKEN, EMAIL_EXIST, history, STATUS_CODE, TOKEN_CYBERSOFT, USER_LOGIN} from "../../../util/settings";
+import {ACCESS_TOKEN, history, STATUS_CODE, USER_LOGIN} from "../../../util/settings";
 import {userServices} from "../../services/UserServices";
-import {notifiFuntion} from "../../../util/Notification";
 
 
-// ---------------- user login
-function* registerSaga(action) {
-
+// ---------------- Create User
+function* registerSaga({dataRegister}) {
     try {
-        yield put({
-            type: DISPLAY_LOADING
-        })
-
-        yield delay(500)
-        const {data, status} = yield call(() => userServices.register(action.dataRegister))
-        console.log('data', data)
-
+        const {data} = yield call(() => userServices.register(dataRegister))
         if (data.statusCode === STATUS_CODE.SUCCESS) {
-            yield put({
-                type: CLOSE_DRAWER
-            })
-            notifiFuntion('success', 'register successfully')
+            yield put({type: CLOSE_USER_MODAL})
+            yield put({type: DISPLAY_ALERT, message: 'Create user successfully'})
         }
-        yield put({
-            type: HIDE_LOADING
-        })
 
     } catch (error) {
-        console.log(error);
-        yield put({
-            type: EMAIL_EXIST,
-            data: error.response.data.message
-        })
-        yield put({
-            type: HIDE_LOADING
-        })
-
+        console.log({error});
+        alert('email already exists')
     }
 }
 
@@ -62,19 +38,15 @@ export function* WatcherRegister() {
     yield takeLatest(USER_REGISTER_SAGA, registerSaga)
 }
 
-function* LoginSaga(action) {
-    let {userLogin} = action;
+function* LoginSaga({userLogin}) {
 
     try {
-        yield put({
-            type: DISPLAY_LOADING
-        })
+        yield put({type: DISPLAY_LOADING})
 
         yield delay(1000)
 
-
-        const {data, status} = yield call(() => userServices.login(userLogin))
-
+        const {data} = yield call(() => userServices.login(userLogin))
+        yield put({type: HIDE_LOADING})
 
         localStorage.setItem(ACCESS_TOKEN, data.content.accessToken)
         localStorage.setItem(USER_LOGIN, JSON.stringify(data.content))
@@ -83,18 +55,13 @@ function* LoginSaga(action) {
             type: LOGIN,
             userLogin: data
         })
-        // console.log(data);
         history.push('/projects')
-        notifiFuntion('success', 'login successfully')
-
-        yield put({
-            type: HIDE_LOADING
-        })
+        yield put({type: DISPLAY_ALERT, message: 'Login successfully'})
 
     } catch (error) {
         console.log({error})
         if (error.response.status === 400) {
-            alert('Tài khoản hoặc mật khẩu không đúng')
+            alert('Incorrect account or password')
         }
         yield put({
             type: HIDE_LOADING
@@ -111,14 +78,14 @@ function* getUserSaga(action) {
 
     let {keyWord} = action
     try {
-        const {data, status} = yield call(() => userServices.getUser(keyWord))
+        const {data} = yield call(() => userServices.getUser(keyWord))
         yield put({
             type: GET_USER,
             listUser: data.content
         })
 
     } catch (err) {
-        console.log(err);
+        console.log({err});
     }
 }
 
@@ -127,14 +94,10 @@ export function* WatcherGetUser() {
 }
 
 // ---------------- add user
-function* addUserSaga(action) {
-
-    console.log('action', action)
+function* addUserSaga({userProject}) {
     try {
-        yield call(() => userServices.addUserProject(action.userProject))
-        yield put({
-            type: GET_ALL_PROJECT_SAGA
-        })
+        yield call(() => userServices.addUserProject(userProject))
+        yield put({type: GET_ALL_PROJECT_SAGA})
     } catch (error) {
         console.log('error', error.statusCode)
         if (error.statusCode === 403) {
@@ -151,27 +114,16 @@ export function* WatcherAddUser() {
 // ---------------- edit user
 function* editUserSaga(action) {
     try {
-        yield put({
-            type: DISPLAY_LOADING
-        })
+        const {data} = yield call(() => userServices.editUser(action.dataEdited))
+        yield put({type: GET_USER_SAGA})
 
-        yield delay(600)
-        const {data, status} = yield call(() => userServices.editUser(action.dataEdited))
-        yield put({
-            type: GET_USER_SAGA
-        })
         if (data.statusCode === STATUS_CODE.SUCCESS) {
-            yield put({
-                type: CLOSE_DRAWER
-            })
+            yield put({type: CLOSE_USER_MODAL})
+            yield delay(200)
+            yield put({type: DISPLAY_ALERT, message: 'Edit info successfully'})
         }
-        notifiFuntion('success', 'Edit successfully')
-
-        yield put({
-            type: HIDE_LOADING
-        })
     } catch (err) {
-        console.log(err);
+        console.log({err});
     }
 }
 
@@ -183,13 +135,12 @@ export function* WatcherEditUser() {
 function* deleteUserSaga(action) {
     try {
         yield call(() => userServices.deleteUser(action.userId))
-        yield put({
-            type: GET_USER_SAGA
-        })
-        notifiFuntion('success', 'Delete user successfully')
+        yield put({type: GET_USER_SAGA})
+        yield put({type: DISPLAY_ALERT, message: 'Delete user successfully'})
+
     } catch (err) {
-        console.log(err);
-        notifiFuntion('error', 'you cannot delete registered users in the project')
+        console.log({err});
+        yield put({type: DISPLAY_ALERT, message: 'you cannot delete registered users in the project'})
     }
 }
 
@@ -198,16 +149,14 @@ export function* WatcherDeleteUser() {
 }
 
 // ---------------- del user from project
-function* deleteUserFromProjectSaga(action) {
-
-    console.log(action)
+function* deleteUserFromProjectSaga({userProject}) {
     try {
-        yield call(() => userServices.deleteUserFromProject(action.userProject))
-        yield put({
-            type: GET_ALL_PROJECT_SAGA
-        })
+        yield call(() => userServices.deleteUserFromProject(userProject))
+        yield put({type: GET_ALL_PROJECT_SAGA})
+        yield put({type: DISPLAY_ALERT, message: 'Delete user successfully'})
     } catch (error) {
-        console.log(error);
+        console.log({error});
+        yield put({type: DISPLAY_ALERT, message: 'you are not authorized to delete user'})
     }
 }
 
@@ -227,7 +176,6 @@ function* getUserByProjectIdSaga({projectId}) {
         }
     } catch (error) {
         console.log({error});
-        console.log(error.response?.data)
         if (error.response?.data.statusCode === STATUS_CODE.NOT_FOUND) {
             yield put({
                 type: GET_USER_BY_PROJECT_ID,
@@ -247,7 +195,7 @@ function* assignUserTaskSaga(action) {
     try {
         yield call(() => userServices.assignUserTask(action))
     } catch (error) {
-        console.log(error.response?.data)
+        console.log({error})
     }
 }
 

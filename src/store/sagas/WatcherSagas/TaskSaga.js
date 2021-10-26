@@ -4,25 +4,24 @@ import {takeLatest, takeEvery} from "redux-saga/effects";
 import {
     CHANGE_ASSIGN,
     CHANGE_TASK_MODAL, CLOSE_DRAWER,
-    CREATE_TASK_SAGA, GET_DETAIL_PROJECT,
+    CREATE_TASK_SAGA, DISPLAY_ALERT, GET_DETAIL_PROJECT,
     GET_DETAIL_PROJECT_SAGA,
     GET_TASK_DETAIL,
     GET_TASK_DETAIL_SAGA,
     HANDLE_CHANGE_POST_API_SAGA, REMOVE_TASK_SAGA, REMOVE_USER_ASSIGN, UPDATE_STATUS_TASK_SAGA
 } from "../../types/Type";
-import {history, STATUS_CODE} from "../../../util/settings";
-import {notifiFuntion} from "../../../util/Notification";
+import { STATUS_CODE} from "../../../util/settings";
 
 // ---------------------- get task detail
 function* getTaskDetailSaga({taskId}) {
     try {
-        const {data, status} = yield call(() => taskServices.getTaskDetail(taskId))
+        const {data} = yield call(() => taskServices.getTaskDetail(taskId))
         yield put({
             type: GET_TASK_DETAIL,
             taskDetailModal: data.content
         })
     } catch (error) {
-        console.log(error.response.data);
+        console.log({error});
     }
 }
 
@@ -31,19 +30,12 @@ export function* WatcherGetTaskDetail() {
 }
 
 // ---------------------- create task
-function* createTaskSaga({ taskObj }) {
-
-    console.log('taskObj', taskObj)
+function* createTaskSaga({taskObj}) {
     try {
         const result = yield call(() => taskServices.createTask(taskObj))
-        // if (status === STATUS_CODE.SUCCESS) {
-        //     console.log(data);
-        // }
-
         console.log({result})
-        alert('success')
-
         yield put({type: CLOSE_DRAWER})
+        yield put({type: DISPLAY_ALERT, message: 'Create task success'})
         yield put({
             type: GET_DETAIL_PROJECT_SAGA,
             projectId: taskObj.projectId
@@ -53,6 +45,10 @@ function* createTaskSaga({ taskObj }) {
         console.log({error})
         if (error.response.status === 403) {
             alert('you are not authorized to create tasks')
+        } else {
+            if (error.response.status === 500) {
+                alert('task name already exists, give it another name')
+            }
         }
     }
 }
@@ -69,7 +65,7 @@ function* removeTaskSaga({taskId, projectId}) {
             type: GET_DETAIL_PROJECT_SAGA,
             projectId: projectId
         })
-        notifiFuntion('success', 'delete project successfully')
+        yield put({type: DISPLAY_ALERT, message: 'Delete task success'})
     } catch (error) {
         if (error.response.status === 403) {
             alert('you are not authorized to delete tasks')
@@ -82,7 +78,7 @@ export function* WatcherRemoveTask() {
 }
 
 
-// ------------------------ update status task
+// ------------------------ update status task ( use for drag-drop )
 function* updateStatusTaskSaga({taskUpdateStatus}) {
 
     console.log('task-update-status', taskUpdateStatus)
@@ -154,7 +150,7 @@ export function* handleChangePostApiSaga(action) {
     })
 
     taskDetailModal = {...taskDetailModal, listUserAsign: listUserAsign}
-    console.log('task-detail-modalll', taskDetailModal)
+    console.log('task-detail-modal-at-saga', taskDetailModal)
 
     try {
         const {status} = yield call(() => taskServices.updateTask(taskDetailModal))
@@ -169,9 +165,9 @@ export function* handleChangePostApiSaga(action) {
             //     type: GET_TASK_DETAIL_SAGA,
             //     taskId: taskUpdateApi.taskId
             // })
-        }
+            }
     } catch (e) {
-        console.log(e.response?.data)
+        console.log({e})
     }
 }
 

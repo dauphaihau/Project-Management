@@ -4,42 +4,28 @@ import {
     CREATE_TASK_SAGA,
     GET_ALL_PRIORITY_SAGA,
     GET_ALL_STATUS_SAGA,
-    GET_ALL_TASK_TYPE,
     GET_ALL_TASK_TYPE_SAGA,
-    GET_DETAIL_PROJECT_SAGA,
     GET_USER_BY_PROJECT_ID_SAGA,
-    GET_USER_SAGA,
     SET_SUBMIT_CONTENT,
-    USER_REGISTER_SAGA
 } from "../../store/types/Type";
 import {withFormik} from "formik";
 import * as Yup from "yup";
 import {Editor} from '@tinymce/tinymce-react';
 import SelectReact from 'react-select'
 import makeAnimated from 'react-select/animated';
-import {
-    // Slider,
-} from 'antd';
-import {FormControl, InputLabel, Slider, MenuItem, Select, TextField} from "@material-ui/core";
+import {Slider, MenuItem, TextField, Box, FormHelperText} from "@material-ui/core";
 
 function CreateTaskForm(props) {
 
     const animatedComponents = makeAnimated();
 
     const editorRef = useRef(null);
-    const log = () => {
-        if (editorRef.current) {
-            console.log(editorRef.current.getContent());
-        }
-    }
 
     const dispatch = useDispatch();
     const {arrStatus} = useSelector(state => state.StatusReducer);
     const {arrPriority} = useSelector(state => state.PriorityReducer);
     const {arrTaskType} = useSelector(state => state.TaskTypeReducer);
     const {arrUser} = useSelector(state => state.UserReducer);
-
-    console.log('arr-user', arrUser)
 
     const [timeTracking, setTimeTracking] = useState({
         timeTrackingSpent: 0,
@@ -65,7 +51,6 @@ function CreateTaskForm(props) {
             type: GET_USER_BY_PROJECT_ID_SAGA,
             projectId: props.projectId
         })
-        setFieldValue('projectId', parseInt(props.projectId))
     }, [])
 
     const {
@@ -98,27 +83,23 @@ function CreateTaskForm(props) {
         });
     }
 
-    const handleDropdownChange = (e) => {
-        setFieldValue(e.target.name, parseInt(e.target.value));
-    }
-
     return (
         <form className="container-fluid" onSubmit={handleSubmit}>
             {prepareUserList()}
-            <div className="form-group">
+            <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                 <TextField onChange={handleChange} fullWidth name="taskName"
-                           id="outlined-basic" label="Task Name" variant="outlined"
-                           helperText={touched.email && errors.email ? `${errors.email}` : null}
+                           id="outlined-basic" label="TASK NAME" variant="outlined"
                 />
-            </div>
+                <FormHelperText required
+                                error>{touched.taskName && errors.taskName ? `${errors.taskName}` : null}</FormHelperText>
+            </Box>
             <div className='row'>
-                <div className="col-6">
-                    <div className="form-group">
-                        <p className="font-weight-bold">Assignees</p>
+                <div className="col-md-6">
+                    <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                         <SelectReact
-                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                             menuPortalTarget={document.body}
-                            placeholder={<div>Select Users</div>}
+                            placeholder={<div>ASSIGNEES</div>}
                             onChange={handleAddUser}
                             name="userAssign"
                             closeMenuOnSelect={false}
@@ -126,12 +107,12 @@ function CreateTaskForm(props) {
                             isMulti
                             options={options}
                         />
-                    </div>
+                    </Box>
 
-                    <div className="form-group">
+                    <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                         <TextField fullWidth select variant="outlined"
-                                   color='primary'
-                                   label='Priority'
+                                   color='primary' label='PRIORITY' name='priorityId'
+                                   defaultValue={1}
                                    onChange={(e) => {
                                        setFieldValue('priorityId', e.target.value)
                                    }}
@@ -142,25 +123,27 @@ function CreateTaskForm(props) {
                                 </MenuItem>
                             })}
                         </TextField>
-                    </div>
+                    </Box>
 
-                    <div className="form-group">
+
+                    <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                         <TextField
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                            inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                             color='primary' fullWidth id="outlined-basic" label="ORIGINAL ESTIMATE (HOURS)"
                             variant='outlined'
                             onChange={(e) => {
                                 setFieldValue('originalEstimate', e.target.value)
                             }}
                         />
-                    </div>
+                    </Box>
                 </div>
-                <div className="col-6">
-                    <div className="form-group">
+                <div className="col-md-6">
+                    <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                         <TextField fullWidth select variant="outlined"
                                    name='statusId'
                                    color='primary'
                                    label='Status'
+                                   defaultValue={1}
                                    onChange={(e) => {
                                        setFieldValue('statusId', e.target.value)
                                    }}
@@ -171,12 +154,14 @@ function CreateTaskForm(props) {
                                 </MenuItem>
                             })}
                         </TextField>
-                    </div>
+                    </Box>
 
-                    <div className="form-group">
+                    <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                         <TextField fullWidth select variant="outlined"
+                                   name='typeId'
                                    color='primary'
-                                   label='Task Type'
+                                   label='TASK TYPE'
+                                   defaultValue={1}
                                    onChange={(e) => {
                                        setFieldValue('typeId', e.target.value)
                                    }}
@@ -187,9 +172,9 @@ function CreateTaskForm(props) {
                                 </MenuItem>
                             })}
                         </TextField>
-                    </div>
+                    </Box>
 
-                    <p>Time Tracking</p>
+                    <h6 color={`rgba(0, 0, 0, 0.54)`}>Time Tracking</h6>
                     <Slider defaultValue={30} color='primary' value={timeTracking.timeTrackingSpent}
                             max={Number(timeTracking.timeTrackingSpent) + Number(timeTracking.timeTrackingRemaining)}
                     />
@@ -257,7 +242,6 @@ const CreateTaskFormByFormik = withFormik({
     enableReinitialize: true,
     mapPropsToValues: (props) => {
         const {arrStatus, arrPriority, arrTaskType} = props
-
         return {
             taskName: '',
             statusId: arrStatus[0]?.statusId,
@@ -268,19 +252,11 @@ const CreateTaskFormByFormik = withFormik({
             timeTrackingSpent: 0,
             timeTrackingRemaining: 0,
             description: '',
-            projectId: 0
+            projectId: props.projectId
         }
     },
     validationSchema: Yup.object().shape({
         taskName: Yup.string().required('Task name is required'),
-        // statusId: Yup.string().required('Status is required'),
-        // priorityId: Yup.string().required('Priority is required'),
-        // typeId: Yup.string().required('Type is required'),
-        // userAssign: Yup.string().required('User assign is required'),
-        // originalEstimate: Yup.string().required('Original estimate is required'),
-        // timeTrackingSpent: Yup.string().required('Time tracking spent is required'),
-        // timeTrackingRemaining: Yup.string().required('Time tracking remains is required'),
-        // description: Yup.string().required('Description is required'),
     }),
     handleSubmit: (values, {props, setSubmitting}) => {
         console.log('values', values)
@@ -293,9 +269,9 @@ const CreateTaskFormByFormik = withFormik({
 })(CreateTaskForm)
 
 const mapStateToProps = state => ({
-    arrStatus: state => state.StatusReducer.arrStatus,
-    arrPriority: state => state.PriorityReducer.arrPriority,
-    arrTaskType: state => state.TaskTypeReducer.arrTaskType
+    arrStatus: state.StatusReducer.arrStatus,
+    arrPriority: state.PriorityReducer.arrPriority,
+    arrTaskType: state.TaskTypeReducer.arrTaskType
 })
 
 export default connect(mapStateToProps)(CreateTaskFormByFormik);

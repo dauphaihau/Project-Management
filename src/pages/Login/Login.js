@@ -1,11 +1,16 @@
 import React from 'react';
-import {Button, Input} from "antd";
-import {UserOutlined, GoogleOutlined, LockOutlined, TwitterOutlined, createFromIconfontCN} from '@ant-design/icons';
-import {withFormik} from "formik";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import {Button} from "antd";
+import {GoogleOutlined, TwitterOutlined, createFromIconfontCN} from '@ant-design/icons';
+import {withFormik} from 'formik';
+import LockIcon from '@mui/icons-material/Lock';
 import * as yup from 'yup';
 import {connect} from "react-redux";
 import {loginActions} from "../../store/actions/UserAction";
 import {Redirect} from "react-router-dom";
+import {Box, FormHelperText, TextField} from "@material-ui/core";
+import ButtonMui from "@material-ui/core/Button";
+import * as Yup from "yup";
 
 const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
@@ -30,25 +35,25 @@ function Login(props) {
             <div className='d-flex flex-column justify-content-center align-item-center'
                  style={{height: window.innerHeight}}>
                 <h1 className='text-center'>Login</h1>
-                <h3 className='text-center'>{props.displayName}</h3>
-
-                <div className='d-flex mt-3'>
-                    <Input onChange={handleChange} onBlur={handleBlur} name='email' size="large" placeholder="email"
-                           prefix={<UserOutlined/>}/>
-                </div>
-                {touched.email && errors.email ? (
-                    <p className='text-danger'>{errors.email}</p>
-                ) : null}
-                <div className='d-flex mt-3'>
-                    <Input onChange={handleChange} onBlur={handleBlur} name='password' size="large" type='password'
-                           placeholder="password"
-                           prefix={<LockOutlined/>}/>
-                </div>
-                {touched.password && errors.password ? (
-                    <p className='text-danger'>{errors.password}</p>
-                ) : null}
-
-                <Button className='mt-3' size='large' htmlType='submit' type='primary'>Login</Button>
+                <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
+                </Box>
+                <Box sx={{display: 'flex', alignItems: 'flex-end', mb: 1}}>
+                    <AccountCircle sx={{color: 'action.active', mr: 1, my: 0.5}}/>
+                    <TextField onBlur={handleBlur} onChange={handleChange} fullWidth name="email"
+                               id="outlined-basic" placeholder="Email" variant="standard"
+                    />
+                </Box>
+                <FormHelperText required style={{marginLeft: 30}}
+                                error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <Box fullWidth sx={{display: 'flex', alignItems: 'flex-end', minWidth: 120}} error>
+                    <LockIcon sx={{color: 'action.active', mr: 1, my: 0.5}}/>
+                    <TextField onBlur={handleBlur} onChange={handleChange} fullWidth name="password"
+                               id="standard-basic" placeholder="Password" variant="standard"
+                    />
+                </Box>
+                <FormHelperText required style={{marginLeft: 30, marginBottom: 30}}
+                                error>{touched.password && errors.password ? `${errors.password}` : null}</FormHelperText>
+                <ButtonMui fullWidth color='primary' type='submit' variant="contained">Login</ButtonMui>
 
                 <div className='social mt-4 my-3 text-center'>
                     <Button style={{backgroundColor: '#42609A', marginLeft: '44', color: '#fff'}} shape="circle"
@@ -72,8 +77,8 @@ const LoginWithFormik = withFormik({
         password: '',
     }),
     validationSchema: yup.object().shape({
-        email: yup.string().required('Please enter your email!').email('email is invalid'),
-        password: yup.string().min(6, 'Password must be at least 6 characters.').max(32, 'password have max 32 characters')
+        email: Yup.string().required('Email is required').email('Email should be valid and contain @'),
+        password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters.').max(32, 'Password have max 32 characters'),
     }),
     handleSubmit: ({email, password}, {props, setSubmitted}) => {
         props.dispatch(loginActions(email, password));

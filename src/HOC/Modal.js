@@ -1,16 +1,11 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
-import {
-    SearchOutlined,
-    EditOutlined,
-    CloseOutlined,
-    PlusOutlined
-} from "@ant-design/icons";
+import {CloseOutlined,} from "@ant-design/icons";
 import {Button} from "antd";
 
 export default function Modal(props) {
 
-    const {Component, handleSubmit} = useSelector(state => state.ModalReducer);
+    const {Component} = useSelector(state => state.ModalReducer);
 
     return (
         <div>

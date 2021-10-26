@@ -14,7 +14,7 @@ export class TaskServices extends baseService {
         return this.get(`Project/getTaskDetail?taskId=${taskId}`)
     }
 
-    updateStatusTask = (task) => {
+    updateStatusTask = (task) => { // use for drag-drop
       return this.put(`Project/updateStatus`,task)
     }
 

@@ -1,12 +1,11 @@
-import {EMAIL_EXIST, history, TOKEN_CYBERSOFT} from "../../util/settings";
-import {USER_LOGIN_SAGA} from "../types/Type";
+import {history, TOKEN_CYBERSOFT} from "../../util/settings";
+import {DISPLAY_ALERT, USER_LOGIN_SAGA} from "../types/Type";
 import axios from "axios";
 
-
-export const registerAction = (dataUser) => {
-    return async (dispatch) => {
+export const registerAction = dataUser => {
+    return async dispatch => {
         try {
-            const result = await axios({
+            await axios({
                 url: 'http://jiranew.cybersoft.edu.vn/api/Users/signup',
                 method: 'POST',
                 data: dataUser,
@@ -14,12 +13,11 @@ export const registerAction = (dataUser) => {
                     'TokenCyberSoft': TOKEN_CYBERSOFT
                 }
             })
-            alert('register successful')
+            dispatch({type: DISPLAY_ALERT, message: 'Register successfully'})
             history.push('/login');
-
         } catch (error) {
-            console.log(error.response);
-            alert(error.response.data.message)
+            console.log({error})
+            alert('email already exists')
         }
     };
 }

@@ -10,7 +10,7 @@ function DrawerModal(props) {
     const dispatch = useDispatch();
     const onClose = () => {
         dispatch({type: CLOSE_DRAWER})
-    };
+    }
 
     return (
         <>
@@ -25,7 +25,9 @@ function DrawerModal(props) {
             >
                 {ComponentContentDrawer}
                 <div className='form-group'>
-                    <Button onClick={callBackSubmit} size='large' type='primary' htmlType='submit' className='btn-success btn ml-3 mt-3'>Submit</Button>
+                    <Button onClick={callBackSubmit} size='large' type='primary'
+                            htmlType='submit'
+                            className='btn-success btn ml-3 mt-3'>Submit</Button>
                 </div>
             </Drawer>
         </>

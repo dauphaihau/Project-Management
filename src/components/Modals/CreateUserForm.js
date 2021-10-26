@@ -1,20 +1,20 @@
 import React, {useEffect} from 'react';
-import {connect, useDispatch, useSelector} from "react-redux";
-import {SET_SUBMIT_CONTENT, USER_REGISTER_SAGA} from "../../store/types/Type";
+import {connect, useDispatch} from "react-redux";
+import {SET_SUBMIT_CONTENT_MODAL, USER_REGISTER_SAGA} from "../../store/types/Type";
 import {withFormik} from "formik";
 import * as Yup from "yup";
+import {Box, FormHelperText, TextField} from "@material-ui/core";
 
 function CreateUserForm(props) {
 
-    const { dataExist } = useSelector(state => state.UserReducer)
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch({
-            type: SET_SUBMIT_CONTENT,
+            type: SET_SUBMIT_CONTENT_MODAL,
             submitFn: handleSubmit
         })
-    },[])
+    }, [])
 
     const {
         touched,
@@ -24,43 +24,41 @@ function CreateUserForm(props) {
     } = props;
 
     return (
-        <form className='container-fluid' onSubmit={handleSubmit}>
-            <div className='form-group'>
-                <p className='font-weight-bold'>Email</p>
-                <input onChange={handleChange} className='form-control' name='email'/>
-                {touched.email && errors.email ? (
-                    <p className='text-danger'>{errors.email}</p>
-                ) : null}
-                <p style={{color:'red', marginLeft:'5px'}}>{dataExist}</p>
-            </div>
-            <div className='form-group'>
-                <p className='font-weight-bold'>Password</p>
-                <input onChange={handleChange} className='form-control' name='passWord'/>
-                {touched.passWord && errors.passWord ? (
-                    <p className='text-danger'>{errors.passWord}</p>
-                ) : null}
-            </div>
-            <div className='form-group'>
-                <p className='font-weight-bold'>Name</p>
-                <input onChange={handleChange} className='form-control' name='name'/>
-                {touched.name && errors.name ? (
-                    <p className='text-danger'>{errors.name}</p>
-                ) : null}
-            </div>
-            <div className='form-group'>
-                <p className='font-weight-bold'>Phone</p>
-                <input onChange={handleChange} className='form-control' name='phoneNumber'/>
-                {touched.phoneNumber && errors.phoneNumber ? (
-                    <p className='text-danger'>{errors.phoneNumber}</p>
-                ) : null}
-            </div>
+        <form onSubmit={handleSubmit}>
+            <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
+                <TextField onChange={handleChange} fullWidth name="email"
+                           id="outlined-basic" label="Email" variant="outlined"
+                />
+                <FormHelperText required
+                                error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+            </Box>
+            <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
+                <TextField onChange={handleChange} fullWidth name="passWord"
+                           id="outlined-basic" label="PASSWORD" variant="outlined"
+                />
+                <FormHelperText required
+                                error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>
+            </Box>
+            <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
+                <TextField onChange={handleChange} fullWidth name="name"
+                           id="outlined-basic" label="Name" variant="outlined"
+                />
+                <FormHelperText required error>{touched.name && errors.name ? `${errors.name}` : null}</FormHelperText>
+            </Box>
+            <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
+                <TextField onChange={handleChange} fullWidth name="phoneNumber"
+                           id="outlined-basic" label="Phone Number" variant="outlined"
+                />
+                <FormHelperText required
+                                error>{touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}</FormHelperText>
+            </Box>
         </form>
     );
 }
 
 const CreateUserFormByFormik = withFormik({
     enableReinitialize: true,
-    mapPropsToValues: (props) => ({
+    mapPropsToValues: () => ({
         email: '',
         passWord: '',
         name: '',
@@ -72,7 +70,7 @@ const CreateUserFormByFormik = withFormik({
         name: Yup.string().required('Name is required').matches(/^[A-Z a-z]+$/, 'Names cannot contain numbers !'),
         phoneNumber: Yup.string().required('Phone Number is required').matches(/^[0-9]*$/, 'number phone must be a number').min(6, 'Phone Number must be at least 6 characters.').max(32, 'Phone Number have max 32 characters'),
     }),
-    handleSubmit: (values, {props, setSubmitting}) => {
+    handleSubmit: (values, {props}) => {
 
         props.dispatch({
             type: USER_REGISTER_SAGA,

@@ -14,12 +14,14 @@ import LoadingComponent from "./components/Loading/LoadingComponent";
 import UserList from "./pages/User/UserList";
 import Drawer from "./HOC/Drawer";
 import Profile from './pages/Profile/Profile';
+import NotificationMui from "./util/NotificationMui";
 
 
 function App() {
     return (
         <Router history={history}>
             <LoadingComponent/>
+            <NotificationMui/>
             <Drawer/>
             <Switch>
                 <UserTemplate exact path="/login" component={Login}/>

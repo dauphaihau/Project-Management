@@ -12,9 +12,13 @@ import {createTheme, ThemeProvider} from "@material-ui/core";
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#1b55c5'
+            // main: '#1b55c5'
+            main: '#4090f6'
+        },
+        background: {
+            default: '#fff'
         }
-    }
+    },
 });
 
 ReactDOM.render(

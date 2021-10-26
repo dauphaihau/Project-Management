@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Form, InputNumber, Radio, Input, Button, Checkbox} from 'antd';
+import React, {useState} from 'react';
+import {Form, InputNumber, Radio, Input, Button} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {EDIT_USER_SAGA} from "../../store/types/Type";
 
 const validateMessages = {
-    required: '${label} không được bỏ trống',
+    required: '${label} is required',
     types: {
-        email: '${label} không hợp lệ!',
-        number: '${label} không hợp lệ!',
+        email: '${label} should be valid and contain @!',
+        number: '${label} must be a number',
     },
     number: {
-        range: '${label} phải từ 9 - 12 số ',
+        range: '${label} must be from 9-12 digits',
     },
 };
 
-function Profile(props) {
+function Profile() {
 
     const [componentSize, setComponentSize] = useState('default');
     const {userLogin} = useSelector(state => state.UserReducer)
@@ -40,8 +40,6 @@ function Profile(props) {
             onFinish={onFinish}
             labelCol={{span: 8}}
             wrapperCol={{span: 16}}
-            // labelCol={{span: 4}}
-            // wrapperCol={{span: 14}}
             layout="horizontal"
             initialValues={{
                 size: componentSize,
@@ -55,14 +53,6 @@ function Profile(props) {
             size={componentSize}
 
         >
-            <Form.Item label="Form Size" name="size">
-                <Radio.Group>
-                    <Radio.Button value="small">Small</Radio.Button>
-                    <Radio.Button value="default">Default</Radio.Button>
-                    <Radio.Button value="large">Large</Radio.Button>
-                </Radio.Group>
-            </Form.Item>
-
             <Form.Item label="Id" name='id'>
                 <Input style={{width: 300}} disabled/>
             </Form.Item>
@@ -88,7 +78,7 @@ function Profile(props) {
                 xs: {span: 24, offset: 0},
                 sm: {span: 16, offset: 8},
             }}>
-                <Button type="primary" htmlType='submit'>Cập nhật</Button>
+                <Button type="primary" htmlType='submit'>Update</Button>
             </Form.Item>
         </Form>
     );

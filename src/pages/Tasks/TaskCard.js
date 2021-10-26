@@ -2,6 +2,8 @@ import React from "react";
 import {useDispatch} from "react-redux";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import BugReportIcon from '@mui/icons-material/BugReport';
 // import {Draggable} from "react-beautiful-dnd";
 import {CardActions, CardContent, IconButton} from "@material-ui/core";
 import {EditOutlined, MoreVert} from "@material-ui/icons";
@@ -9,19 +11,17 @@ import {Button, Avatar, Tooltip} from "antd";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 
-
-
 export default function TaskCard(props) {
     const dispatch = useDispatch();
     const taskDetail = props.taskDetail;
     const index = props.index;
 
-    // console.log('task-detail', taskDetail)
+    console.log('task-detail', taskDetail)
 
     const styles = {
         container: {
             marginBottom: 10,
-            padding: 20,
+            padding: 9,
         },
     };
 
@@ -44,9 +44,12 @@ export default function TaskCard(props) {
                     </div>
                     <div style={{display: 'flex', marginTop: 30}}>
                         <div className='d-flex'>
-                            <ArrowUpwardIcon/>
-                            <p className='text-danger'
-                               style={{marginRight: '7rem'}}>{taskDetail.priorityTask.priority}</p>
+                            {/*<ArrowUpwardIcon/>*/}
+                            <div>
+                                {taskDetail.taskTypeDetail.taskType === 'new task' ? <NewReleasesIcon/>
+                                    : <BugReportIcon/>}
+                            </div>
+                            <p style={{marginRight:'7rem', marginLeft: 5}}>{taskDetail.priorityTask.priority}</p>
                         </div>
                         <div className="block-right">
                             <div style={{display: 'flex'}} className='avatar-group'>

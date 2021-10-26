@@ -1,36 +1,27 @@
 import React, {Fragment, useState} from "react";
 import TaskCard from "./TaskCard";
 import {useSelector, useDispatch} from "react-redux";
-import ActionButton from "./ActionButton";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
-import {sort} from "../../store/actions/TaskAction";
+// import {sort} from "../../store/actions/TaskAction";
 import {
-    DRAG_HAPPENED,
-    GET_TASK_DETAIL,
     GET_TASK_DETAIL_SAGA,
     OPEN_FORM_CREATE_TASK,
     UPDATE_STATUS_TASK_SAGA
 } from "../../store/types/Type";
-import {Form, Modal, Input, Table, Tag, Space, Avatar, Tooltip, Button} from "antd";
-// import Modal from '../../HOC/Modal';
+import {Modal, Avatar, Tooltip, Button} from "antd";
 import CreateTaskForm from "../../components/Modals/CreateTaskForm";
-import {OPEN_FORM_EDIT_TASK} from "../../store/types/Type";
 import EditTaskForm from "../../components/Modals/EditTaskForm";
 
 export default function TaskList(props) {
 
-    const {taskList} = useSelector(state => state.TaskReducer);
+    // const {taskList} = useSelector(state => state.TaskReducer);
     const dispatch = useDispatch();
 
-    // console.log('props', props)
-
     const [state, setState] = useState({
-        modal1Visible: false,
         modal2Visible: false,
     })
 
     const setModal2Visible = (modal2Visible, taskId) => {
-        console.log('task-id at taskList', taskId)
         setState({modal2Visible});
         dispatch({
             type: GET_TASK_DETAIL_SAGA,
@@ -38,23 +29,16 @@ export default function TaskList(props) {
         })
     }
 
-    const styles = {
-        container: {
-            backgroundColor: "#ccc",
-            borderRadius: 3,
-            width: 300,
-            padding: 7.5,
-            marginRight: 5,
-        },
-    };
-
-    const handleUpdateTask = (taskId) => {
-        dispatch({
-            type: OPEN_FORM_EDIT_TASK,
-            Component: <EditTaskForm projectId={props.projectId} taskId={taskId}/>,
-            title: 'Edit task'
-        })
-    };
+    // const styles = {
+    //     container: {
+    //         backgroundColor: "#ccc",
+    //         borderRadius: 3,
+    //         width: 300,
+    //         padding: 7.5,
+    //         marginRight: 5,
+    //     },
+    // };
+    //
 
     const handleDragEnd = (result) => {
 
@@ -83,7 +67,7 @@ export default function TaskList(props) {
             {props.lstTask?.map((task, index) => {
                 return <Droppable key={index} droppableId={task.statusName}>
                     {(provided) => {
-                        return <div className="task-col" key={index} style={{paddingBottom: 30, paddingTop: 8}}
+                        return <div className="task-col" key={index} style={{paddingBottom: 0, paddingTop: 8}}
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}>
                             {/*the chua item se co droppableProps*/}
@@ -120,7 +104,6 @@ export default function TaskList(props) {
                                                 onCancel={() => setModal2Visible(false)}
                                                 width={1000}
                                                 footer={null}
-                                                // bodyStyle={{height: '100%'}}
                                             >
                                                 <EditTaskForm
                                                     projectId={props.projectId} taskId={taskDetail.taskId}
@@ -138,26 +121,27 @@ export default function TaskList(props) {
         </DragDropContext>
     };
 
-    const onDragEnd = (result) => {
-        //reorder cards
-        const {destination, source, draggableId, type} = result;
-
-        //do nothing if card dragged outside
-        if (!destination) {
-            return;
-        }
-
-        dispatch(
-            sort(
-                source.droppableId,
-                destination.droppableId,
-                source.index,
-                destination.index,
-                draggableId,
-                type
-            )
-        );
-    };
+    // const onDragEnd = (result) => {
+    //     //reorder cards
+    //     const {destination, source, draggableId, type} = result;
+    //
+    //     //do nothing if card dragged outside
+    //     if (!destination) {
+    //         return;
+    //     }
+    //
+    //     dispatch(
+    //         sort(
+    //             source.droppableId,
+    //             destination.droppableId,
+    //             source.index,
+    //             destination.index,
+    //             draggableId,
+    //             type
+    //         )
+    //     );
+    // };
+    //
 
     return <Fragment>
         <div className='row ' style={{marginLeft: 14, marginBottom: 15}}>

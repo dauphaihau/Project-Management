@@ -9,7 +9,7 @@ function LoadingComponent(props) {
     if (isLoading) {
         return (
             <div className={styleLoading.bgLoading}>
-                <img height={100} src='./img/giphy.gif'/>
+                <img height={150} src='./img/Spin.gif'/>
             </div>
         );
     } else {

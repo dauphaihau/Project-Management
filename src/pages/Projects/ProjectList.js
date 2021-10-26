@@ -1,36 +1,29 @@
 import React, {useState, useEffect, Fragment, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {Form, Input, Table, Tag, Space, Avatar, Tooltip, Button, Popover} from "antd";
+import {Form, Table, Tag, Space, Avatar, Tooltip, Button, Popover} from "antd";
 import {
-    SearchOutlined,
     EditOutlined,
     CloseOutlined,
     PlusOutlined
 } from "@ant-design/icons";
-import {useHistory} from "react-router-dom";
-import ProjectForm from "../../components/Modals/ProjectForm";
 import Modal from "../../HOC/Modal";
 import CreateProjectForm from "../../components/Modals/CreateProjectForm";
 import {
     GET_ALL_PROJECT_SAGA,
     OPEN_FORM_CREATE_PROJECT,
     DELETE_PROJECT_SAGA,
+
     EDIT_PROJECT,
-    OPEN_DRAWER,
     OPEN_FORM_EDIT_PROJECT,
-    GET_USER_BY_KEYWORD,
-    GET_USER_BY_KEYWORD_SAGA,
     ADD_USER_SAGA,
     DELETE_USER_FROM_PROJECT_SAGA,
-    GET_USER_SAGA, GET_ALL_PROJECT
+    GET_USER_SAGA,
 } from "../../store/types/Type";
+import DeleteIcon from '@mui/icons-material/Delete';
 import {Popconfirm, message} from 'antd';
 import EditProjectForm from "../../components/Modals/EditProjectForm";
 import {AutoComplete} from "antd/es";
-import {UserReducer} from "../../store/reducers/UserReducer";
 import Search from "antd/es/input/Search";
-import axios from "axios";
-import {ACCESS_TOKEN, history, TOKEN_CYBERSOFT} from "../../util/settings";
 
 export default function ProjectList(props) {
     const cancel = (e) => {
@@ -38,12 +31,9 @@ export default function ProjectList(props) {
         message.error('Click on No');
     }
 
+    const dispatch = useDispatch();
     const {listProject} = useSelector((state) => state.ProjectReducer);
     const {listUser} = useSelector((state) => state.UserReducer);
-
-    console.log('list-project', listProject)
-
-    const dispatch = useDispatch();
 
     const [state, setState] = useState({
         data: [],
@@ -53,7 +43,13 @@ export default function ProjectList(props) {
         },
         loading: false,
     });
-    const [valueLable, setValueLable] = useState('')
+
+    const [valueLabel, setValueLabel] = useState('')
+
+    useEffect(() => {
+        const {pagination} = state;
+        fetch({pagination});
+    }, []);
 
     const searchRef = useRef(null)
 
@@ -62,11 +58,11 @@ export default function ProjectList(props) {
             title: "ID",
             dataIndex: "id",
             key: "id",
-            // render: (record) => <a href="#">{record}</a>,
             sorter: (item2, item1) => {
                 return item2.id - item1.id;
             },
-            sortDirections: ['descend']
+            sortDirections: ['descend'],
+            // width: '5%',
         },
         {
             title: "Project Name",
@@ -75,6 +71,7 @@ export default function ProjectList(props) {
             render: (text, record) => (
                 <a href={"/project/task/" + record.id}>{text}</a>
             ),
+            // width: '25%',
             sorter: (item2, item1) => {
                 let projectName1 = item1.projectName.trim().toLowerCase();
                 let projectName2 = item2.projectName.trim().toLowerCase();
@@ -88,6 +85,7 @@ export default function ProjectList(props) {
             title: "Category",
             dataIndex: "categoryName",
             key: "categoryName",
+            // width: '15%',
             sorter: (item2, item1) => {
                 let categoryName1 = item1.categoryName?.trim().toLowerCase();
                 let categoryName2 = item2.categoryName?.trim().toLowerCase();
@@ -106,6 +104,7 @@ export default function ProjectList(props) {
                   <Tag color="green">{records.name.toUpperCase()}</Tag>
                 </span>
             ),
+            // width: '15%',
             sorter: (item2, item1) => {
                 let creator1 = item1.creator.name?.trim().toLowerCase();
                 let creator2 = item2.creator.name?.trim().toLowerCase();
@@ -120,15 +119,14 @@ export default function ProjectList(props) {
             key: "members",
             dataIndex: "members",
             render: (record, index) => <span>{renderAvatarGroups(record, index)}</span>,
+            // width: '15%',
         },
         {
             title: "Action",
             key: "action",
+            align: 'center',
             render: (text, record) => (
                 <Space size="small">
-                    {/* <a href={'/project/detail/' + record.id}>Edit</a>
-                      <a href={'/project/delete/' + record.id}>Delete</a> */}
-                    {/* <Button type="primary" onClick={handleProjectUpdate(record.id)} icon={<EditOutlined />}/> */}
                     <Button type="primary" onClick={() => {
                         console.log('record', record)
                         dispatch({
@@ -160,13 +158,9 @@ export default function ProjectList(props) {
                     </Popconfirm>
                 </Space>
             ),
+            // width: '20%',
         },
     ];
-
-    useEffect(() => {
-        const {pagination} = state;
-        fetch({pagination});
-    }, []);
 
     const handleTableChange = (pagination, filters, sorter) => {
         fetch({
@@ -199,19 +193,9 @@ export default function ProjectList(props) {
         });
     };
 
-    const openForm = () => {
-        dispatch({
-            type: "OPEN_PROJECT",
-            Component: <ProjectForm/>,
-            handleSubmit: () => {
-                alert("Logged in");
-            },
-        });
-    };
-
     const renderActionButtons = () => {
         return (
-            <div className="d-flex justify-content-between align-items-center mb-2">
+            <div className="d-flex align-items-center mb-2">
                 <Button
                     type="primary"
                     onClick={() => {
@@ -225,13 +209,13 @@ export default function ProjectList(props) {
                     Create Project
                 </Button>
                 <Modal/>
-                <Form name="basic" layout="inline">
+                <Form className='ml-2' name="basic" layout="inline">
                     <Search placeholder="input search text" onSearch={(keyWord) => {
                         dispatch({
                             type: GET_ALL_PROJECT_SAGA,
                             keyWord: keyWord
                         })
-                    }} enterButton/>
+                    }}/>
                 </Form>
             </div>
         );
@@ -250,25 +234,32 @@ export default function ProjectList(props) {
                 >
                     {members.map((member, index) => {
                         return (
-                            <Popover className={{borderRadius: '6px'}} key={index} placement='top' title='members'
+                            <Popover key={index} placement='top'
                                      content={() => {
-                                         return <table className='table'>
+                                         return <table className='table table-borderless table-light'>
                                              <thead>
                                              <tr>
-                                                 <th>id</th>
-                                                 <th>Avatar</th>
-                                                 <th>Name</th>
-                                                 <th/>
+                                                 <th scope="col">Id</th>
+                                                 <th scope="col">Avatar</th>
+                                                 <th scope="col">Name</th>
+                                                 <th scope="col">Action</th>
+                                                 {/*<th/>*/}
                                              </tr>
                                              </thead>
                                              <tbody>
                                              {members.map((item, index) => {
-                                                 return <tr key={index}>
-                                                     <td>{item.id}</td>
-                                                     <td><img src={item.avatar} height={25} width={25} alt='...'/></td>
+                                                 return <tr scope='row' key={index}>
+                                                     <td>{item.userId}</td>
+                                                     <td>
+                                                         {/*<img src={item.avatar} height={25} width={25} alt='...'/>*/}
+                                                         <img className="img-fluid img-responsive rounded-circle mr-2"
+                                                              src={`https://i.pravatar.cc/150?u=${item.avatar}`}
+                                                              width="38"/>
+                                                     </td>
                                                      <td>{item.name}</td>
                                                      <td>
-                                                         <button
+                                                         <DeleteIcon
+                                                             style={{cursor: "pointer", marginLeft: 8}}
                                                              onClick={() => {
                                                                  dispatch({
                                                                      type: DELETE_USER_FROM_PROJECT_SAGA,
@@ -278,8 +269,7 @@ export default function ProjectList(props) {
                                                                      }
                                                                  })
                                                              }}
-                                                             className='btn btn-danger'>Delete
-                                                         </button>
+                                                         />
                                                      </td>
                                                  </tr>
                                              })}
@@ -304,13 +294,13 @@ export default function ProjectList(props) {
                         options={listUser?.map((user, index) => {
                             return {label: user.name, value: user.userId.toString()}
                         })}
-                        value={valueLable} // set default value
+                        value={valueLabel} // set default value
 
                         onChange={(text) => {
-                            setValueLable(text)
+                            setValueLabel(text)
                         }}
                         onSelect={(valueSelect, option) => {
-                            setValueLable(option.label)
+                            setValueLabel(option.label)
                             dispatch({
                                 type: ADD_USER_SAGA,
                                 userProject: {
@@ -341,8 +331,8 @@ export default function ProjectList(props) {
         );
     };
 
-    const renderlistProject = () => {
-        const {data, pagination, loading} = state;
+    const renderListProject = () => {
+        const {pagination, loading} = state;
 
         return (
             <div>
@@ -363,7 +353,7 @@ export default function ProjectList(props) {
     return (
         <div>
             {renderActionButtons()}
-            {renderlistProject()}
+            {renderListProject()}
         </div>
     );
 }

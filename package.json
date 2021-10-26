@@ -36,6 +36,7 @@
     "react-icons": "^4.3.1",
     "react-modal": "^3.14.3",
     "react-redux": "^7.2.4",
+    "react-router": "^5.2.1",
     "react-router-dom": "^5.2.0",
     "react-saga": "^0.3.1",
     "react-scripts": "4.0.3",
@@ -76,6 +77,7 @@
   "devDependencies": {
     "@mui/core": "^5.0.0-alpha.51",
     "@mui/system": "^5.0.4",
-    "immutable": "^4.0.0-rc.14"
+    "immutable": "^4.0.0-rc.14",
+    "prop-types": "^15.7.2"
   }
 }

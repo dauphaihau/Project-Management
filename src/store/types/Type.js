@@ -62,10 +62,12 @@ export const INSERT_COMMENT_SAGA = 'INSERT_COMMENT_SAGA'
 export const UPDATE_COMMENT_SAGA = 'UPDATE_COMMENT_SAGA'
 export const DELETE_COMMENT_SAGA = 'DELETE_COMMENT_SAGA'
 
-// --------------------- loading
+// --------------------- loading, notification
 
 export const DISPLAY_LOADING = 'DISPLAY_LOADING'
 export const HIDE_LOADING = 'HIDE_LOADING'
+export const DISPLAY_ALERT = 'DISPLAY_ALERT'
+export const HIDE_ALERT = 'HIDE_ALERT'
 
 
 // ---------------------- list & card
@@ -76,6 +78,9 @@ export const DRAG_HAPPENED = 'DRAG_HAPPENED'
 export const OPEN_DRAWER = 'OPEN_DRAWER'
 export const CLOSE_DRAWER = 'CLOSE_DRAWER'
 
+export const OPEN_USER_MODAL = 'OPEN_USER_MODAL'
+export const CLOSE_USER_MODAL = 'CLOSE_USER_MODAL'
+
 
 export const OPEN_FORM_EDIT_USER = 'OPEN_FORM_EDIT_USER'
 export const SET_SUBMIT_EDIT_USER = 'SET_SUBMIT_EDIT_USER'
@@ -85,6 +90,7 @@ export const OPEN_FORM_CREATE_USER = 'OPEN_FORM_CREATE_USER'
 
 export const OPEN_FORM_EDIT_PROJECT = 'OPEN_FORM_EDIT_PROJECT'
 export const SET_SUBMIT_CONTENT = 'SET_SUBMIT_CONTENT'
+export const SET_SUBMIT_CONTENT_MODAL = 'SET_SUBMIT_CONTENT_MODAL'
 export const EDIT_PROJECT = 'EDIT_PROJECT'
 export const CREATE_PROJECT = 'CREATE_PROJECT'
 export const OPEN_FORM_CREATE_PROJECT = 'OPEN_FORM_CREATE_PROJECT'

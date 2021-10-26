@@ -1,21 +1,19 @@
-import React, {useEffect} from 'react';
-import {Table, Space, Button, Form, Input, Tooltip} from 'antd';
-import {CloseOutlined, EditOutlined, SearchOutlined} from "@ant-design/icons";
-import Modal from "../../HOC/Modal";
+import React, {useEffect, useState} from 'react';
+import {Table, Space, Button, Form} from 'antd';
+import {CloseOutlined, EditOutlined} from "@ant-design/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    DELETE_USER_SAGA,
-    EDIT_USER, GET_USER_BY_KEYWORD, GET_USER_BY_KEYWORD_SAGA,
-    GET_USER_SAGA,
-    OPEN_DRAWER,
+    DELETE_USER_SAGA, EDIT_USER, GET_USER_SAGA,
     OPEN_FORM_CREATE_USER,
-    OPEN_FORM_EDIT_USER
+    OPEN_FORM_EDIT_USER,
 } from "../../store/types/Type";
 import EditUserForm from "../../components/Modals/EditUserForm";
 import {Popconfirm, message} from 'antd';
 import CreateUserForm from "../../components/Modals/CreateUserForm";
 import Search from "antd/es/input/Search";
+import UserModal from "../../HOC/UserModal";
 
+import Avatar from '@mui/material/Avatar';
 
 const cancel = (e) => {
     console.log(e);
@@ -26,7 +24,10 @@ function UserList(props) {
 
     const dispatch = useDispatch();
     const {listUser} = useSelector(state => state.UserReducer);
+    // const [stateCollapse, setStateCollapseIcon] = useState(false)
 
+    console.log('list-user', listUser)
+    console.log('props', props)
 
     useEffect(() => {
         dispatch({
@@ -42,25 +43,41 @@ function UserList(props) {
             // defaultSortOrder: 'ascend',
             sorter: (a, b) => a.userId - b.userId,
             sortDirections: ['ascend', 'descend', 'ascend'],
+            width: '10%',
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            width: '25%',
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            // responsive: ['md'],
+            width: '25%',
         },
+        {
+            title: "Avatar",
+            key: "avatar",
+            dataIndex: "avatar",
+            // responsive: ['lg'],
+            render: (text, record) => <Avatar alt="Cindy Baker" src={`https://i.pravatar.cc/150?u=${record.avatar}`}/>,
+            width: '10%',
+        },
+
         {
             title: 'Phone',
             dataIndex: 'phoneNumber',
             key: 'phoneNumber',
+            responsive: ['lg'],
+            width: '10%',
         },
         {
             title: 'Action',
             key: 'action',
+            align: 'center',
             render: (text, record) => (
                 <Space size='small'>
                     <Button type="primary" onClick={() => {
@@ -102,49 +119,50 @@ function UserList(props) {
                     </Popconfirm>
                 </Space>
             ),
+            width: '20%',
         },
     ];
 
     const renderActionButtons = () => {
         return (
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex  align-items-center mb-2">
                 <Button
                     type="primary"
                     onClick={() => {
-                      dispatch({
-                          type: OPEN_FORM_CREATE_USER,
-                          Component: <CreateUserForm/>,
-                          title: 'Create user'
-                      })
+                        dispatch({
+                            type: OPEN_FORM_CREATE_USER,
+                            Component: <CreateUserForm/>,
+                            title: 'Create user',
+                        })
                     }}
                 >
                     Create User
                 </Button>
-                <Modal/>
-                <Form name="basic" layout="inline">
+                <UserModal/>
+                <Form className='ml-2' name="basic" layout="inline">
                     <Search placeholder="input search text" onSearch={(keyWord) => {
-                      dispatch({
-                          type: GET_USER_SAGA,
-                          keyWord: keyWord
-                      })
-                    }} enterButton />
-                    {/*<Form.Item name="searchProject">*/}
-                    {/*    <Input placeholder="Search user"/>*/}
-                    {/*</Form.Item>*/}
-                    {/*<Form.Item>*/}
-                    {/*    <Tooltip title="search">*/}
-                    {/*        <Button type="primary" shape="circle" icon={<SearchOutlined/>} size="large"/>*/}
-                    {/*    </Tooltip>*/}
-                    {/*</Form.Item>*/}
+                        dispatch({
+                            type: GET_USER_SAGA,
+                            keyWord: keyWord
+                        })
+                    }}/>
                 </Form>
+                {/*<div className="left-content">*/}
+                {/*    {React.createElement(*/}
+                {/*        stateCollapse ? MenuUnfoldOutlined : MenuFoldOutlined,*/}
+                {/*        {*/}
+                {/*            className: "trigger left-content",*/}
+                {/*            onClick: props.setStateCollapse,*/}
+                {/*            style: {color: "#000000", fontSize: "30px", marginLeft: 5},*/}
+                {/*        }*/}
+                {/*    )}*/}
+                {/*</div>*/}
             </div>
         );
     };
 
     const renderListUser = () => {
-        return (
-            <Table columns={columns} dataSource={listUser}/>
-        )
+        return <Table columns={columns} dataSource={listUser} scroll={{x: 300}}/>
     }
 
     return (
