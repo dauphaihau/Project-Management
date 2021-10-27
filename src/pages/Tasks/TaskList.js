@@ -67,11 +67,11 @@ export default function TaskList(props) {
             {props.lstTask?.map((task, index) => {
                 return <Droppable key={index} droppableId={task.statusName}>
                     {(provided) => {
-                        return <div className="task-col" key={index} style={{paddingBottom: 0, paddingTop: 8}}
+                        return <div className="task-col" key={index} style={{paddingBottom: 1, paddingTop: 8}}
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}>
                             {/*the chua item se co droppableProps*/}
-                            <h3 className="task-list-name mb-3">{task.statusName}</h3>
+                            <h3 className="task-list-name mb-3 pb-2 ">{task.statusName}</h3>
                             {task.lstTaskDeTail.map((taskDetail, index) => {
                                 return <Draggable key={taskDetail.taskId.toString()} index={index}
                                     // draggableId={taskDetail.taskId.toString()}
@@ -167,8 +167,7 @@ export default function TaskList(props) {
                 </Avatar.Group>
             </div>
         </div>
-
-        <div id="task-list">
+        <div id="task-list" className='d-block d-md-flex'>
             {renderTaskList()}
         </div>
     </Fragment>

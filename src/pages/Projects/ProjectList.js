@@ -4,7 +4,7 @@ import {Form, Table, Tag, Space, Avatar, Tooltip, Button, Popover} from "antd";
 import {
     EditOutlined,
     CloseOutlined,
-    PlusOutlined
+    UserAddOutlined
 } from "@ant-design/icons";
 import Modal from "../../HOC/Modal";
 import CreateProjectForm from "../../components/Modals/CreateProjectForm";
@@ -25,7 +25,7 @@ import EditProjectForm from "../../components/Modals/EditProjectForm";
 import {AutoComplete} from "antd/es";
 import Search from "antd/es/input/Search";
 
-export default function ProjectList(props) {
+export default function ProjectList() {
     const cancel = (e) => {
         console.log(e);
         message.error('Click on No');
@@ -68,9 +68,8 @@ export default function ProjectList(props) {
             title: "Project Name",
             dataIndex: "projectName",
             key: "projectName",
-            render: (text, record) => (
-                <a href={"/project/task/" + record.id}>{text}</a>
-            ),
+            render: (text, record) => <a href={"/project/task/" + record.id}>{text}</a>
+            ,
             // width: '25%',
             sorter: (item2, item1) => {
                 let projectName1 = item1.projectName.trim().toLowerCase();
@@ -101,7 +100,7 @@ export default function ProjectList(props) {
             dataIndex: "creator",
             render: (records) => (
                 <span>
-                  <Tag color="green">{records.name.toUpperCase()}</Tag>
+                  <Tag color="geekblue">{records.name.toUpperCase()}</Tag>
                 </span>
             ),
             // width: '15%',
@@ -128,7 +127,6 @@ export default function ProjectList(props) {
             render: (text, record) => (
                 <Space size="small">
                     <Button type="primary" onClick={() => {
-                        console.log('record', record)
                         dispatch({
                             type: OPEN_FORM_EDIT_PROJECT,
                             Component: <EditProjectForm/>,
@@ -230,6 +228,7 @@ export default function ProjectList(props) {
                     maxStyle={{
                         color: "#4091f7",
                         backgroundColor: "#cfe4fd",
+
                     }}
                 >
                     {members.map((member, index) => {
@@ -251,8 +250,7 @@ export default function ProjectList(props) {
                                                  return <tr scope='row' key={index}>
                                                      <td>{item.userId}</td>
                                                      <td>
-                                                         {/*<img src={item.avatar} height={25} width={25} alt='...'/>*/}
-                                                         <img className="img-fluid img-responsive rounded-circle mr-2"
+                                                         <img alt='avatar' className="img-fluid img-responsive rounded-circle mr-2"
                                                               src={`https://i.pravatar.cc/150?u=${item.avatar}`}
                                                               width="38"/>
                                                      </td>
@@ -277,7 +275,6 @@ export default function ProjectList(props) {
                                          </table>
                                      }}>
                                 <Tooltip
-                                    // title={member.name}
                                     key={index} placement="top">
                                     <Avatar style={{backgroundColor: "#3a87f7",}}>
                                         {member.name[0].toUpperCase()}
@@ -291,7 +288,7 @@ export default function ProjectList(props) {
                 <Popover placement="top" title={'Add user'} trigger="click" content={() => {
                     return <AutoComplete
                         style={{width: '100%'}}
-                        options={listUser?.map((user, index) => {
+                        options={listUser?.map((user) => {
                             return {label: user.name, value: user.userId.toString()}
                         })}
                         value={valueLabel} // set default value
@@ -325,7 +322,7 @@ export default function ProjectList(props) {
                             }, 300)
                         }}/>
                 }}>
-                    <Button shape="circle" icon={<PlusOutlined/>}/>
+                    <Button shape="circle"  icon={<UserAddOutlined/>}/>
                 </Popover>
             </Fragment>
         );

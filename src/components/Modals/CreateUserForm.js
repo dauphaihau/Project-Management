@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {connect, useDispatch} from "react-redux";
-import {SET_SUBMIT_CONTENT_MODAL, USER_REGISTER_SAGA} from "../../store/types/Type";
+import {CREATE_USER_SAGA, SET_SUBMIT_CONTENT_MODAL} from "../../store/types/Type";
 import {withFormik} from "formik";
 import * as Yup from "yup";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
@@ -73,7 +73,7 @@ const CreateUserFormByFormik = withFormik({
     handleSubmit: (values, {props}) => {
 
         props.dispatch({
-            type: USER_REGISTER_SAGA,
+            type: CREATE_USER_SAGA,
             dataRegister: values
         })
     },

@@ -24,8 +24,10 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import {Fade} from '../../HOC/UserModal'
+import {useTheme} from "@mui/system";
+import {useMediaQuery} from "@mui/material";
 
-const style = {
+let style = {
     position: 'absolute',
     top: '30%',
     left: '50%',
@@ -60,8 +62,13 @@ function EditTaskForm(props) {
     const [historyContent, setHistoryContent] = useState(taskDetailModal.description)
     const [content, setContent] = useState(taskDetailModal.description)
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('md'))
+
+    if (matches) style = {...style, width: '90%'};
+
     const dispatch = useDispatch();
-    console.log('task-detail-modal', taskDetailModal)
+    // console.log('task-detail-modal', taskDetailModal)
 
     useEffect(() => {
         dispatch({type: GET_ALL_STATUS_SAGA})
@@ -147,7 +154,8 @@ function EditTaskForm(props) {
             <i className="far fa-clock"/>
             <div style={{width: '100%'}}>
                 <div className='progress'>
-                    <div className='progress-bar' role='progressbar' style={{width: `${percent}%`, backgroundColor: '#1b55c5'}}
+                    <div className='progress-bar' role='progressbar'
+                         style={{width: `${percent}%`, backgroundColor: '#1b55c5'}}
                          aria-valuenow={Number(timeTrackingSpent)}
                          aria-valuemin={Number(timeTrackingRemaining)}
                          aria-valuemax={max}/>
@@ -258,7 +266,6 @@ function EditTaskForm(props) {
                                 })}
                             </TextField>
                         </div>
-
                         <div className="form-group col-6 col-sm-4">
                             <TextField onChange={handleChange} name="taskName" defaultValue={taskDetailModal.taskName}
                                        id="standard-basic" label="TASK NAME" variant="standard"/>
@@ -321,15 +328,16 @@ function EditTaskForm(props) {
                                         marginBottom: 7,
                                         JustifyContent: 'space-evenly'
                                     }} className='item'>
-                                        <Avatar size='small' alt="Cindy Baker" src={`https://i.pravatar.cc/150?u=${user.avatar}`} />
+                                        <Avatar size='small' alt="Cindy Baker"
+                                                src={`https://i.pravatar.cc/150?u=${user.avatar}`}/>
                                         <p className='name ml-1'>{user.name.slice(0, 7)}</p>
-                                            <CloseOutlined style={{marginLeft: 17, lineHeight: 'inherit'}} onClick={() => {
-                                                dispatch({
-                                                    type: HANDLE_CHANGE_POST_API_SAGA,
-                                                    actionType: REMOVE_USER_ASSIGN,
-                                                    userId: user.id
-                                                })
-                                            }}/>
+                                        <CloseOutlined style={{marginLeft: 17, lineHeight: 'inherit'}} onClick={() => {
+                                            dispatch({
+                                                type: HANDLE_CHANGE_POST_API_SAGA,
+                                                actionType: REMOVE_USER_ASSIGN,
+                                                userId: user.id
+                                            })
+                                        }}/>
                                     </div>
                                 })
                             }

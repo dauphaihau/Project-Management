@@ -20,14 +20,10 @@ const cancel = (e) => {
     message.error('Click on No');
 }
 
-function UserList(props) {
+function UserList() {
 
     const dispatch = useDispatch();
     const {listUser} = useSelector(state => state.UserReducer);
-    // const [stateCollapse, setStateCollapseIcon] = useState(false)
-
-    console.log('list-user', listUser)
-    console.log('props', props)
 
     useEffect(() => {
         dispatch({
@@ -147,16 +143,6 @@ function UserList(props) {
                         })
                     }}/>
                 </Form>
-                {/*<div className="left-content">*/}
-                {/*    {React.createElement(*/}
-                {/*        stateCollapse ? MenuUnfoldOutlined : MenuFoldOutlined,*/}
-                {/*        {*/}
-                {/*            className: "trigger left-content",*/}
-                {/*            onClick: props.setStateCollapse,*/}
-                {/*            style: {color: "#000000", fontSize: "30px", marginLeft: 5},*/}
-                {/*        }*/}
-                {/*    )}*/}
-                {/*</div>*/}
             </div>
         );
     };

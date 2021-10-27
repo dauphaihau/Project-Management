@@ -1,7 +1,3 @@
-// const Default = (props) => {
-//     return <p>Default Component</p>
-// }
-
 import {
     CLOSE_USER_MODAL,
     OPEN_FORM_CREATE_USER, OPEN_FORM_EDIT_USER,

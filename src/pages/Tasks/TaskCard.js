@@ -1,22 +1,22 @@
 import React from "react";
-import {useDispatch} from "react-redux";
+// import {useDispatch} from "react-redux";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import BugReportIcon from '@mui/icons-material/BugReport';
 // import {Draggable} from "react-beautiful-dnd";
 import {CardActions, CardContent, IconButton} from "@material-ui/core";
-import {EditOutlined, MoreVert} from "@material-ui/icons";
+// import {EditOutlined, MoreVert} from "@material-ui/icons";
 import {Button, Avatar, Tooltip} from "antd";
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+// import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 export default function TaskCard(props) {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const taskDetail = props.taskDetail;
-    const index = props.index;
+    // const index = props.index;
 
-    console.log('task-detail', taskDetail)
+    // console.log('task-detail', taskDetail)
 
     const styles = {
         container: {

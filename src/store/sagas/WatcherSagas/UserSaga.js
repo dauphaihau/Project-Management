@@ -1,6 +1,6 @@
 import {
     ADD_USER_SAGA,
-    ASSIGN_USER_TASK_SAGA, CLOSE_USER_MODAL,
+    ASSIGN_USER_TASK_SAGA, CLOSE_USER_MODAL, CREATE_USER_SAGA,
     DELETE_USER_FROM_PROJECT_SAGA,
     DELETE_USER_SAGA, DISPLAY_ALERT,
     DISPLAY_LOADING,
@@ -18,25 +18,6 @@ import {call, takeLatest, put, delay} from 'redux-saga/effects'
 import {ACCESS_TOKEN, history, STATUS_CODE, USER_LOGIN} from "../../../util/settings";
 import {userServices} from "../../services/UserServices";
 
-
-// ---------------- Create User
-function* registerSaga({dataRegister}) {
-    try {
-        const {data} = yield call(() => userServices.register(dataRegister))
-        if (data.statusCode === STATUS_CODE.SUCCESS) {
-            yield put({type: CLOSE_USER_MODAL})
-            yield put({type: DISPLAY_ALERT, message: 'Create user successfully'})
-        }
-
-    } catch (error) {
-        console.log({error});
-        alert('email already exists')
-    }
-}
-
-export function* WatcherRegister() {
-    yield takeLatest(USER_REGISTER_SAGA, registerSaga)
-}
 
 function* LoginSaga({userLogin}) {
 
@@ -99,9 +80,10 @@ function* addUserSaga({userProject}) {
         yield call(() => userServices.addUserProject(userProject))
         yield put({type: GET_ALL_PROJECT_SAGA})
     } catch (error) {
-        console.log('error', error.statusCode)
-        if (error.statusCode === 403) {
-            alert('User is unthorization!')
+        console.log({error})
+        console.log('error', error.response.status)
+        if (error.status === 403) {
+            alert('you are not authorized to add user')
         }
         alert('User already exists in the project!')
     }
@@ -109,6 +91,26 @@ function* addUserSaga({userProject}) {
 
 export function* WatcherAddUser() {
     yield takeLatest(ADD_USER_SAGA, addUserSaga)
+}
+
+
+// ---------------- Create User
+function* createUserSaga({dataRegister}) {
+    try {
+        const {data} = yield call(() => userServices.register(dataRegister))
+        if (data.statusCode === STATUS_CODE.SUCCESS) {
+            yield put({type: CLOSE_USER_MODAL})
+            yield put({type: DISPLAY_ALERT, message: 'Create user successfully'})
+        }
+
+    } catch (error) {
+        console.log({error});
+        alert('email already exists')
+    }
+}
+
+export function* WatcherRegister() {
+    yield takeLatest(CREATE_USER_SAGA, createUserSaga)
 }
 
 // ---------------- edit user

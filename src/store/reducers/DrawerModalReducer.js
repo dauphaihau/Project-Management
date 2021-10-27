@@ -11,7 +11,7 @@ import React from 'react'
 const initialState = {
     visible: false,
     ComponentContentDrawer: <p>default content</p>,
-    callBackSubmit: (propValues) => {
+    callBackSubmit: () => {
         alert('HI')
     },
     title: '',

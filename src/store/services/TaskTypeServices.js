@@ -1,14 +1,8 @@
 import {baseService} from "./baseServices";
 
-
 export class TaskTypeServices extends baseService {
-    constructor() {
-        super();
-    }
 
-    getAllTask = () => {
-        return this.get(`TaskType/getAll`)
-    }
+    getAllTask = () => this.get(`TaskType/getAll`)
 
 }
 

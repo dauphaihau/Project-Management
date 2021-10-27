@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux'
 import {CloseOutlined,} from "@ant-design/icons";
 import {Button} from "antd";
 
-export default function Modal(props) {
+export default function Modal() {
 
     const {Component} = useSelector(state => state.ModalReducer);
 

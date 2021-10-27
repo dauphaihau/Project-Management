@@ -10,7 +10,7 @@ import {
     GET_TASK_DETAIL_SAGA,
     HANDLE_CHANGE_POST_API_SAGA, REMOVE_TASK_SAGA, REMOVE_USER_ASSIGN, UPDATE_STATUS_TASK_SAGA
 } from "../../types/Type";
-import { STATUS_CODE} from "../../../util/settings";
+import {STATUS_CODE} from "../../../util/settings";
 
 // ---------------------- get task detail
 function* getTaskDetailSaga({taskId}) {
@@ -32,8 +32,7 @@ export function* WatcherGetTaskDetail() {
 // ---------------------- create task
 function* createTaskSaga({taskObj}) {
     try {
-        const result = yield call(() => taskServices.createTask(taskObj))
-        console.log({result})
+        yield call(() => taskServices.createTask(taskObj))
         yield put({type: CLOSE_DRAWER})
         yield put({type: DISPLAY_ALERT, message: 'Create task success'})
         yield put({
@@ -162,11 +161,11 @@ export function* handleChangePostApiSaga(action) {
                 type: GET_DETAIL_PROJECT_SAGA,
                 projectId: taskDetailModal.projectId
             })
-            // yield put({
-            //     type: GET_TASK_DETAIL_SAGA,
-            //     taskId: taskUpdateApi.taskId
-            // })
-            }
+            yield put({
+                type: GET_TASK_DETAIL_SAGA,
+                taskId: taskDetailModal.taskId
+            })
+        }
     } catch (e) {
         console.log({e})
     }

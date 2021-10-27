@@ -86,7 +86,7 @@ function CreateTaskForm(props) {
     return (
         <form className="container-fluid" onSubmit={handleSubmit}>
             {prepareUserList()}
-            <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
+            <Box fullWidth sx={{mb: 2, mt:2, minWidth: 120}} error>
                 <TextField onChange={handleChange} fullWidth name="taskName"
                            id="outlined-basic" label="TASK NAME" variant="outlined"
                 />

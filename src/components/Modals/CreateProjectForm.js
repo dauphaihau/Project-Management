@@ -9,13 +9,21 @@ import {withFormik} from "formik";
 import * as Yup from "yup";
 import {Editor} from '@tinymce/tinymce-react';
 import {FormControl, FormHelperText, MenuItem, TextField} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core";
+
+const useStyle = makeStyles((theme) => ({
+    textField: {
+        [theme.breakpoints.down('md')]: {
+            marginTop: 20
+        }
+    }
+}));
 
 function CreateProjectForm(props) {
     const editorRef = useRef(null);
     const {projectCategory} = useSelector(state => state.ProjectReducer)
     const dispatch = useDispatch();
-
-    console.log('project-category', projectCategory)
+    const classess = useStyle()
 
     useEffect(() => {
         dispatch({
@@ -27,7 +35,6 @@ function CreateProjectForm(props) {
         })
     }, [])
 
-
     const {
         touched,
         errors,
@@ -36,18 +43,19 @@ function CreateProjectForm(props) {
         setFieldValue
     } = props;
 
-    const handleEditorChange = (content, editor) => {
+    const handleEditorChange = (content) => {
         setFieldValue('description', content)
     }
 
     return (
         <form className='container' onSubmit={handleSubmit}>
-            <FormControl fullWidth sx={{ m: 1, minWidth: 120 }} error>
+            <FormControl className={classess.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
                 <TextField onChange={handleChange} fullWidth name="projectName"
                            id="outlined-error-helper-text"
                            label="Project Name" variant="outlined"
                 />
-                <FormHelperText error>{touched.projectName && errors.projectName ? `${errors.projectName}` : null}</FormHelperText>
+                <FormHelperText
+                    error>{touched.projectName && errors.projectName ? `${errors.projectName}` : null}</FormHelperText>
             </FormControl>
 
             <div className='form-group'>
@@ -55,7 +63,7 @@ function CreateProjectForm(props) {
                 <Editor
                     onInit={(evt, editor) => editorRef.current = editor}
                     initialValue=""
-                    style={{borderRadius : 6}}
+                    style={{borderRadius: 6}}
                     init={{
                         height: 500,
                         menubar: false,
@@ -75,15 +83,15 @@ function CreateProjectForm(props) {
             </div>
 
 
-            <FormControl fullWidth sx={{ m: 1, minWidth: 120 }} error>
-                <TextField  select variant="outlined" color='primary' name='categoryId' label='Category'
+            <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                <TextField select variant="outlined" color='primary' name='categoryId' label='Category'
                            defaultValue={1}
                            onChange={(e) => {
                                setFieldValue('typeId', e.target.value)
                            }}
                 >
                     {projectCategory.map((item, index) => {
-                        return <MenuItem  key={index} value={item.id}>
+                        return <MenuItem key={index} value={item.id}>
                             {item.projectCategoryName}
                         </MenuItem>
                     })}

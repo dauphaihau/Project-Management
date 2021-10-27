@@ -10,7 +10,15 @@ import * as yup from 'yup';
 import {connect} from "react-redux";
 import * as Yup from "yup";
 import {Editor} from "@tinymce/tinymce-react";
-import {FormControl, FormHelperText, MenuItem, TextField} from "@material-ui/core";
+import {FormControl, FormHelperText, makeStyles, MenuItem, TextField} from "@material-ui/core";
+
+const useStyle = makeStyles((theme) => ({
+    textField: {
+        [theme.breakpoints.down('md')]: {
+            marginTop: 20
+        }
+    }
+}));
 
 function EditProjectForm(props) {
 
@@ -25,8 +33,8 @@ function EditProjectForm(props) {
     }, [])
     const {projectCategory} = useSelector(state => state.ProjectReducer)
     const dispatch = useDispatch();
-
     const editorRef = useRef(null);
+    const classes = useStyle()
 
     const {
         values,
@@ -37,7 +45,7 @@ function EditProjectForm(props) {
     } = props;
 
 
-    const handleEditorChange = (content, editor) => {
+    const handleEditorChange = (content) => {
         setFieldValue('description', content)
     }
 
@@ -45,7 +53,7 @@ function EditProjectForm(props) {
         <form className='container' onSubmit={handleSubmit}>
             <div className='row'>
                 <div className='col-md-4 col-12'>
-                    <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                    <FormControl className={classes.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
                         <TextField defaultValue={values.id} disabled fullWidth name="id"
                                    id="outlined-error-helper-text"
                                    label="Id Project" variant="outlined"
@@ -53,7 +61,7 @@ function EditProjectForm(props) {
                     </FormControl>
                 </div>
                 <div className='col-md-4 col-12'>
-                    <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                    <FormControl className={classes.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
                         <TextField defaultValue={values.projectName} onChange={handleChange} fullWidth
                                    name="projectName"
                                    id="outlined-error-helper-text"
@@ -64,7 +72,7 @@ function EditProjectForm(props) {
                     </FormControl>
                 </div>
                 <div className='col-md-4 col-12'>
-                    <FormControl fullWidth sx={{m: 1, minWidth: 120}} error>
+                    <FormControl className={classes.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
                         <TextField select variant="outlined" color='primary' name='categoryId' label='Category'
                                    defaultValue={values.categoryId}
                                    onChange={(e) => {
@@ -112,9 +120,7 @@ function EditProjectForm(props) {
 const EditProjectFormByFormik = withFormik({
     enableReinitialize: true,
     mapPropsToValues: (props) => {
-
         const {formProjectEdit} = props;
-        console.log('props', props);
         return {
             id: formProjectEdit.id,
             projectName: formProjectEdit.projectName,
@@ -125,9 +131,8 @@ const EditProjectFormByFormik = withFormik({
     validationSchema: yup.object().shape({
         projectName: Yup.string().required('Project name is required'),
         description: Yup.string().required('Description is required'),
-        categoryId: Yup.string().required('Category is required')
     }),
-    handleSubmit: (values, {props, setSubmitting}) => {
+    handleSubmit: (values, {props}) => {
         console.log('values', values)
 
         props.dispatch({

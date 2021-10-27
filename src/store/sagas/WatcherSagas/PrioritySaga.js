@@ -2,7 +2,7 @@ import {call,takeLatest, put} from "redux-saga/effects";
 import {GET_ALL_PRIORITY, GET_ALL_PRIORITY_SAGA} from "../../types/Type";
 import {priorityServices} from "../../services/PriorityServices";
 
-function* getAllPrioritySaga(action) {
+function* getAllPrioritySaga() {
     try {
         const {data} = yield call(() => priorityServices.getAllPriority())
         yield put({

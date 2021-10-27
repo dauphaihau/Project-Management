@@ -1,9 +1,6 @@
 import {baseService} from "./baseServices";
 
 export class ProjectServices extends baseService {
-    constructor() {
-        super();
-    }
 
     getAllProject = (keyWord = '') => {
         if (keyWord.trim() !== '') {
@@ -12,25 +9,15 @@ export class ProjectServices extends baseService {
         return this.get(`Project/getAllProject`)
     }
 
-    getProjectDetail = (projectId) => {
-        return this.get(`Project/getProjectDetail?id=${projectId}`)
-    }
+    getProjectDetail = projectId => this.get(`Project/getProjectDetail?id=${projectId}`)
 
-    getProjectCategory = () => {
-        return this.get(`/ProjectCategory`)
-    }
+    getProjectCategory = () => this.get(`/ProjectCategory`)
 
-    createProjectAuthorization = (newProject) => {
-        return this.post(`Project/createProjectAuthorize`, newProject)
-    }
+    createProjectAuthorization = newProject => this.post(`Project/createProjectAuthorize`, newProject)
 
-    deleteProject = (idProject) => {
-        return this.delete(`Project/deleteProject?projectId=${idProject}`)
-    }
+    deleteProject = idProject => this.delete(`Project/deleteProject?projectId=${idProject}`)
 
-    updateProject = (dataEdited) => {
-        return this.put(`Project/updateProject?projectId=${dataEdited.id}`, dataEdited)
-    }
+    updateProject = dataEdited => this.put(`Project/updateProject?projectId=${dataEdited.id}`, dataEdited)
 }
 
 export const projectServices = new ProjectServices();

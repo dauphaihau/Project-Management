@@ -33,7 +33,6 @@ export const ProjectReducer = (state = initialState, action) => {
         }
 
         case GET_PROJECT_CATEGORY: {
-            console.log('action.projectCategory', action.projectCategory);
             return {...state, projectCategory: action.projectCategory}
         }
         case EDIT_PROJECT: {

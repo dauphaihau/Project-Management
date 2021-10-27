@@ -1,86 +1,80 @@
-import React, {useState} from 'react';
-import {Form, InputNumber,  Input, Button} from 'antd';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {EDIT_USER_SAGA} from "../../store/types/Type";
-
-const validateMessages = {
-    required: '${label} is required',
-    types: {
-        email: '${label} should be valid and contain @!',
-        number: '${label} must be a number',
-    },
-    number: {
-        range: '${label} must be from 9-12 digits',
-    },
-};
+import {Box, FormHelperText, TextField} from "@material-ui/core";
+import ButtonMui from "@material-ui/core/Button";
+import {useFormik} from "formik";
+import * as Yup from "yup";
 
 function Profile() {
 
-    const [componentSize, setComponentSize] = useState('default');
     const {userLogin} = useSelector(state => state.UserReducer)
     const dispatch = useDispatch();
 
-    console.log('user-login', userLogin)
-
-    const onFormLayoutChange = ({size}) => {
-        setComponentSize(size);
-    };
-
-    const onFinish = (newData) => {
-        console.log('Received values of form: ', newData);
-        dispatch({
-            type: EDIT_USER_SAGA,
-            dataEdited: newData
-        })
-    };
+    const formik = useFormik({
+        initialValues: {
+            id: userLogin.id,
+            email: userLogin.email,
+            passWord: userLogin.passWord,
+            name: userLogin.name,
+            phoneNumber: userLogin.phoneNumber,
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().required('Email is required').email('Email should be valid and contain @'),
+            passWord: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters.').max(32, 'Password have max 32 characters'),
+            name: Yup.string().required('Name is required').matches(/^[A-Z a-z]+$/, 'Names cannot contain numbers !'),
+            phoneNumber: Yup.string().required('Phone Number is required').matches(/^[0-9]*$/, 'number phone must be a number').min(10, 'Phone Number must be at least 10 characters.').max(12, 'Phone Number have max 12 characters'),
+        }),
+        onSubmit: (newData) => {
+            dispatch({
+                type: EDIT_USER_SAGA,
+                dataEdited: newData
+            })
+        }
+    })
 
     return (
-        <Form
-            validateMessages={validateMessages}
-            onFinish={onFinish}
-            labelCol={{span: 8}}
-            wrapperCol={{span: 16}}
-            layout="horizontal"
-            initialValues={{
-                size: componentSize,
-                id: userLogin.id,
-                passWord: userLogin.passWord,
-                name: userLogin.name,
-                email: userLogin.email,
-                phoneNumber: userLogin.phoneNumber,
-            }}
-            onValuesChange={onFormLayoutChange}
-            size={componentSize}
-
-        >
-            <Form.Item label="Id" name='id'>
-                <Input style={{width: 300}} disabled/>
-            </Form.Item>
-
-            <Form.Item label="Password" name={['passWord']} rules={[{required: true}]}>
-                <Input style={{width: 300}}/>
-            </Form.Item>
-
-            <Form.Item label="Name" name={['name']} rules={[{required: true}]}>
-                <Input style={{width: 300}}/>
-            </Form.Item>
-
-            <Form.Item label="Email" required name={['email']} rules={[{required: true, type: 'email'}]}>
-                <Input style={{width: 300}}/>
-            </Form.Item>
-
-            <Form.Item label="Phone Number" name={['phoneNumber']}
-                       rules={[{required: true, type: 'number', min: 100000000, max: 999999999999}]}>
-                <InputNumber style={{width: 300}}/>
-            </Form.Item>
-
-            <Form.Item wrapperCol={{
-                xs: {span: 24, offset: 0},
-                sm: {span: 16, offset: 8},
-            }}>
-                <Button type="primary" htmlType='submit'>Update</Button>
-            </Form.Item>
-        </Form>
+        <form onSubmit={formik.handleSubmit} className='container' style={{height: window.innerHeight}}>
+            <div className='d-flex flex-column justify-content-center align-item-center'>
+                <h3 className='text-left mt-5'>Profile</h3>
+                <Box sx={{mb: 2, minWidth: 120}} error>
+                    <TextField style={{width: 300}} defaultValue={formik.values.email} onChange={formik.handleChange}
+                               name="email"
+                               id="outlined-basic" label="Email" variant="standard"
+                    />
+                    <FormHelperText required
+                                    error>{formik.touched.email && formik.errors.email ? `${formik.errors.email}` : null}</FormHelperText>
+                </Box>
+                <Box sx={{mb: 2, minWidth: 120}} error>
+                    <TextField style={{width: 300}} defaultValue={formik.values.passWord} onChange={formik.handleChange}
+                               name="passWord"
+                               id="standard-basic" label="Password" variant="standard"
+                    />
+                    <FormHelperText required
+                                    error>{formik.touched.passWord && formik.errors.passWord ? `${formik.errors.passWord}` : null}</FormHelperText>
+                </Box>
+                <Box sx={{mb: 2, minWidth: 120}} error>
+                    <TextField style={{width: 300}} defaultValue={formik.values.name} onChange={formik.handleChange}
+                               name="name"
+                               id="standard-basic" label="Name" variant="standard"
+                    />
+                    <FormHelperText required
+                                    error>{formik.touched.name && formik.errors.name ? `${formik.errors.name}` : null}</FormHelperText>
+                </Box>
+                <Box sx={{mb: 2, minWidth: 120}} error>
+                    <TextField style={{width: 300}} defaultValue={formik.values.phoneNumber}
+                               onChange={formik.handleChange} name="phoneNumber"
+                               id="standard-basic" label="Phone Number" variant="standard"
+                    />
+                    <FormHelperText required
+                                    error>{formik.touched.phoneNumber && formik.errors.phoneNumber ? `${formik.errors.phoneNumber}` : null}</FormHelperText>
+                </Box>
+                <div className='form-group text-left '>
+                    <ButtonMui color='primary' className='mt-3' type='submit'
+                               variant="contained">Update</ButtonMui>
+                </div>
+            </div>
+        </form>
     );
 }
 

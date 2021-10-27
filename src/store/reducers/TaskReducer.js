@@ -94,7 +94,7 @@ export const TaskReducer = (state = initialState, action) => {
         }
         case CHANGE_TASK_MODAL: {
             const {name, value} = action;
-            console.log('state-task-detail-modal', state.taskDetailModal)
+            console.log('task-detail-modal-reducer', state.taskDetailModal)
             return {...state, taskDetailModal: {...state.taskDetailModal, [name]: value}}
         }
         case CHANGE_ASSIGN : {
