@@ -11,7 +11,6 @@ export default function ProjectTasks() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-
         dispatch({
             type: GET_DETAIL_PROJECT_SAGA,
             projectId: id
@@ -45,8 +44,8 @@ export default function ProjectTasks() {
                         </Link>
                     </Breadcrumbs>
                 </div>
-                <h3 style={{marginLeft: 10, fontSize: 24}}>{detailProject.projectName}</h3>
-                <TaskList projectId={id} lstTask={detailProject.lstTask} member={detailProject.members}/>
+                <h3 style={{marginLeft: 10, fontSize: 24}}>{detailProject?.projectName}</h3>
+                <TaskList projectId={id} lstTask={detailProject?.lstTask} member={detailProject?.members}/>
             </div>
         </div>
     )

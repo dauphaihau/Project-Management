@@ -14,6 +14,7 @@ import {STATUS_CODE} from "../../../util/settings";
 
 // ---------------------- get task detail
 function* getTaskDetailSaga({taskId}) {
+    console.log('task-id', taskId)
     try {
         const {data} = yield call(() => taskServices.getTaskDetail(taskId))
         yield put({
@@ -83,10 +84,10 @@ function* updateStatusTaskSaga({taskUpdateStatus}) {
     console.log('task-update-status', taskUpdateStatus)
 
     try {
-        const {status} = yield call(() => taskServices.updateStatusTask(taskUpdateStatus))
+        const {status, data} = yield call(() => taskServices.updateStatusTask(taskUpdateStatus))
         if (status === STATUS_CODE.SUCCESS) {
             yield put({
-                type: GET_DETAIL_PROJECT,
+                type: GET_DETAIL_PROJECT_SAGA,
                 projectId: taskUpdateStatus.projectId
             })
             yield put({
@@ -149,21 +150,20 @@ export function* handleChangePostApiSaga(action) {
         return user.id
     })
 
-    taskDetailModal = {...taskDetailModal, listUserAsign: listUserAsign}
-    console.log('task-detail-modal-at-saga', taskDetailModal)
+    const taskUpdateApi = {...taskDetailModal, listUserAsign}
+    console.log('task-update-api', taskUpdateApi)
 
     try {
-        const {status} = yield call(() => taskServices.updateTask(taskDetailModal))
+        const {status} = yield call(() => taskServices.updateTask(taskUpdateApi))
 
         if (status === STATUS_CODE.SUCCESS) {
-            // refresh page
             yield put({
                 type: GET_DETAIL_PROJECT_SAGA,
-                projectId: taskDetailModal.projectId
+                projectId: taskUpdateApi.projectId
             })
             yield put({
                 type: GET_TASK_DETAIL_SAGA,
-                taskId: taskDetailModal.taskId
+                taskId: taskUpdateApi.taskId
             })
         }
     } catch (e) {

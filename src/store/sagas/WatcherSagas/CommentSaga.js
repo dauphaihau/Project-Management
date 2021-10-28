@@ -12,6 +12,7 @@ function* getAllCommentSaga({idTask}) {
     console.log('id-task', idTask)
     try {
         const {data} = yield call(() => commentServices.getAllComment(idTask))
+        console.log('data', data)
         yield put({
             type: GET_ALL_COMMENT,
             dataComment: data.content
@@ -30,10 +31,10 @@ function* insertCommentSaga({infoComment}) {
     console.log('info-comment', infoComment)
     try {
         yield call(() => commentServices.insertComment(infoComment))
-        // yield put({
-        //     type: GET_ALL_COMMENT_SAGA,
-        //     idTask: infoComment.idTask
-        // })
+        yield put({
+            type: GET_ALL_COMMENT_SAGA,
+            idTask: infoComment.taskId
+        })
     } catch (error) {
         console.log({error});
     }
@@ -44,14 +45,13 @@ export function* WatcherInsertComment() {
 }
 
 // ------------------ update comment
-function* updateCommentSaga({infoComment}) {
-    console.log('info-comment', infoComment)
+function* updateCommentSaga({userId, taskId, contentComment}) {
     try {
-        yield call(() => commentServices.updateComment(infoComment))
-        // yield put({
-        //     type: GET_ALL_COMMENT_SAGA
-        // })
-        // alert('success')
+        yield call(() => commentServices.updateComment(userId, contentComment))
+        yield put({
+            type: GET_ALL_COMMENT_SAGA,
+            idTask: taskId
+        })
     } catch (error) {
         console.log({error});
     }
@@ -63,14 +63,13 @@ export function* WatcherUpdateComment() {
 
 
 // ------------------ del comment
-function* deleteCommentSaga({idComment}) {
-
-    console.log('id-comment', idComment)
+function* deleteCommentSaga({idComment, taskId}) {
     try {
         yield call(() => commentServices.deleteComment(idComment))
-        // yield put({
-        //     type: GET_ALL_COMMENT_SAGA
-        // })
+        yield put({
+            type: GET_ALL_COMMENT_SAGA,
+            idTask: taskId
+        })
     } catch (error) {
         console.log({error});
     }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import TimerIcon from '@mui/icons-material/Timer';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useDispatch, useSelector} from "react-redux";
@@ -8,7 +8,7 @@ import {
     GET_ALL_COMMENT_SAGA,
     GET_ALL_PRIORITY_SAGA,
     GET_ALL_STATUS_SAGA,
-    GET_ALL_TASK_TYPE_SAGA,
+    GET_ALL_TASK_TYPE_SAGA, GET_DETAIL_PROJECT_SAGA, GET_TASK_DETAIL_SAGA,
     GET_USER_SAGA,
     HANDLE_CHANGE_POST_API_SAGA,
     REMOVE_TASK_SAGA,
@@ -26,6 +26,7 @@ import PropTypes from "prop-types";
 import {Fade} from '../../HOC/UserModal'
 import {useTheme} from "@mui/system";
 import {useMediaQuery} from "@mui/material";
+import {put} from "redux-saga/effects";
 
 let style = {
     position: 'absolute',
@@ -58,16 +59,17 @@ function EditTaskForm(props) {
     const {arrTaskType} = useSelector(state => state.TaskTypeReducer);
 
     const {detailProject} = useSelector(state => state.ProjectReducer)
-    const [visibleEditor, setVisibleEditor] = useState(false)
+    const [visibleEditor, setVisibleEditor] = useState(true)
     const [historyContent, setHistoryContent] = useState(taskDetailModal.description)
     const [content, setContent] = useState(taskDetailModal.description)
+    const taskNameRef = useRef('')
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('md'))
-
     if (matches) style = {...style, width: '90%'};
 
     const dispatch = useDispatch();
+
     // console.log('task-detail-modal', taskDetailModal)
 
     useEffect(() => {
@@ -82,7 +84,10 @@ function EditTaskForm(props) {
             type: GET_USER_SAGA,
             idProject: props.projectId
         })
-
+        dispatch({
+            type: GET_TASK_DETAIL_SAGA,
+            taskId: props.taskId
+        })
         // setFieldValue('projectId', parseInt(props.projectId))
     }, [])
 
@@ -140,7 +145,8 @@ function EditTaskForm(props) {
                     setHistoryContent(taskDetailModal.description)
                     setVisibleEditor(!visibleEditor)
                 }}>
-                    {jsxDescription}</div>}
+                    {jsxDescription}</div>
+            }
         </div>
     }
 
@@ -171,11 +177,11 @@ function EditTaskForm(props) {
                         inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                         color='primary'
                         id="outlined-size-small"
-                        // label="Time spent"
                         variant='outlined'
                         size='small'
                         name="timeTrackingSpent"
                         onChange={handleChange}
+                        value={taskDetailModal.timeTrackingSpent}
                     />
                 </div>
                 <div className='col-6'>
@@ -183,11 +189,11 @@ function EditTaskForm(props) {
                         inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                         color='primary'
                         id="outlined-size-small"
-                        // label="Time remaining"
                         variant='outlined'
                         size='small'
                         name="timeTrackingRemaining"
                         onChange={handleChange}
+                        value={taskDetailModal.timeTrackingRemaining}
                     />
                 </div>
             </div>
@@ -257,7 +263,7 @@ function EditTaskForm(props) {
                                 variant="standard"
                                 color='primary' label={`TASK ${taskDetailModal.taskId} - TYPE: `}
                                 onChange={handleChange}
-                                defaultValue={taskDetailModal.typeId}
+                                value={taskDetailModal.typeId}
                             >
                                 {arrTaskType.map((taskType, index) => {
                                     return <MenuItem key={index} value={taskType.id}>
@@ -266,17 +272,30 @@ function EditTaskForm(props) {
                                 })}
                             </TextField>
                         </div>
-                        <div className="form-group col-6 col-sm-4">
-                            <TextField onChange={handleChange} name="taskName" defaultValue={taskDetailModal.taskName}
+                        <div className="form-group col-6 col-sm-8">
+                            <TextField fullWidth
+                                       // onChange={(value) => {
+                                       //     if (taskNameRef.current) return clearTimeout(taskNameRef.current)
+                                       //
+                                       //     taskNameRef.current = setTimeout(() => {
+                                       //       handleChange(value)
+                                       //     },3000)
+                                       // }}
+                                       onChange={handleChange}
+                                       name="taskName"
+                                       value={taskDetailModal.taskName}
                                        id="standard-basic" label="TASK NAME" variant="standard"/>
                         </div>
                     </div>
                     <div className="form-group">
-                        <h6 color={`rgba(0, 0, 0, 0.54)`}>DESCRIPTION</h6>
+                        <h6
+                            color={`rgba(0, 0, 0, 0.54)`}
+                            onClick={() => setVisibleEditor(!visibleEditor)}
+                        >DESCRIPTION</h6>
                         {renderDescription()}
                     </div>
                     {/*Comment*/}
-                    <EditTaskComment taskId={props.taskId}/>
+                    <EditTaskComment dataComment={taskDetailModal} taskId={props.taskId}/>
                 </div>
                 <div className="col-md-4">
                     <div className="form-group">
@@ -285,7 +304,7 @@ function EditTaskForm(props) {
                                    color='primary'
                                    label='STATUS'
                                    onChange={handleChange}
-                                   defaultValue={taskDetailModal.statusId}
+                                   value={taskDetailModal.statusId}
                         >
                             {arrStatus.map((status, index) => {
                                 return <MenuItem key={index} value={status.statusId}>
@@ -297,8 +316,9 @@ function EditTaskForm(props) {
                     <div className="form-group">
                         <TextField fullWidth select variant="outlined"
                                    color='primary' label='PRIORITY'
+                                   name='priorityId'
                                    onChange={handleChange}
-                                   defaultValue={taskDetailModal.priorityId}
+                                   value={taskDetailModal.priorityId}
                         >
                             {arrPriority.map((priority, index) => {
                                 return <MenuItem key={index} value={priority.priorityId}>
@@ -310,12 +330,12 @@ function EditTaskForm(props) {
 
                     <div className="form-group">
                         <TextField
-                            inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                            // inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                             color='primary' fullWidth id="outlined-basic" label="ORIGINAL ESTIMATE (HOURS)"
                             variant='outlined'
                             name="originalEstimate"
                             onChange={handleChange}
-                            defaultValue={taskDetailModal.originalEstimate}
+                            value={taskDetailModal.originalEstimate}
                         />
                     </div>
                     <div className="form-group">
@@ -326,11 +346,13 @@ function EditTaskForm(props) {
                                     return <div key={index} style={{
                                         display: 'flex',
                                         marginBottom: 7,
-                                        JustifyContent: 'space-evenly'
+                                        justifyContent: 'space-evenly'
                                     }} className='item'>
-                                        <Avatar size='small' alt="Cindy Baker"
-                                                src={`https://i.pravatar.cc/150?u=${user.avatar}`}/>
-                                        <p className='name ml-1'>{user.name.slice(0, 7)}</p>
+                                        <div className='flex'>
+                                            <Avatar size='small' alt="Cindy Baker"
+                                                    src={`https://i.pravatar.cc/150?u=${user.avatar}`}/>
+                                            <span className='name ml-1'>{user.name.slice(0, 7)}</span>
+                                        </div>
                                         <CloseOutlined style={{marginLeft: 17, lineHeight: 'inherit'}} onClick={() => {
                                             dispatch({
                                                 type: HANDLE_CHANGE_POST_API_SAGA,
@@ -357,9 +379,7 @@ function EditTaskForm(props) {
                                         value='+ Add more'
                                         showArrow={false}
                                         onSelect={(value) => {
-                                            if (value == '0') {
-                                                return;
-                                            }
+                                            if (value == '0') return;
                                             let userSelected = detailProject.members.find(mem => mem.userId === value);
                                             userSelected = {...userSelected, id: userSelected.userId};
                                             dispatch({

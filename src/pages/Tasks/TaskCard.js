@@ -1,22 +1,14 @@
 import React from "react";
-// import {useDispatch} from "react-redux";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import BugReportIcon from '@mui/icons-material/BugReport';
-// import {Draggable} from "react-beautiful-dnd";
-import {CardActions, CardContent, IconButton} from "@material-ui/core";
+import {CardContent} from "@material-ui/core";
 // import {EditOutlined, MoreVert} from "@material-ui/icons";
-import {Button, Avatar, Tooltip} from "antd";
-// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-// import BookmarkIcon from '@mui/icons-material/Bookmark';
+import {Avatar, Tooltip} from "antd";
 
 export default function TaskCard(props) {
-    // const dispatch = useDispatch();
     const taskDetail = props.taskDetail;
-    // const index = props.index;
-
-    // console.log('task-detail', taskDetail)
 
     const styles = {
         container: {
@@ -26,14 +18,6 @@ export default function TaskCard(props) {
     };
 
     return (
-        // <Draggable draggableId={taskDetail.taskId.toString()} index={index} key={taskDetail.taskId}>
-        //   {
-        //     provided => (
-        //       <div
-        //       ref={provided.innerRef}
-        //       {...provided.draggableProps}
-        //       {...provided.dragHandleProps}
-        //         >
         <Card style={styles.container} className={taskDetail.taskId}>
             <CardContent>
                 <div className='block'>
@@ -69,10 +53,5 @@ export default function TaskCard(props) {
                 </div>
             </CardContent>
         </Card>
-        // </div>
-        //     )
-        //   }
-
-        // </Draggable>
     );
 }

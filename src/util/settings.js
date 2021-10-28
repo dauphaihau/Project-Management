@@ -9,6 +9,6 @@ export const STATUS_CODE = {
     NOT_FOUND: 400,
     SERVER_ERROR:500
 }
-export const DOMAIN = 'https://jiranew.cybersoft.edu.vn/api'
+export const DOMAIN = 'http://casestudy.cyberlearn.vn/api'
 export const USER_LOGIN = 'userLogin'
 export const ACCESS_TOKEN = 'accessToken'

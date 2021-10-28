@@ -24,6 +24,7 @@ import {Popconfirm, message} from 'antd';
 import EditProjectForm from "../../components/Modals/EditProjectForm";
 import {AutoComplete} from "antd/es";
 import Search from "antd/es/input/Search";
+import {NavLink} from "react-router-dom";
 
 export default function ProjectList() {
     const cancel = (e) => {
@@ -68,7 +69,7 @@ export default function ProjectList() {
             title: "Project Name",
             dataIndex: "projectName",
             key: "projectName",
-            render: (text, record) => <a href={"/project/task/" + record.id}>{text}</a>
+            render: (text, record) => <NavLink to={`/project/task/${record.id}`}>{text}</NavLink>
             ,
             // width: '25%',
             sorter: (item2, item1) => {
@@ -277,7 +278,7 @@ export default function ProjectList() {
                                 <Tooltip
                                     key={index} placement="top">
                                     <Avatar style={{backgroundColor: "#3a87f7",}}>
-                                        {member.name[0].toUpperCase()}
+                                        {member.name[0]?.toUpperCase()}
                                     </Avatar>
                                 </Tooltip>
                             </Popover>
@@ -337,7 +338,6 @@ export default function ProjectList() {
                     className="project-list"
                     columns={columns}
                     dataSource={listProject}
-                    // rowKey={(record) => record.login.uuid}
                     rowKey={(record) => record.id}
                     pagination={pagination}
                     loading={loading}

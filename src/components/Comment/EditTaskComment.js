@@ -1,18 +1,22 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {DELETE_COMMENT_SAGA, INSERT_COMMENT_SAGA, UPDATE_COMMENT_SAGA} from "../../store/types/Type";
 import {useDispatch, useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
 import {Link, TextField} from "@material-ui/core";
+import reactHtmlParse from "react-html-parser";
+import _ from "lodash";
 
-function EditTaskComment(props) {
+function EditTaskComment({dataComment, taskId}) {
 
     const dispatch = useDispatch();
-    const {dataComment} = useSelector(state => state.CommentReducer);
-    const [contentComment, setContentComment] = useState('')
+    const contentComment = useRef('')
     const [visibleComment, setVisibleComment] = useState(false)
-    // const [historyComment, setHistoryComment] = useState('')
+    const {taskDetailModal} = useSelector(state => state.TaskReducer);
+    console.log('task-detail-modal',taskDetailModal)
 
-    // console.log('data-comment', dataComment)
+    // dataComment.reverse();
+
+    console.log('data-comment', dataComment)
 
     return <>
         <div className="form-group">
@@ -24,8 +28,9 @@ function EditTaskComment(props) {
                                  src="https://i.pravatar.cc/300" width="38"/>
                             <TextField fullWidth id="standard-basic" label="Add a comment" size='small'
                                        variant="outlined"
+                                       // name='lstComment'
                                        onChange={(e) => {
-                                           setContentComment(e.target.value)
+                                           contentComment.current = e.target.value;
                                        }}
                             />
                             <Button color='primary' className='ml-2' variant="contained"
@@ -33,17 +38,17 @@ function EditTaskComment(props) {
                                         dispatch({
                                             type: INSERT_COMMENT_SAGA,
                                             infoComment: {
-                                                taskId: props.taskId,
-                                                contentComment: contentComment
+                                                taskId: taskId,
+                                                contentComment: contentComment.current
                                             }
                                         })
                                     }}
                             >Save</Button>
                         </div>
-                        {dataComment?.map((ele, index) => {
+                        {_.reverse(taskDetailModal.lstComment).map((element, index) => {
                             return <div className="commented-section mt-2 mb-3 ml-5" key={index}>
                                 <div className="d-flex flex-row align-items-center commented-user">
-                                    <h5 className="mr-2">{ele.user.name}</h5>
+                                    <h5 className="mr-2">{element.user?.name}</h5>
                                     <span className="dot mb-1
 
                                     "/><span className="mb-1 ml-2"
@@ -52,41 +57,35 @@ function EditTaskComment(props) {
                                 </div>
                                 <div className="comment-text-sm">
                                     {visibleComment ? <div>
-                                            <TextField id="standard-basic" defaultValue={ele.contentComment}
+                                            <TextField id="standard-basic"
+                                                       value={element.commentContent}
                                                        variant="standard"
                                                        onChange={(e) => {
-                                                           setContentComment(e.target.value)
-                                                       }}/>
+                                                           contentComment.current = e.target.value;
+                                                       }}
+                                                       fullWidth
+                                            />
                                             <div>
                                                 <Button size='small' color='primary' className='mt-2 mr-2'
                                                         variant="contained"
                                                         onClick={() => {
                                                             dispatch({
                                                                 type: UPDATE_COMMENT_SAGA,
-                                                                infoComment: {
-                                                                    taskId: ele.id,
-                                                                    contentComment: contentComment
-                                                                }
+                                                                taskId: taskId,
+                                                                userId: element.idUser,
+                                                                contentComment: contentComment.current
                                                             })
                                                             setVisibleComment(false)
                                                         }}>Save
                                                 </Button>
                                                 <Button size='small' className='mt-2 mr-2' variant="text"
-                                                        onClick={() => {
-                                                            // dispatch({
-                                                            //     type: UPDATE_COMMENT_SAGA,
-                                                            //     infoComment: {
-                                                            //         taskId: props.taskId,
-                                                            //         contentComment: historyComment
-                                                            //     }
-                                                            // })
-                                                            setVisibleComment(false)
+                                                        onClick={() => {setVisibleComment(false)
                                                         }}>Close
                                                 </Button>
                                             </div>
                                         </div>
                                         : <>
-                                            <div className='mb-1'>{ele.contentComment}</div>
+                                            <div className='mb-1'>{reactHtmlParse(element.contentComment)}</div>
                                             <div className="reply-section">
                                                 <div className="d-flex flex-row align-items-center voting-icons"><i
                                                     className="fa fa-sort-up fa-2x mt-3 hit-voting"/><i
@@ -94,28 +93,27 @@ function EditTaskComment(props) {
                                                 />
                                                     <Link
                                                         underline="hover"
-                                                        color="text.primary"
                                                         className="pl-0 mr-2"
                                                         style={{color: `rgb(94, 108, 132)`, fontSize: '14.5px'}}
                                                         onClick={() => {
                                                             setVisibleComment(!visibleComment)
                                                         }}
-                                                    >Edit</Link>
+                                                    >Edit
+                                                    </Link>
                                                     <Link
                                                         underline="hover"
-                                                        color="text.primary"
                                                         style={{color: `rgb(94, 108, 132)`, fontSize: '14.5px'}}
                                                         onClick={() => {
                                                             dispatch({
                                                                 type: DELETE_COMMENT_SAGA,
-                                                                idComment: ele.id
+                                                                idComment: element.id,
+                                                                taskId: taskId,
                                                             })
                                                         }}
                                                     >Delete
                                                     </Link>
                                                 </div>
                                             </div>
-
                                         </>}
                                 </div>
                             </div>

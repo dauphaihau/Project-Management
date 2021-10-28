@@ -23,7 +23,6 @@ function* LoginSaga({userLogin}) {
 
     try {
         yield put({type: DISPLAY_LOADING})
-
         yield delay(1000)
 
         const {data} = yield call(() => userServices.login(userLogin))
@@ -37,16 +36,12 @@ function* LoginSaga({userLogin}) {
             userLogin: data
         })
         history.push('/projects')
-        yield put({type: DISPLAY_ALERT, message: 'Login successfully'})
-
+        // yield put({type: DISPLAY_ALERT, message: 'Login successfully'})
+        yield put({type: DISPLAY_ALERT, message: 'Sorry we have some bug, please reload the page to continue'})
     } catch (error) {
         console.log({error})
-        if (error.response.status === 400) {
-            alert('Incorrect account or password')
-        }
-        yield put({
-            type: HIDE_LOADING
-        })
+        if (error.response.status === 400) return alert('Incorrect account or password');
+        yield put({type: HIDE_LOADING})
     }
 }
 

@@ -26,9 +26,7 @@ function UserList() {
     const {listUser} = useSelector(state => state.UserReducer);
 
     useEffect(() => {
-        dispatch({
-            type: GET_USER_SAGA
-        })
+        dispatch({type: GET_USER_SAGA})
     }, [])
 
     const columns = [
