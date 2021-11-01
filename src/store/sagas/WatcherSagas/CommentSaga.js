@@ -2,20 +2,19 @@ import {call, takeLatest, put, takeEvery} from "redux-saga/effects";
 import {
     DELETE_COMMENT_SAGA,
     GET_ALL_COMMENT,
-    GET_ALL_COMMENT_SAGA,
+    GET_ALL_COMMENT_SAGA, GET_TASK_DETAIL, GET_TASK_DETAIL_SAGA,
     INSERT_COMMENT_SAGA, UPDATE_COMMENT_SAGA
 } from "../../types/Type";
 import {commentServices} from "../../services/CommentServices";
 
 // ----------------- get all Comment
 function* getAllCommentSaga({idTask}) {
-    console.log('id-task', idTask)
     try {
         const {data} = yield call(() => commentServices.getAllComment(idTask))
         console.log('data', data)
         yield put({
             type: GET_ALL_COMMENT,
-            dataComment: data.content
+            lstComment: data.content
         })
     } catch (error) {
         console.log({error});
@@ -28,12 +27,15 @@ export function* WatcherGetAllComment() {
 
 // ----------------- insert Comment
 function* insertCommentSaga({infoComment}) {
-    console.log('info-comment', infoComment)
     try {
         yield call(() => commentServices.insertComment(infoComment))
+        // yield put({
+        //     type: GET_ALL_COMMENT_SAGA,
+        //     idTask: infoComment.taskId
+        // })
         yield put({
-            type: GET_ALL_COMMENT_SAGA,
-            idTask: infoComment.taskId
+            type: GET_TASK_DETAIL_SAGA,
+            taskId: infoComment.taskId
         })
     } catch (error) {
         console.log({error});

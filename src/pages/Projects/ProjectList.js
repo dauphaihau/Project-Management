@@ -243,7 +243,6 @@ export default function ProjectList() {
                                                  <th scope="col">Avatar</th>
                                                  <th scope="col">Name</th>
                                                  <th scope="col">Action</th>
-                                                 {/*<th/>*/}
                                              </tr>
                                              </thead>
                                              <tbody>

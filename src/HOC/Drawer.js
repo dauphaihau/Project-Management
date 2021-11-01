@@ -3,8 +3,7 @@ import {Drawer, Button, Space} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {CLOSE_DRAWER} from "../store/types/Type";
 
-
-function DrawerModal(props) {
+function DrawerModal() {
 
     const {visible, title, ComponentContentDrawer, callBackSubmit} = useSelector(state => state.DrawerModalReducer)
     const dispatch = useDispatch();

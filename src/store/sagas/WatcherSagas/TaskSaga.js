@@ -168,6 +168,7 @@ export function* handleChangePostApiSaga(action) {
         }
     } catch (e) {
         console.log({e})
+        alert('you are not authorized to edit tasks')
     }
 }
 

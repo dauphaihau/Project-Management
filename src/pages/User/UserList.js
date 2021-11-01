@@ -34,7 +34,6 @@ function UserList() {
             title: 'Id',
             dataIndex: 'userId',
             key: 'userId',
-            // defaultSortOrder: 'ascend',
             sorter: (a, b) => a.userId - b.userId,
             sortDirections: ['ascend', 'descend', 'ascend'],
             width: '10%',

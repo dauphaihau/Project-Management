@@ -6,17 +6,15 @@ import {Link, TextField} from "@material-ui/core";
 import reactHtmlParse from "react-html-parser";
 import _ from "lodash";
 
-function EditTaskComment({dataComment, taskId}) {
+function EditTaskComment({taskId, taskDetailModal}) {
 
     const dispatch = useDispatch();
     const contentComment = useRef('')
     const [visibleComment, setVisibleComment] = useState(false)
-    const {taskDetailModal} = useSelector(state => state.TaskReducer);
-    console.log('task-detail-modal',taskDetailModal)
+    // const {taskDetailModal} = useSelector(state => state.TaskReducer);
+    console.log('task-detail-modal', taskDetailModal)
 
-    // dataComment.reverse();
-
-    console.log('data-comment', dataComment)
+    // console.log('data-comment', dataComment)
 
     return <>
         <div className="form-group">
@@ -28,7 +26,7 @@ function EditTaskComment({dataComment, taskId}) {
                                  src="https://i.pravatar.cc/300" width="38"/>
                             <TextField fullWidth id="standard-basic" label="Add a comment" size='small'
                                        variant="outlined"
-                                       // name='lstComment'
+                                // name='lstComment'
                                        onChange={(e) => {
                                            contentComment.current = e.target.value;
                                        }}
@@ -45,10 +43,10 @@ function EditTaskComment({dataComment, taskId}) {
                                     }}
                             >Save</Button>
                         </div>
-                        {_.reverse(taskDetailModal.lstComment).map((element, index) => {
+                        {_.reverse(_.clone(taskDetailModal.lstComment)).map((element, index) => {
                             return <div className="commented-section mt-2 mb-3 ml-5" key={index}>
                                 <div className="d-flex flex-row align-items-center commented-user">
-                                    <h5 className="mr-2">{element.user?.name}</h5>
+                                    <h5 className="mr-2">{element.name}</h5>
                                     <span className="dot mb-1
 
                                     "/><span className="mb-1 ml-2"
@@ -79,13 +77,14 @@ function EditTaskComment({dataComment, taskId}) {
                                                         }}>Save
                                                 </Button>
                                                 <Button size='small' className='mt-2 mr-2' variant="text"
-                                                        onClick={() => {setVisibleComment(false)
+                                                        onClick={() => {
+                                                            setVisibleComment(false)
                                                         }}>Close
                                                 </Button>
                                             </div>
                                         </div>
                                         : <>
-                                            <div className='mb-1'>{reactHtmlParse(element.contentComment)}</div>
+                                            <div className='mb-1'>{reactHtmlParse(element.commentContent)}</div>
                                             <div className="reply-section">
                                                 <div className="d-flex flex-row align-items-center voting-icons"><i
                                                     className="fa fa-sort-up fa-2x mt-3 hit-voting"/><i

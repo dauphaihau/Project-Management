@@ -1,11 +1,10 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
-import NewReleasesIcon from '@mui/icons-material/NewReleases';
-import BugReportIcon from '@mui/icons-material/BugReport';
 import {CardContent} from "@material-ui/core";
-// import {EditOutlined, MoreVert} from "@material-ui/icons";
 import {Avatar, Tooltip} from "antd";
+import ErrorIcon from '@mui/icons-material/Error';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export default function TaskCard(props) {
     const taskDetail = props.taskDetail;
@@ -26,14 +25,11 @@ export default function TaskCard(props) {
                         <i className='fa fa-bookmark'/>
                         <i className='fa fa-arrow-up'/>
                     </div>
-                    <div style={{display: 'flex', marginTop: 30}}>
+                    <div className='mt-5 d-flex'>
                         <div className='d-flex'>
-                            {/*<ArrowUpwardIcon/>*/}
-                            <div>
-                                {taskDetail.taskTypeDetail.taskType === 'new task' ? <NewReleasesIcon/>
-                                    : <BugReportIcon/>}
-                            </div>
-                            <p style={{marginRight:'7rem', marginLeft: 5}}>{taskDetail.priorityTask.priority}</p>
+                            {taskDetail.taskTypeDetail.taskType === 'new task' ? <AssignmentIcon color='primary'/>
+                                : <ErrorIcon color='error'/>}
+                            <p style={{marginRight: '6rem', marginLeft: 5}}>{taskDetail.priorityTask.priority}</p>
                         </div>
                         <div className="block-right">
                             <div style={{display: 'flex'}} className='avatar-group'>

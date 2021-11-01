@@ -27,6 +27,7 @@ import {Fade} from '../../HOC/UserModal'
 import {useTheme} from "@mui/system";
 import {useMediaQuery} from "@mui/material";
 import {put} from "redux-saga/effects";
+import _ from "lodash";
 
 let style = {
     position: 'absolute',
@@ -62,7 +63,6 @@ function EditTaskForm(props) {
     const [visibleEditor, setVisibleEditor] = useState(true)
     const [historyContent, setHistoryContent] = useState(taskDetailModal.description)
     const [content, setContent] = useState(taskDetailModal.description)
-    const taskNameRef = useRef('')
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('md'))
@@ -70,16 +70,14 @@ function EditTaskForm(props) {
 
     const dispatch = useDispatch();
 
-    // console.log('task-detail-modal', taskDetailModal)
-
     useEffect(() => {
         dispatch({type: GET_ALL_STATUS_SAGA})
         dispatch({type: GET_ALL_PRIORITY_SAGA,})
         dispatch({type: GET_ALL_TASK_TYPE_SAGA})
-        dispatch({
-            type: GET_ALL_COMMENT_SAGA,
-            idTask: props.taskId
-        })
+        // dispatch({
+        //     type: GET_ALL_COMMENT_SAGA,
+        //     idTask: props.taskId
+        // })
         dispatch({
             type: GET_USER_SAGA,
             idProject: props.projectId
@@ -114,7 +112,7 @@ function EditTaskForm(props) {
                             content_style:
                                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                         }}
-                        onEditorChange={(content, editor) => {
+                        onEditorChange={(content) => {
                             setContent(content)
                         }}
                     />
@@ -141,7 +139,7 @@ function EditTaskForm(props) {
                             }}>Close
                     </Button>
                 </div>
-                : <div onClick={() => {
+                : <div style={{height: 350}} onClick={() => {
                     setHistoryContent(taskDetailModal.description)
                     setVisibleEditor(!visibleEditor)
                 }}>
@@ -161,7 +159,7 @@ function EditTaskForm(props) {
             <div style={{width: '100%'}}>
                 <div className='progress'>
                     <div className='progress-bar' role='progressbar'
-                         style={{width: `${percent}%`, backgroundColor: '#1b55c5'}}
+                         style={{width: `${percent}%`, backgroundColor: '#4090f6'}}
                          aria-valuenow={Number(timeTrackingSpent)}
                          aria-valuemin={Number(timeTrackingRemaining)}
                          aria-valuemax={max}/>
@@ -274,13 +272,6 @@ function EditTaskForm(props) {
                         </div>
                         <div className="form-group col-6 col-sm-8">
                             <TextField fullWidth
-                                       // onChange={(value) => {
-                                       //     if (taskNameRef.current) return clearTimeout(taskNameRef.current)
-                                       //
-                                       //     taskNameRef.current = setTimeout(() => {
-                                       //       handleChange(value)
-                                       //     },3000)
-                                       // }}
                                        onChange={handleChange}
                                        name="taskName"
                                        value={taskDetailModal.taskName}
@@ -295,7 +286,7 @@ function EditTaskForm(props) {
                         {renderDescription()}
                     </div>
                     {/*Comment*/}
-                    <EditTaskComment dataComment={taskDetailModal} taskId={props.taskId}/>
+                    <EditTaskComment taskDetailModal={taskDetailModal} taskId={props.taskId}/>
                 </div>
                 <div className="col-md-4">
                     <div className="form-group">

@@ -1,8 +1,7 @@
 import React, {Fragment, useState} from "react";
 import TaskCard from "./TaskCard";
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
-// import {sort} from "../../store/actions/TaskAction";
 import {
     GET_TASK_DETAIL_SAGA,
     OPEN_FORM_CREATE_TASK,

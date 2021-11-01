@@ -47,6 +47,7 @@ const initialState = {
         "typeId": 2,
         "priorityId": 3,
         "projectId": 1452
+
     },
     lstTask: [],
     formTaskEdit: {
@@ -82,9 +83,9 @@ export const TaskReducer = (state = initialState, action) => {
             state.taskDetailModal.assigness = [...state.taskDetailModal.assigness.filter(us => us.id !== action.userId)]
             return {...state}
         }
-        case GET_ALL_COMMENT: {
-            return {...state, taskDetailModal: {...state.taskDetailModal, lstComment: action.dataComment}}
-        }
+        // case GET_ALL_COMMENT: {
+        //     return {...state, taskDetailModal: {...state.taskDetailModal, lstComment: action.lstComment}}
+        // }
         default:
             return state
     }
