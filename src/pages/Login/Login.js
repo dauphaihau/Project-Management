@@ -6,11 +6,11 @@ import {withFormik} from 'formik';
 import LockIcon from '@mui/icons-material/Lock';
 import * as yup from 'yup';
 import {connect, useSelector} from "react-redux";
-import {loginActions} from "../../store/actions/UserAction";
 import {Redirect} from "react-router-dom";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
 import ButtonMui from "@material-ui/core/Button";
 import * as Yup from "yup";
+import {USER_LOGIN_SAGA} from "../../store/types/Type";
 
 const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
@@ -84,7 +84,12 @@ const LoginWithFormik = withFormik({
         password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters.').max(32, 'Password have max 32 characters'),
     }),
     handleSubmit: ({email, password}, {props, setSubmitted}) => {
-        props.dispatch(loginActions(email, password));
+        let userLogin = {
+            email: email,
+            password: password
+        }
+
+        props.dispatch({type: USER_LOGIN_SAGA, userLogin});
     }, displayName: 'Login to continuous',
 
 })(Login);

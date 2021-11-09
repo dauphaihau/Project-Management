@@ -2,10 +2,10 @@ import React from 'react';
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
 import * as Yup from 'yup';
-import {registerAction} from "../../store/actions/UserAction";
 import {Redirect} from "react-router-dom";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
 import ButtonMui from "@material-ui/core/Button";
+import {USER_REGISTER_SAGA} from "../../store/types/Type";
 
 function Register() {
 
@@ -26,9 +26,10 @@ function Register() {
             phoneNumber: Yup.string().required('Phone Number is required').matches(/^[0-9]*$/, 'number phone must be a number').min(6, 'Phone Number must be at least 6 characters.').max(32, 'Phone Number have max 32 characters'),
         }),
         onSubmit: (values) => {
-
-            const action = registerAction(values)
-            dispatch(action);
+            dispatch({
+                type: USER_REGISTER_SAGA,
+                dataRegister: values
+            });
         }
     })
 

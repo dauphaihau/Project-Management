@@ -15,6 +15,7 @@ export function *rootSaga() {
         UserSaga.WatcherGetUserByProjectId(),
         UserSaga.WatcherGetUser(),
         UserSaga.WatcherAddUser(),
+        UserSaga.WatcherCreateUser(),
         UserSaga.WatcherDeleteUser(),
         UserSaga.WatcherEditUser(),
         UserSaga.WatcherAssignUserTask(),
@@ -41,4 +42,4 @@ export function *rootSaga() {
         CommentSaga.WatcherInsertComment(),
         CommentSaga.WatcherUpdateComment(),
     ])
-} 
+}

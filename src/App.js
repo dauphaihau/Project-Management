@@ -4,7 +4,7 @@ import Login from './pages/Login/Login';
 import {UserTemplate} from './templates/UserTemplate/UserTemplate';
 import Register from './pages/Register/Register';
 import {AdminTemplate} from './templates/AdminTemplate/AdminTemplate';
-import Dashboard from './pages/Dashboard/Dashboard';
+// import Dashboard from './pages/Dashboard/Dashboard';
 import ProjectList from './pages/Projects/ProjectList';
 import ProjectTasks from './pages/Tasks/ProjectTasks';
 import {history} from "./utils/settings";
@@ -24,7 +24,7 @@ function App() {
             <Switch>
                 <UserTemplate exact path="/login" component={Login}/>
                 <UserTemplate exact path="/register" component={Register}/>
-                <AdminTemplate exact path="/" component={Dashboard}/>
+                {/*<AdminTemplate exact path="/" component={Dashboard}/>*/}
                 <AdminTemplate exact path="/projects" component={ProjectList}/>
                 <AdminTemplate exact path="/project/task/:id" component={ProjectTasks}/>
                 <AdminTemplate exact path="/users" component={UserList}/>

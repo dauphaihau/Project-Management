@@ -12,10 +12,10 @@ import {
     GET_USER_SAGA,
     HIDE_LOADING,
     LOGIN,
-    USER_LOGIN_SAGA,
+    USER_LOGIN_SAGA, USER_REGISTER_SAGA,
 } from "../../types/Type";
 import {call, takeLatest, put} from 'redux-saga/effects'
-import {ACCESS_TOKEN, STATUS_CODE, USER_LOGIN} from "../../../utils/settings";
+import {ACCESS_TOKEN, history, STATUS_CODE, USER_LOGIN} from "../../../utils/settings";
 import {userServices} from "../../services/UserServices";
 
 
@@ -48,6 +48,29 @@ function* LoginSaga({userLogin}) {
 
 export function* WatcherLogin() {
     yield takeLatest(USER_LOGIN_SAGA, LoginSaga)
+}
+
+
+// ---------------- Register User
+function* registerSaga({dataRegister}) {
+    try {
+        const {data} = yield call(() => userServices.register(dataRegister))
+        if (data.statusCode === STATUS_CODE.SUCCESS) {
+            yield put({type: DISPLAY_ALERT, message: 'Register successfully'})
+            yield put({type: ERROR_FROM_SERVER, messageServer: ''})
+            history.push('/login');
+        }
+
+    } catch (error) {
+        console.log({error});
+        if (error.response?.status === STATUS_CODE.NOT_FOUND) {
+            yield put({type: ERROR_FROM_SERVER, messageServer: 'email already exists'})
+        }
+    }
+}
+
+export function* WatcherRegister() {
+    yield takeLatest(USER_REGISTER_SAGA, registerSaga)
 }
 
 // ---------------- get user ( user management )
@@ -108,7 +131,7 @@ function* createUserSaga({dataRegister}) {
     }
 }
 
-export function* WatcherRegister() {
+export function* WatcherCreateUser() {
     yield takeLatest(CREATE_USER_SAGA, createUserSaga)
 }
 
