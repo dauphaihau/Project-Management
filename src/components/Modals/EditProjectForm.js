@@ -30,7 +30,8 @@ function EditProjectForm(props) {
             type: SET_SUBMIT_CONTENT,
             submitFn: handleSubmit
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     const {projectCategory} = useSelector(state => state.ProjectReducer)
     const dispatch = useDispatch();
     const editorRef = useRef(null);
@@ -46,7 +47,8 @@ function EditProjectForm(props) {
 
 
     const handleEditorChange = (content) => {
-        setFieldValue('description', content)
+        values.description = content;
+        console.log('desc',values.description);
     }
 
     return (
@@ -76,7 +78,7 @@ function EditProjectForm(props) {
                         <TextField select variant="outlined" color='primary' name='categoryId' label='Category'
                                    defaultValue={values.categoryId}
                                    onChange={(e) => {
-                                       setFieldValue('typeId', e.target.value)
+                                       setFieldValue('categoryId', e.target.value)
                                    }}
                         >
                             {projectCategory.map((item, index) => {

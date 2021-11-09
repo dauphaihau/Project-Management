@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {EDIT_USER_SAGA} from "../../store/types/Type";
+import {EDIT_USER_SAGA, LOGIN} from "../../store/types/Type";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
 import ButtonMui from "@material-ui/core/Button";
 import {useFormik} from "formik";
@@ -30,6 +30,7 @@ function Profile() {
                 type: EDIT_USER_SAGA,
                 dataEdited: newData
             })
+            dispatch({type: LOGIN, userLogin: newData})
         }
     })
 

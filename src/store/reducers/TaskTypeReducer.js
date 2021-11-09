@@ -1,6 +1,5 @@
 import {GET_ALL_TASK_TYPE} from "../types/Type";
 
-
 const initialState = {
     arrTaskType: []
 }

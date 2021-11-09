@@ -1,5 +1,5 @@
-import React, {useRef, useState} from 'react';
-import {DELETE_COMMENT_SAGA, INSERT_COMMENT_SAGA, UPDATE_COMMENT_SAGA} from "../../store/types/Type";
+import React, {useEffect, useRef, useState} from 'react';
+import {DELETE_COMMENT_SAGA, INSERT_COMMENT_SAGA, UPDATE_COMMENT_SAGA} from "../../../../store/types/Type";
 import {useDispatch, useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
 import {Link, TextField} from "@material-ui/core";
@@ -10,11 +10,13 @@ function EditTaskComment({taskId, taskDetailModal}) {
 
     const dispatch = useDispatch();
     const contentComment = useRef('')
-    const [visibleComment, setVisibleComment] = useState(false)
-    // const {taskDetailModal} = useSelector(state => state.TaskReducer);
-    console.log('task-detail-modal', taskDetailModal)
+    const [visibleComment, setVisibleComment] = useState(0)
 
-    // console.log('data-comment', dataComment)
+    const {stateInputComment} = useSelector(state => state.TaskReducer)
+
+    useEffect(() => {
+        contentComment.current = 'abc'
+    }, [stateInputComment])
 
     return <>
         <div className="form-group">
@@ -23,9 +25,10 @@ function EditTaskComment({taskId, taskDetailModal}) {
                     <div className="coment-bottom bg-white w-100">
                         <div className="d-flex flex-row add-comment-section mt-4 mb-4">
                             <img className="img-fluid img-responsive rounded-circle mr-2"
-                                 src="https://i.pravatar.cc/300" width="38"/>
+                                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" width="38" alt='avatar'/>
                             <TextField fullWidth id="standard-basic" label="Add a comment" size='small'
                                        variant="outlined"
+                                // value={stateInputComment}
                                 // name='lstComment'
                                        onChange={(e) => {
                                            contentComment.current = e.target.value;
@@ -40,6 +43,7 @@ function EditTaskComment({taskId, taskDetailModal}) {
                                                 contentComment: contentComment.current
                                             }
                                         })
+                                        // contentComment.current = '';
                                     }}
                             >Save</Button>
                         </div>
@@ -49,17 +53,18 @@ function EditTaskComment({taskId, taskDetailModal}) {
                                     <h5 className="mr-2">{element.name}</h5>
                                     <span className="dot mb-1
 
-                                    "/><span className="mb-1 ml-2"
+                                    "/><span className="mb-1 "
                                              style={{color: `rgb(75, 85, 101)`, fontSize: '12.5px'}}
                                 >{Math.floor(Math.random() * 24)} hours ago</span>
                                 </div>
                                 <div className="comment-text-sm">
-                                    {visibleComment ? <div>
+                                    {(visibleComment === element.id) ? <div>
                                             <TextField id="standard-basic"
-                                                       value={element.commentContent}
+                                                       defaultValue={element.commentContent}
                                                        variant="standard"
                                                        onChange={(e) => {
                                                            contentComment.current = e.target.value;
+                                                           console.log('e.target.value', contentComment.current);
                                                        }}
                                                        fullWidth
                                             />
@@ -70,15 +75,15 @@ function EditTaskComment({taskId, taskDetailModal}) {
                                                             dispatch({
                                                                 type: UPDATE_COMMENT_SAGA,
                                                                 taskId: taskId,
-                                                                userId: element.idUser,
+                                                                commentId: element.id,
                                                                 contentComment: contentComment.current
                                                             })
-                                                            setVisibleComment(false)
+                                                            setVisibleComment(0)
                                                         }}>Save
                                                 </Button>
                                                 <Button size='small' className='mt-2 mr-2' variant="text"
                                                         onClick={() => {
-                                                            setVisibleComment(false)
+                                                            setVisibleComment(0)
                                                         }}>Close
                                                 </Button>
                                             </div>
@@ -95,7 +100,8 @@ function EditTaskComment({taskId, taskDetailModal}) {
                                                         className="pl-0 mr-2"
                                                         style={{color: `rgb(94, 108, 132)`, fontSize: '14.5px'}}
                                                         onClick={() => {
-                                                            setVisibleComment(!visibleComment)
+                                                            console.log('click edit', element)
+                                                            setVisibleComment(element.id)
                                                         }}
                                                     >Edit
                                                     </Link>

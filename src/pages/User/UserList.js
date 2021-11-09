@@ -27,7 +27,7 @@ function UserList() {
 
     useEffect(() => {
         dispatch({type: GET_USER_SAGA})
-    }, [])
+    }, [dispatch])
 
     const columns = [
         {
@@ -37,6 +37,7 @@ function UserList() {
             sorter: (a, b) => a.userId - b.userId,
             sortDirections: ['ascend', 'descend', 'ascend'],
             width: '10%',
+            defaultSortOrder: 'descend'
         },
         {
             title: 'Email',
@@ -118,7 +119,7 @@ function UserList() {
 
     const renderActionButtons = () => {
         return (
-            <div class="d-flex  align-items-center mb-2">
+            <div className="d-flex  align-items-center mb-2">
                 <Button
                     type="primary"
                     onClick={() => {
@@ -133,7 +134,7 @@ function UserList() {
                 </Button>
                 <UserModal/>
                 <Form className='ml-2' name="basic" layout="inline">
-                    <Search placeholder="input search text" onSearch={(keyWord) => {
+                    <Search placeholder="Search users ..." onSearch={(keyWord) => {
                         dispatch({
                             type: GET_USER_SAGA,
                             keyWord: keyWord

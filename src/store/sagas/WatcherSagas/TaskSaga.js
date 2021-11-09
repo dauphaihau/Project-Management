@@ -4,17 +4,16 @@ import {takeLatest, takeEvery} from "redux-saga/effects";
 import {
     CHANGE_ASSIGN,
     CHANGE_TASK_MODAL, CLOSE_DRAWER,
-    CREATE_TASK_SAGA, DISPLAY_ALERT, GET_DETAIL_PROJECT,
+    CREATE_TASK_SAGA, DISPLAY_ALERT,
     GET_DETAIL_PROJECT_SAGA,
     GET_TASK_DETAIL,
     GET_TASK_DETAIL_SAGA,
     HANDLE_CHANGE_POST_API_SAGA, REMOVE_TASK_SAGA, REMOVE_USER_ASSIGN, UPDATE_STATUS_TASK_SAGA
 } from "../../types/Type";
-import {STATUS_CODE} from "../../../util/settings";
+import {STATUS_CODE} from "../../../utils/settings";
 
 // ---------------------- get task detail
 function* getTaskDetailSaga({taskId}) {
-    console.log('task-id', taskId)
     try {
         const {data} = yield call(() => taskServices.getTaskDetail(taskId))
         yield put({
@@ -40,6 +39,7 @@ function* createTaskSaga({taskObj}) {
             type: GET_DETAIL_PROJECT_SAGA,
             projectId: taskObj.projectId
         })
+        yield put({type: 'CLEAR_FIELD_CREATE_TASK'})
 
     } catch (error) {
         console.log({error})
@@ -81,10 +81,8 @@ export function* WatcherRemoveTask() {
 // ------------------------ update status task ( use for drag-drop )
 function* updateStatusTaskSaga({taskUpdateStatus}) {
 
-    console.log('task-update-status', taskUpdateStatus)
-
     try {
-        const {status, data} = yield call(() => taskServices.updateStatusTask(taskUpdateStatus))
+        const {status} = yield call(() => taskServices.updateStatusTask(taskUpdateStatus))
         if (status === STATUS_CODE.SUCCESS) {
             yield put({
                 type: GET_DETAIL_PROJECT_SAGA,
@@ -108,7 +106,7 @@ export function* WatcherUpdateStatusTask() {
 
 // ------------------------ handle change post api
 export function* handleChangePostApiSaga(action) {
-    console.log('action', action)
+
     // invoke action to change taskDetailModal
     // eslint-disable-next-line default-case
     switch (action.actionType) {
@@ -146,7 +144,7 @@ export function* handleChangePostApiSaga(action) {
     console.log('taskDetailModal after change', taskDetailModal)
 
     // convert data to API's data require
-    const listUserAsign = taskDetailModal.assigness?.map((user, index) => {
+    const listUserAsign = taskDetailModal.assigness?.map((user) => {
         return user.id
     })
 
@@ -166,9 +164,11 @@ export function* handleChangePostApiSaga(action) {
                 taskId: taskUpdateApi.taskId
             })
         }
-    } catch (e) {
-        console.log({e})
-        alert('you are not authorized to edit tasks')
+    } catch (err) {
+        console.log({err})
+        if (err.response.status === 403) {
+            alert('you are not authorized to edit tasks')
+        }
     }
 }
 

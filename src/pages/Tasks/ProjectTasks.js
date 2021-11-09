@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {useParams} from "react-router-dom";
-import TaskList from './TaskList'
+import TaskList from './Layout/TaskList'
 import {GET_DETAIL_PROJECT_SAGA} from '../../store/types/Type';
 import {Breadcrumbs, Link} from "@material-ui/core";
 
@@ -15,9 +15,7 @@ export default function ProjectTasks() {
             type: GET_DETAIL_PROJECT_SAGA,
             projectId: id
         })
-    }, []);
-
-    console.log('detail-project', detailProject)
+    }, [dispatch, id]);
 
     return (
         <div>
@@ -30,7 +28,7 @@ export default function ProjectTasks() {
                         <Link
                             underline="hover"
                             color="inherit"
-                            href="/projects"
+                            href={"/projects"}
                         >
                             Project List
                         </Link>

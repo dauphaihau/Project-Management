@@ -1,5 +1,5 @@
-import {history, TOKEN_CYBERSOFT} from "../../util/settings";
-import {DISPLAY_ALERT, USER_LOGIN_SAGA} from "../types/Type";
+import {history, STATUS_CODE, TOKEN_CYBERSOFT} from "../../utils/settings";
+import {DISPLAY_ALERT, ERROR_FROM_SERVER, USER_LOGIN_SAGA} from "../types/Type";
 import axios from "axios";
 
 export const registerAction = dataUser => {
@@ -14,10 +14,13 @@ export const registerAction = dataUser => {
                 }
             })
             dispatch({type: DISPLAY_ALERT, message: 'Register successfully'})
+            dispatch({type: ERROR_FROM_SERVER, messageServer: ''})
             history.push('/login');
         } catch (error) {
             console.log({error})
-            alert('email already exists')
+            if (error.response?.status === STATUS_CODE.NOT_FOUND) {
+                dispatch({type: ERROR_FROM_SERVER, messageServer: 'email already exists'})
+            }
         }
     };
 }

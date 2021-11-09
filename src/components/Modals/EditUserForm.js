@@ -18,7 +18,7 @@ function EditUserForm(props) {
             type: SET_SUBMIT_CONTENT_MODAL,
             submitFn: handleSubmit
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const {
         values,
@@ -44,7 +44,7 @@ function EditUserForm(props) {
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                 <TextField defaultValue={values.passWord} onChange={handleChange} fullWidth name="passWord"
-                           id="outlined-basic" label="PASSWORD" variant="outlined"
+                           id="outlined-basic" label="Password" variant="outlined"
                 />
                 <FormHelperText required
                                 error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>

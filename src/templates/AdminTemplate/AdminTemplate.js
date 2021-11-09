@@ -1,5 +1,4 @@
 import React, {useState, Fragment} from "react";
-import {Route} from "react-router";
 import {Layout, Menu} from "antd";
 import {
     MenuUnfoldOutlined,
@@ -9,7 +8,7 @@ import {
     UserOutlined,
     UsergroupAddOutlined
 } from "@ant-design/icons";
-import {NavLink, Redirect} from "react-router-dom";
+import {NavLink, Redirect, Route} from "react-router-dom";
 
 const {Header, Sider, Content} = Layout;
 
@@ -134,7 +133,7 @@ export const AdminTemplate = (props) => {
                                             width={50}
                                             height={50}
                                             style={{borderRadius: "50%", cursor: 'pointer'}}
-                                            src="https://i.pravatar.cc/300"
+                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                             alt="..."
                                             onClick={() => {
                                                 window.location.href = '/profile'

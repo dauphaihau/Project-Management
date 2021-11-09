@@ -1,10 +1,11 @@
 import axios from "axios";
-import {ACCESS_TOKEN, DOMAIN, TOKEN_CYBERSOFT} from "../../util/settings";
+import {ACCESS_TOKEN, DOMAIN, TOKEN_CYBERSOFT} from "../../utils/settings";
 
 const requestHeaders = {
     'Authorization': `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
     'TokenCybersoft': TOKEN_CYBERSOFT
 }
+
 
 export class baseService {
     put = (url, data) => {

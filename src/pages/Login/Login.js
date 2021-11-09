@@ -5,7 +5,7 @@ import {GoogleOutlined, TwitterOutlined, createFromIconfontCN} from '@ant-design
 import {withFormik} from 'formik';
 import LockIcon from '@mui/icons-material/Lock';
 import * as yup from 'yup';
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {loginActions} from "../../store/actions/UserAction";
 import {Redirect} from "react-router-dom";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
@@ -17,6 +17,8 @@ const IconFont = createFromIconfontCN({
 });
 
 function Login(props) {
+
+    const {messageServer} = useSelector(state => state.UserReducer)
 
     if (localStorage.getItem('accessToken')) {
         return <Redirect to='/'/>
@@ -45,6 +47,7 @@ function Login(props) {
                 </Box>
                 <FormHelperText required style={{marginLeft: 30}}
                                 error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <FormHelperText required style={{marginLeft: 30}} error>{messageServer}</FormHelperText>
                 <Box fullWidth sx={{display: 'flex', alignItems: 'flex-end', minWidth: 120}} error>
                     <LockIcon sx={{color: 'action.active', mr: 1, my: 0.5}}/>
                     <TextField onBlur={handleBlur} onChange={handleChange} fullWidth name="password"

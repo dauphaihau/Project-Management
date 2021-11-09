@@ -6,7 +6,7 @@ import {Router} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import store from './store/configStore';
 import 'antd/dist/antd.css';
-import {history} from "./util/settings";
+import {history} from "./utils/settings";
 import {createTheme, ThemeProvider} from "@material-ui/core";
 
 const theme = createTheme({

@@ -2,14 +2,15 @@ import React, {Fragment, useState} from "react";
 import TaskCard from "./TaskCard";
 import {useDispatch} from "react-redux";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
+import CloseIcon from '@mui/icons-material/Close';
 import {
     GET_TASK_DETAIL_SAGA,
     OPEN_FORM_CREATE_TASK,
     UPDATE_STATUS_TASK_SAGA
-} from "../../store/types/Type";
+} from "../../../store/types/Type";
 import {Modal, Avatar, Tooltip, Button} from "antd";
-import CreateTaskForm from "../../components/Modals/CreateTaskForm";
-import EditTaskForm from "../../components/Modals/EditTaskForm";
+import CreateTaskForm from "../../../components/Modals/CreateTaskForm";
+import EditTaskForm from "../../../components/Modals/EditTaskForm";
 
 export default function TaskList(props) {
     const dispatch = useDispatch();
@@ -28,7 +29,6 @@ export default function TaskList(props) {
 
     const handleDragEnd = (result) => {
 
-        console.log('result', result)
         let {source, destination} = result;
         let {projectId, taskId} = JSON.parse(result.draggableId);
 
@@ -70,6 +70,7 @@ export default function TaskList(props) {
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                         >
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a style={{display: 'block'}} onClick={() =>
                                                 // handleUpdateTask(taskDetail.taskId)}
                                                 setModal2Visible(true, taskDetail.taskId)
@@ -87,6 +88,13 @@ export default function TaskList(props) {
                                                         taskId: taskDetail.taskId
                                                     })
                                                 }}
+                                                closeIcon={<CloseIcon
+                                                    style={{marginTop:'5px', marginRight: '20px',
+                                                        width: '30px', height: '30px',
+                                                        color: 'rgb(66,82,110)'
+                                                    }}
+                                                className='custom-btn-edit-form'
+                                                />}
                                                 centered
                                                 visible={state.modal2Visible}
                                                 // onOk={() => setModal2Visible(false)}

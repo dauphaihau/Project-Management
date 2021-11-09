@@ -11,6 +11,10 @@
       }
     }
   }
+
+  .ant-table-cell span {
+    display: flex;
+  }
 }
 
 #task-list {
@@ -604,4 +608,25 @@
 
 .ant-popover-inner {
   border-radius: 6px !important;
+}
+
+.custom-btn-edit-form {
+  //transition: background-color;
+  transition: ease-in-out;
+  border-radius: 3px;
+  transition-duration: 0.5s;
+  transition-timing-function: initial;
+  transition-delay: initial;
+  transition-property: all;
+  appearance: none;
+  cursor: pointer;
+  font-size: 14.5px;
+  background-image: initial;
+  background-position-x: initial;
+  background-position-y: initial;
+  background-size: initial;
+}
+
+.custom-btn-edit-form:hover {
+  background-color: rgb(235, 236, 240);
 }

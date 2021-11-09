@@ -1,5 +1,5 @@
 import {call, put, takeLatest, takeEvery, delay} from 'redux-saga/effects'
-import {STATUS_CODE} from '../../../util/settings'
+import {STATUS_CODE} from '../../../utils/settings'
 import {projectServices} from '../../services/ProjectServices'
 import {
     CLOSE_DRAWER,
@@ -47,11 +47,13 @@ export function* WatcherGetAllProject() {
 // -------- get detail project
 function* getDetailProjectSaga({projectId}) {
     try {
+        yield put({type: DISPLAY_LOADING})
         const {data} = yield call(() => projectServices.getProjectDetail(projectId))
         yield put({
             type: GET_DETAIL_PROJECT,
             detailProject: data.content
         })
+        yield put({type: HIDE_LOADING})
     } catch (error) {
         console.log({error});
     }

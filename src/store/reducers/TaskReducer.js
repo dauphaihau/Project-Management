@@ -1,6 +1,6 @@
 import {
     CHANGE_ASSIGN,
-    CHANGE_TASK_MODAL, GET_ALL_COMMENT,
+    CHANGE_TASK_MODAL, CLEAR_FIELD_COMMENT,
     GET_TASK_DETAIL,
     REMOVE_USER_ASSIGN,
 } from "../types/Type";
@@ -47,7 +47,6 @@ const initialState = {
         "typeId": 2,
         "priorityId": 3,
         "projectId": 1452
-
     },
     lstTask: [],
     formTaskEdit: {
@@ -62,7 +61,8 @@ const initialState = {
         projectId: 0,
         typeId: 0,
         priorityId: 0
-    }
+    },
+    stateInputComment: false
 }
 
 export const TaskReducer = (state = initialState, action) => {
@@ -72,7 +72,6 @@ export const TaskReducer = (state = initialState, action) => {
         }
         case CHANGE_TASK_MODAL: {
             const {name, value} = action;
-            console.log('task-detail-modal-reducer', state.taskDetailModal)
             return {...state, taskDetailModal: {...state.taskDetailModal, [name]: value}}
         }
         case CHANGE_ASSIGN : {
@@ -83,9 +82,9 @@ export const TaskReducer = (state = initialState, action) => {
             state.taskDetailModal.assigness = [...state.taskDetailModal.assigness.filter(us => us.id !== action.userId)]
             return {...state}
         }
-        // case GET_ALL_COMMENT: {
-        //     return {...state, taskDetailModal: {...state.taskDetailModal, lstComment: action.lstComment}}
-        // }
+        case CLEAR_FIELD_COMMENT : {
+            return {...state, stateInputComment: true}
+        }
         default:
             return state
     }

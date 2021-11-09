@@ -1,14 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TimerIcon from '@mui/icons-material/Timer';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {useDispatch, useSelector} from "react-redux";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {
     CHANGE_ASSIGN,
     CHANGE_TASK_MODAL,
-    GET_ALL_COMMENT_SAGA,
     GET_ALL_PRIORITY_SAGA,
     GET_ALL_STATUS_SAGA,
-    GET_ALL_TASK_TYPE_SAGA, GET_DETAIL_PROJECT_SAGA, GET_TASK_DETAIL_SAGA,
+    GET_ALL_TASK_TYPE_SAGA, GET_TASK_DETAIL_SAGA,
     GET_USER_SAGA,
     HANDLE_CHANGE_POST_API_SAGA,
     REMOVE_TASK_SAGA,
@@ -19,15 +18,13 @@ import reactHtmlParse from 'react-html-parser'
 import {Avatar, Select} from "antd";
 import {CloseOutlined} from "@ant-design/icons";
 import {Box, MenuItem, Modal, TextField,} from "@material-ui/core";
-import EditTaskComment from "../Comment/EditTaskComment";
+import EditTaskComment from "../../pages/Tasks/Layout/Comment/EditTaskComment";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import {Fade} from '../../HOC/UserModal'
 import {useTheme} from "@mui/system";
 import {useMediaQuery} from "@mui/material";
-import {put} from "redux-saga/effects";
-import _ from "lodash";
 
 let style = {
     position: 'absolute',
@@ -74,10 +71,6 @@ function EditTaskForm(props) {
         dispatch({type: GET_ALL_STATUS_SAGA})
         dispatch({type: GET_ALL_PRIORITY_SAGA,})
         dispatch({type: GET_ALL_TASK_TYPE_SAGA})
-        // dispatch({
-        //     type: GET_ALL_COMMENT_SAGA,
-        //     idTask: props.taskId
-        // })
         dispatch({
             type: GET_USER_SAGA,
             idProject: props.projectId
@@ -86,8 +79,7 @@ function EditTaskForm(props) {
             type: GET_TASK_DETAIL_SAGA,
             taskId: props.taskId
         })
-        // setFieldValue('projectId', parseInt(props.projectId))
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const renderDescription = () => {
         const jsxDescription = reactHtmlParse(taskDetailModal.description);
@@ -213,7 +205,11 @@ function EditTaskForm(props) {
     return <>
         <form>
             <div style={{textAlign: 'right'}}>
-                <DeleteIcon style={{marginRight: "27px", paddingBottom: "7px"}} onClick={handleOpen}/>
+                <DeleteOutlineIcon className='custom-btn-edit-form' style={{
+                    marginRight: "45px",
+                    color: 'rgb(66,82,110)',
+                    width: '30px', height: '30px', marginTop: '-8px', cursor: 'pointer'
+                }} onClick={handleOpen}/>
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -321,7 +317,6 @@ function EditTaskForm(props) {
 
                     <div className="form-group">
                         <TextField
-                            // inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                             color='primary' fullWidth id="outlined-basic" label="ORIGINAL ESTIMATE (HOURS)"
                             variant='outlined'
                             name="originalEstimate"
@@ -333,7 +328,7 @@ function EditTaskForm(props) {
                         <h6 color={`rgba(0, 0, 0, 0.54)`}>ASSIGNEES</h6>
                         <div style={{display: 'flex', flexWrap: 'wrap'}}>
                             {
-                                taskDetailModal.assigness.map((user, index) => {
+                                taskDetailModal.assigness?.map((user, index) => {
                                     return <div key={index} style={{
                                         display: 'flex',
                                         marginBottom: 7,
@@ -344,7 +339,7 @@ function EditTaskForm(props) {
                                                     src={`https://i.pravatar.cc/150?u=${user.avatar}`}/>
                                             <span className='name ml-1'>{user.name.slice(0, 7)}</span>
                                         </div>
-                                        <CloseOutlined style={{marginLeft: 17, lineHeight: 'inherit'}} onClick={() => {
+                                        <CloseOutlined style={{marginLeft: 7, lineHeight: 'inherit'}} onClick={() => {
                                             dispatch({
                                                 type: HANDLE_CHANGE_POST_API_SAGA,
                                                 actionType: REMOVE_USER_ASSIGN,
@@ -362,7 +357,7 @@ function EditTaskForm(props) {
                                                 return false;
                                             }
                                             return true;
-                                        }).map((mem, index) => {
+                                        }).map((mem) => {
                                             return {value: mem.userId, label: mem.name}
                                         })}
                                         optionFilterProp='label' // when select -> occur label
@@ -370,7 +365,7 @@ function EditTaskForm(props) {
                                         value='+ Add more'
                                         showArrow={false}
                                         onSelect={(value) => {
-                                            if (value == '0') return;
+                                            if (value === '0') return;
                                             let userSelected = detailProject.members.find(mem => mem.userId === value);
                                             userSelected = {...userSelected, id: userSelected.userId};
                                             dispatch({

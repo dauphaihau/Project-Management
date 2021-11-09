@@ -12,7 +12,6 @@ import {
     GET_ALL_PROJECT_SAGA,
     OPEN_FORM_CREATE_PROJECT,
     DELETE_PROJECT_SAGA,
-
     EDIT_PROJECT,
     OPEN_FORM_EDIT_PROJECT,
     ADD_USER_SAGA,
@@ -34,7 +33,7 @@ export default function ProjectList() {
 
     const dispatch = useDispatch();
     const {listProject} = useSelector((state) => state.ProjectReducer);
-    const {listUser} = useSelector((state) => state.UserReducer);
+    const {listUser, isAddMember} = useSelector((state) => state.UserReducer);
 
     const [state, setState] = useState({
         data: [],
@@ -48,9 +47,13 @@ export default function ProjectList() {
     const [valueLabel, setValueLabel] = useState('')
 
     useEffect(() => {
+        setValueLabel('')
+    }, [isAddMember], )
+
+    useEffect(() => {
         const {pagination} = state;
         fetch({pagination});
-    }, []);
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const searchRef = useRef(null)
 
@@ -62,8 +65,8 @@ export default function ProjectList() {
             sorter: (item2, item1) => {
                 return item2.id - item1.id;
             },
-            sortDirections: ['descend'],
-            // width: '5%',
+            sortDirections: ['ascend', 'descend', 'ascend'],
+            defaultSortOrder: 'descend'
         },
         {
             title: "Project Name",
@@ -209,7 +212,7 @@ export default function ProjectList() {
                 </Button>
                 <Modal/>
                 <Form className='ml-2' name="basic" layout="inline">
-                    <Search placeholder="input search text" onSearch={(keyWord) => {
+                    <Search placeholder="Search projects ..." onSearch={(keyWord) => {
                         dispatch({
                             type: GET_ALL_PROJECT_SAGA,
                             keyWord: keyWord
@@ -247,13 +250,16 @@ export default function ProjectList() {
                                              </thead>
                                              <tbody>
                                              {members.map((item, index) => {
+                                                 // eslint-disable-next-line jsx-a11y/scope
                                                  return <tr scope='row' key={index}>
                                                      <td>{item.userId}</td>
                                                      <td>
-                                                         <img alt='avatar' className="img-fluid img-responsive rounded-circle mr-2"
+                                                         <img alt='avatar'
+                                                              className="img-fluid img-responsive rounded-circle mr-2"
                                                               src={`https://i.pravatar.cc/150?u=${item.avatar}`}
                                                               width="38"/>
                                                      </td>
+
                                                      <td>{item.name}</td>
                                                      <td>
                                                          <DeleteIcon
@@ -279,6 +285,7 @@ export default function ProjectList() {
                                     <Avatar style={{backgroundColor: "#3a87f7",}}>
                                         {member.name[0]?.toUpperCase()}
                                     </Avatar>
+
                                 </Tooltip>
                             </Popover>
                         );
@@ -288,12 +295,12 @@ export default function ProjectList() {
                 <Popover placement="top" title={'Add user'} trigger="click" content={() => {
                     return <AutoComplete
                         style={{width: '100%'}}
-                        options={listUser?.map((user) => {
+                        options={listUser?.map(user => {
                             return {label: user.name, value: user.userId.toString()}
                         })}
                         value={valueLabel} // set default value
 
-                        onChange={(text) => {
+                        onChange={text => {
                             setValueLabel(text)
                         }}
                         onSelect={(valueSelect, option) => {
@@ -305,7 +312,6 @@ export default function ProjectList() {
                                     "userId": valueSelect
                                 }
                             })
-
                         }}
                         onSearch={(value) => {
 
@@ -322,7 +328,7 @@ export default function ProjectList() {
                             }, 300)
                         }}/>
                 }}>
-                    <Button shape="circle"  icon={<UserAddOutlined/>}/>
+                    <Button shape="circle" icon={<UserAddOutlined/>}/>
                 </Popover>
             </Fragment>
         );

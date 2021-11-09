@@ -4,7 +4,7 @@ import {
     DELETE_USER_FROM_PROJECT_SAGA,
     DELETE_USER_SAGA, DISPLAY_ALERT,
     DISPLAY_LOADING,
-    EDIT_USER_SAGA,
+    EDIT_USER_SAGA, ERROR_FROM_SERVER,
     GET_ALL_PROJECT_SAGA,
     GET_USER,
     GET_USER_BY_PROJECT_ID,
@@ -12,10 +12,10 @@ import {
     GET_USER_SAGA,
     HIDE_LOADING,
     LOGIN,
-    USER_LOGIN_SAGA, USER_REGISTER_SAGA
+    USER_LOGIN_SAGA,
 } from "../../types/Type";
-import {call, takeLatest, put, delay} from 'redux-saga/effects'
-import {ACCESS_TOKEN, history, STATUS_CODE, USER_LOGIN} from "../../../util/settings";
+import {call, takeLatest, put} from 'redux-saga/effects'
+import {ACCESS_TOKEN, STATUS_CODE, USER_LOGIN} from "../../../utils/settings";
 import {userServices} from "../../services/UserServices";
 
 
@@ -23,10 +23,9 @@ function* LoginSaga({userLogin}) {
 
     try {
         yield put({type: DISPLAY_LOADING})
-        yield delay(1000)
-
         const {data} = yield call(() => userServices.login(userLogin))
-        yield put({type: HIDE_LOADING})
+        yield put({type: ERROR_FROM_SERVER, messageServer: ''})
+        window.location.reload();
 
         localStorage.setItem(ACCESS_TOKEN, data.content.accessToken)
         localStorage.setItem(USER_LOGIN, JSON.stringify(data.content))
@@ -35,12 +34,14 @@ function* LoginSaga({userLogin}) {
             type: LOGIN,
             userLogin: data
         })
-        history.push('/projects')
-        // yield put({type: DISPLAY_ALERT, message: 'Login successfully'})
-        yield put({type: DISPLAY_ALERT, message: 'Sorry we have some bug, please reload the page to continue'})
+
+        yield put({type: HIDE_LOADING})
+        yield put({type: DISPLAY_ALERT, message: 'Login successfully'})
     } catch (error) {
         console.log({error})
-        if (error.response.status === 400) return alert('Incorrect account or password');
+        if (error.response?.status === STATUS_CODE.NOT_FOUND) {
+            yield put({type: ERROR_FROM_SERVER, messageServer: 'Incorrect account or password'})
+        }
         yield put({type: HIDE_LOADING})
     }
 }
@@ -50,16 +51,13 @@ export function* WatcherLogin() {
 }
 
 // ---------------- get user ( user management )
-function* getUserSaga(action) {
-
-    let {keyWord} = action
+function* getUserSaga({keyWord}) {
     try {
         const {data} = yield call(() => userServices.getUser(keyWord))
         yield put({
             type: GET_USER,
             listUser: data.content
         })
-
     } catch (err) {
         console.log({err});
     }
@@ -73,14 +71,17 @@ export function* WatcherGetUser() {
 function* addUserSaga({userProject}) {
     try {
         yield call(() => userServices.addUserProject(userProject))
+        yield put({type: 'CLEAR_FIELD_ADD_MEMBER'})
         yield put({type: GET_ALL_PROJECT_SAGA})
     } catch (error) {
         console.log({error})
-        console.log('error', error.response.status)
-        if (error.status === 403) {
+        if (error.response.status === 403) {
             alert('you are not authorized to add user')
+        } else {
+            if (error.response.status === 500) {
+                alert('User already exists in the project!')
+            }
         }
-        alert('User already exists in the project!')
     }
 }
 
@@ -96,11 +97,14 @@ function* createUserSaga({dataRegister}) {
         if (data.statusCode === STATUS_CODE.SUCCESS) {
             yield put({type: CLOSE_USER_MODAL})
             yield put({type: DISPLAY_ALERT, message: 'Create user successfully'})
+            yield put({type: ERROR_FROM_SERVER, messageServer: ''})
         }
 
     } catch (error) {
         console.log({error});
-        alert('email already exists')
+        if (error.response?.status === STATUS_CODE.NOT_FOUND) {
+            yield put({type: ERROR_FROM_SERVER, messageServer: 'email already exists'})
+        }
     }
 }
 
@@ -109,14 +113,11 @@ export function* WatcherRegister() {
 }
 
 // ---------------- edit user
-function* editUserSaga(action) {
+function* editUserSaga({dataEdited}) {
     try {
-        const {data} = yield call(() => userServices.editUser(action.dataEdited))
-        yield put({type: GET_USER_SAGA})
-
+        const {data} = yield call(() => userServices.editUser(dataEdited))
         if (data.statusCode === STATUS_CODE.SUCCESS) {
             yield put({type: CLOSE_USER_MODAL})
-            yield delay(200)
             yield put({type: DISPLAY_ALERT, message: 'Edit info successfully'})
         }
     } catch (err) {

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect, useDispatch} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import {CREATE_USER_SAGA, SET_SUBMIT_CONTENT_MODAL} from "../../store/types/Type";
 import {withFormik} from "formik";
 import * as Yup from "yup";
@@ -8,13 +8,14 @@ import {Box, FormHelperText, TextField} from "@material-ui/core";
 function CreateUserForm(props) {
 
     const dispatch = useDispatch();
+    const {messageServer} = useSelector(state => state.UserReducer)
 
     useEffect(() => {
         dispatch({
             type: SET_SUBMIT_CONTENT_MODAL,
             submitFn: handleSubmit
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const {
         touched,
@@ -31,10 +32,11 @@ function CreateUserForm(props) {
                 />
                 <FormHelperText required
                                 error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <FormHelperText required error>{messageServer}</FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                 <TextField onChange={handleChange} fullWidth name="passWord"
-                           id="outlined-basic" label="PASSWORD" variant="outlined"
+                           id="outlined-basic" label="Password" variant="outlined"
                 />
                 <FormHelperText required
                                 error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>

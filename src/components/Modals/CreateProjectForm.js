@@ -33,7 +33,7 @@ function CreateProjectForm(props) {
         dispatch({
             type: GET_PROJECT_CATEGORY_SAGA
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const {
         touched,
@@ -114,7 +114,7 @@ const CreateProjectFormByFormik = withFormik({
         projectName: Yup.string().required('Project name is required'),
         description: Yup.string().required('Description is required'),
     }),
-    handleSubmit: (values, {props, setSubmitting}) => {
+    handleSubmit: (values, {props }) => {
         props.dispatch({
             type: CREATE_PROJECT_SAGA,
             newProject: values

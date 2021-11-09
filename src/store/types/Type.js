@@ -70,12 +70,14 @@ export const HIDE_ALERT = 'HIDE_ALERT'
 
 
 // ---------------------------------------- Others
-export const ADD_CARD = 'ADD_CARD'
-export const ADD_LIST = 'ADD_LIST'
 export const DRAG_HAPPENED = 'DRAG_HAPPENED'
 
 export const OPEN_DRAWER = 'OPEN_DRAWER'
 export const CLOSE_DRAWER = 'CLOSE_DRAWER'
+
+export const CLEAR_FIELD_COMMENT = 'CLEAR_FIELD_COMMENT'
+export const ERROR_FROM_SERVER = 'ERROR_FROM_SERVER'
+
 
 export const OPEN_USER_MODAL = 'OPEN_USER_MODAL'
 export const CLOSE_USER_MODAL = 'CLOSE_USER_MODAL'

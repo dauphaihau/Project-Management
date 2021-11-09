@@ -1,6 +1,6 @@
-import {USER_LOGIN} from "../../util/settings";
+import {USER_LOGIN} from "../../utils/settings";
 import {
-    EDIT_USER,
+    EDIT_USER, ERROR_FROM_SERVER,
     GET_USER,
     GET_USER_BY_PROJECT_ID,
     LOGIN,
@@ -25,6 +25,8 @@ const initialState = {
             "phoneNumber": "string"
         }
     ],
+    isAddMember: false,
+    messageServer: ''
 }
 
 export const UserReducer = (state = initialState, action) => {
@@ -40,6 +42,12 @@ export const UserReducer = (state = initialState, action) => {
         }
         case EDIT_USER: {
             return {...state, formUserEdit: action.currentDataOfUser}
+        }
+        case 'CLEAR_FIELD_ADD_MEMBER': {
+            return {...state, isAddMember: true}
+        }
+        case ERROR_FROM_SERVER: {
+            return {...state, messageServer: action.messageServer}
         }
         default:
             return {...state}
