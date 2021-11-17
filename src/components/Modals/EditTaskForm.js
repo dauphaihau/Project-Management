@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import TimerIcon from '@mui/icons-material/Timer';
 import {useDispatch, useSelector} from "react-redux";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -60,6 +60,7 @@ function EditTaskForm(props) {
     const [visibleEditor, setVisibleEditor] = useState(true)
     const [historyContent, setHistoryContent] = useState(taskDetailModal.description)
     const [content, setContent] = useState(taskDetailModal.description)
+    const changeRef = useRef(null)
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('md'))
@@ -193,13 +194,26 @@ function EditTaskForm(props) {
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        console.log('name', name)
-        console.log('value', value)
         dispatch({
-            type: HANDLE_CHANGE_POST_API_SAGA,
-            actionType: CHANGE_TASK_MODAL,
-            name, value
+            type: CHANGE_TASK_MODAL,
+            name,
+            value
         })
+
+        if (changeRef.current) {
+            clearTimeout(changeRef.current)
+        }
+
+        changeRef.current = setTimeout(() => {
+            console.log('name', name)
+            console.log('value', value)
+
+            dispatch({
+                type: HANDLE_CHANGE_POST_API_SAGA,
+                actionType: CHANGE_TASK_MODAL,
+                name, value
+            })
+        }, 500)
     }
 
     return <>

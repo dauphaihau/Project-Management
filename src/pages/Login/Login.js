@@ -1,7 +1,5 @@
 import React from 'react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import {Button} from "antd";
-import {GoogleOutlined, TwitterOutlined, createFromIconfontCN} from '@ant-design/icons';
 import {withFormik} from 'formik';
 import LockIcon from '@mui/icons-material/Lock';
 import * as yup from 'yup';
@@ -11,10 +9,6 @@ import {Box, FormHelperText, TextField} from "@material-ui/core";
 import ButtonMui from "@material-ui/core/Button";
 import * as Yup from "yup";
 import {USER_LOGIN_SAGA} from "../../store/types/Type";
-
-const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
-});
 
 function Login(props) {
 
@@ -58,13 +52,6 @@ function Login(props) {
                                 error>{touched.password && errors.password ? `${errors.password}` : null}</FormHelperText>
                 <ButtonMui fullWidth color='primary' type='submit' variant="contained">Login</ButtonMui>
 
-                <div className='social mt-4 my-3 text-center'>
-                    <Button style={{backgroundColor: '#42609A', marginLeft: '44', color: '#fff'}} shape="circle"
-                            icon={<IconFont type="icon-facebook"/>} size={"large"}/>
-                    <Button type="primary ml-3" shape="circle" icon={<TwitterOutlined/>} size={"large"}/>
-                    <Button style={{backgroundColor: 'rgb(216, 78, 63)', color: '#fff'}} type=" ml-3" shape="circle"
-                            icon={<GoogleOutlined/>} size={"large"}/>
-                </div>
                 <p className='text-center mt-3'>Don’t have an account? <a className='font-weight-bold'
                                                                           href={'/register'}>Create Account</a></p>
             </div>
