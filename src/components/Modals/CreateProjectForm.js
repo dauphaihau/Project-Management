@@ -80,6 +80,8 @@ function CreateProjectForm(props) {
                     }}
                     onEditorChange={handleEditorChange}
                 />
+                <FormHelperText
+                    error>{touched.description && errors.description ? `${errors.description}` : null}</FormHelperText>
             </div>
 
 
@@ -87,10 +89,11 @@ function CreateProjectForm(props) {
                 <TextField select variant="outlined" color='primary' name='categoryId' label='Category'
                            defaultValue={1}
                            onChange={(e) => {
-                               setFieldValue('typeId', e.target.value)
+                               setFieldValue('categoryId', e.target.value)
                            }}
                 >
                     {projectCategory.map((item, index) => {
+
                         return <MenuItem key={index} value={item.id}>
                             {item.projectCategoryName}
                         </MenuItem>
@@ -107,7 +110,8 @@ const CreateProjectFormByFormik = withFormik({
         return {
             projectName: '',
             description: '',
-            categoryId: props.projectCategory[0]?.id,
+            // categoryId: props.projectCategory[0]?.id,
+            categoryId: '',
         }
     },
     validationSchema: Yup.object().shape({
