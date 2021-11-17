@@ -110,7 +110,6 @@ const CreateProjectFormByFormik = withFormik({
         return {
             projectName: '',
             description: '',
-            // categoryId: props.projectCategory[0]?.id,
             categoryId: '',
         }
     },
