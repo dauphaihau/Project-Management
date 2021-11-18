@@ -93,7 +93,6 @@ function CreateProjectForm(props) {
                            }}
                 >
                     {projectCategory.map((item, index) => {
-
                         return <MenuItem key={index} value={item.id}>
                             {item.projectCategoryName}
                         </MenuItem>

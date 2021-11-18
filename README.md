@@ -1,5 +1,5 @@
 # Project Management
-Create a website to help users book tickets more easily -
+a software application used for issue tracking and project management -
 <a href="http://petpm.surge.sh/login">Visit the live app</a>
 
 Use email: hauuuu@gmail.com / password: 111111
@@ -7,7 +7,8 @@ Use email: hauuuu@gmail.com / password: 111111
 ![Screenshot](./assets/Demo.png)
 
 ## Features
-- Create, edit, delete, search user, profile, project
+- Create, edit, delete, search user, project
+- Edit profile
 - Create, edit, delete, drag drop task
 - Login, Register pages
 
