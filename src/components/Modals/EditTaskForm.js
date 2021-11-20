@@ -371,7 +371,7 @@ function EditTaskForm(props) {
                                                 return false;
                                             }
                                             return true;
-                                        }).map((mem) => {
+                                        }).map(mem => {
                                             return {value: mem.userId, label: mem.name}
                                         })}
                                         optionFilterProp='label' // when select -> occur label
