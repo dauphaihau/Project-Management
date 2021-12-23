@@ -90,6 +90,7 @@ function CreateTaskForm(props) {
             <Box fullWidth sx={{mb: 2, mt: 2, minWidth: 120}} error>
                 <TextField onChange={handleChange} fullWidth name="taskName"
                            id="outlined-basic" label="TASK NAME" variant="outlined"
+                           defaultValue=""
                 />
                 <FormHelperText
                     required error>{touched.taskName && errors.taskName ? `${errors.taskName}` : null}
@@ -134,7 +135,7 @@ function CreateTaskForm(props) {
                                    name='typeId'
                                    color='primary'
                                    label='TASK TYPE'
-                                   defaultValue={1}
+                                   // defaultValue={1}
                                    onChange={(e) => {
                                        setFieldValue('typeId', e.target.value)
                                    }}
@@ -158,7 +159,6 @@ function CreateTaskForm(props) {
                             closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
-                            // options={options}
                             options={prepareUserList()}
                         />
                     </Box>
@@ -194,8 +194,9 @@ function CreateTaskForm(props) {
                                            setFieldValue('timeTrackingSpent', e.target.value);
                                        }}
                             />
-                            <FormHelperText required
-                                            error>{touched.timeTrackingSpent && errors.timeTrackingSpent ? `${errors.timeTrackingSpent}` : null}</FormHelperText>
+                            <FormHelperText required error>
+                                {touched.timeTrackingSpent && errors.timeTrackingSpent ? `${errors.timeTrackingSpent}` : null}
+                            </FormHelperText>
                         </div>
                         <div className="col-6">
                             <TextField type='number' placeholder='Time Remaining' min='0'
@@ -207,8 +208,9 @@ function CreateTaskForm(props) {
                                            setFieldValue('timeTrackingRemaining', e.target.value);
                                        }}
                             />
-                            <FormHelperText required
-                                            error>{touched.timeTrackingRemaining && errors.timeTrackingRemaining ? `${errors.timeTrackingRemaining}` : null}</FormHelperText>
+                            <FormHelperText required error>
+                                {touched.timeTrackingRemaining && errors.timeTrackingRemaining ? `${errors.timeTrackingRemaining}` : null}
+                            </FormHelperText>
                         </div>
                     </div>
                 </div>
@@ -261,15 +263,16 @@ const CreateTaskFormByFormik = withFormik({
     validationSchema: Yup.object().shape({
         taskName: Yup.string().required('Task name is required'),
         timeTrackingRemaining: Yup.string().required('Time tracking remaining is required').matches(/^[0-9]*$/, 'Time tracking remaining must be a number'),
-        timeTrackingSpent: Yup.string().required('Time tracking spent Number is required').matches(/^[0-9]*$/, 'Time tracking spent must be a number'),
+        timeTrackingSpent: Yup.string().required('Time tracking spent is required').matches(/^[0-9]*$/, 'Time tracking spent must be a number'),
         originalEstimate: Yup.string().required('Original estimate is required').matches(/^[0-9]*$/, 'Original estimate must be a number'),
     }),
-    handleSubmit: (values, {props}) => {
+    handleSubmit: (values, {props, resetForm}) => {
         console.log('values', values)
         props.dispatch({
             type: CREATE_TASK_SAGA,
             taskObj: values,
         })
+        resetForm();
     },
     displayName: 'CreateTaskForm'
 })(CreateTaskForm)

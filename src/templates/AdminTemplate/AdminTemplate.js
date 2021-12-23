@@ -28,9 +28,12 @@ export const AdminTemplate = (props) => {
     };
 
     const renderLayout = (props) => {
-        return <Route path={props.path} render={(propsRoute) => {
-            return <props.component {...propsRoute}/>
-        }}/>
+        return <Route
+            path={props.path}
+            render={(propsRoute) => {
+                return <props.component {...propsRoute}/>
+            }}
+        />
     }
 
     return (
@@ -109,7 +112,6 @@ export const AdminTemplate = (props) => {
                                     Log out
                                 </Menu.Item>
                             </Menu>
-
                         </Sider>
                         <Layout className="site-layout">
                             <Header

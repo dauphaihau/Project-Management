@@ -28,6 +28,8 @@ function* getAllProjectSaga({keyWord}) {
                 type: GET_ALL_PROJECT,
                 listProject: data.content
             })
+
+            console.log({data})
             yield put({type: HIDE_LOADING})
             yield put({
                 type: GET_USER_BY_PROJECT_ID,
@@ -37,7 +39,6 @@ function* getAllProjectSaga({keyWord}) {
     } catch (error) {
         console.log({error});
     }
-
 }
 
 export function* WatcherGetAllProject() {

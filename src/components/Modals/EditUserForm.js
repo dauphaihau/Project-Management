@@ -39,15 +39,13 @@ function EditUserForm(props) {
                 <TextField defaultValue={values.email} onChange={handleChange} fullWidth name="email"
                            id="outlined-basic" label="Email" variant="outlined"
                 />
-                <FormHelperText required
-                                error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <FormHelperText required error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                 <TextField defaultValue={values.passWord} onChange={handleChange} fullWidth name="passWord"
                            id="outlined-basic" label="Password" variant="outlined"
                 />
-                <FormHelperText required
-                                error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>
+                <FormHelperText required error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
                 <TextField defaultValue={values.name} onChange={handleChange} fullWidth name="name"
@@ -59,8 +57,7 @@ function EditUserForm(props) {
                 <TextField defaultValue={values.phoneNumber} onChange={handleChange} fullWidth name="phoneNumber"
                            id="outlined-basic" label="Phone Number" variant="outlined"
                 />
-                <FormHelperText required
-                                error>{touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}</FormHelperText>
+                <FormHelperText required error>{touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}</FormHelperText>
             </Box>
         </form>
     );
@@ -77,7 +74,6 @@ const EditUserFormByFormik = withFormik({
             name: formUserEdit.name,
             phoneNumber: formUserEdit.phoneNumber
         }
-
     },
     validationSchema: yup.object().shape({
         email: Yup.string().required('Email is required').email('Email should be valid and contain @'),

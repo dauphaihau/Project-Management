@@ -343,11 +343,13 @@ function EditTaskForm(props) {
                         <div style={{display: 'flex', flexWrap: 'wrap'}}>
                             {
                                 taskDetailModal.assigness?.map((user, index) => {
-                                    return <div key={index} style={{
-                                        display: 'flex',
-                                        marginBottom: 7,
-                                        justifyContent: 'space-evenly'
-                                    }} className='item'>
+                                    return <div key={index}
+                                                style={{
+                                                    display: 'flex',
+                                                    marginBottom: 7,
+                                                    justifyContent: 'space-evenly'
+                                                }}
+                                                className='item'>
                                         <div className='flex'>
                                             <Avatar size='small' alt="Cindy Baker"
                                                     src={`https://i.pravatar.cc/150?u=${user.avatar}`}/>

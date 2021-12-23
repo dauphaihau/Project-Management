@@ -14,8 +14,31 @@ if (localStorage.getItem(USER_LOGIN)) {
 
 const initialState = {
     userLogin: userLogin,
-    listUser: [],
-    arrUser: [], // use in 'select create task'
+    listUser: [
+        {
+            avatar: "https://ui-avatars.com/api/?name=doraenon",
+            email: "hon@gmail.com",
+            name: "doraenon",
+            phoneNumber: "0982873999",
+            userId: 791
+        },
+        {
+            avatar: "https://ui-avatars.com/api/?name=Cristian",
+            email: "nguyenvananh9x97@gmail.com",
+            name: "Cristian",
+            phoneNumber: "0984375412",
+            userId: 817,
+        }
+    ],
+    arrUser: [
+        {
+            avatar: "https://ui-avatars.com/api/?name=Cristian",
+            email: "nguyenvananh9x97@gmail.com",
+            name: "Cristian",
+            phoneNumber: "0984375412",
+            userId: 817,
+        }
+    ], // use in 'select create task'
     formUserEdit: [
         {
             "id": "string",

@@ -48,7 +48,7 @@ export default function ProjectList() {
 
     useEffect(() => {
         setValueLabel('')
-    }, [isAddMember], )
+    }, [isAddMember])
 
     useEffect(() => {
         const {pagination} = state;
@@ -130,7 +130,9 @@ export default function ProjectList() {
             align: 'center',
             render: (text, record) => (
                 <Space size="small">
-                    <Button type="primary" onClick={() => {
+                    <Button
+                        icon={<EditOutlined/>}
+                        type="primary" onClick={() => {
                         dispatch({
                             type: OPEN_FORM_EDIT_PROJECT,
                             Component: <EditProjectForm/>,
@@ -141,7 +143,7 @@ export default function ProjectList() {
                             currentDataOfProject: record
                         })
                     }}
-                            icon={<EditOutlined/>}/>
+                    />
                     <Popconfirm
                         title="Are you sure to delete this project?"
                         onConfirm={() => {
@@ -210,7 +212,7 @@ export default function ProjectList() {
                 >
                     Create Project
                 </Button>
-                <Modal/>
+                {/*<Modal/>*/}
                 <Form className='ml-2' name="basic" layout="inline">
                     <Search placeholder="Search projects ..." onSearch={(keyWord) => {
                         dispatch({
@@ -232,7 +234,6 @@ export default function ProjectList() {
                     maxStyle={{
                         color: "#4091f7",
                         backgroundColor: "#cfe4fd",
-
                     }}
                 >
                     {members.map((member, index) => {
@@ -296,7 +297,7 @@ export default function ProjectList() {
                     return <AutoComplete
                         style={{width: '100%'}}
                         options={listUser?.map(user => {
-                            return {label: user.name, value: user.userId.toString()}
+                            return {label: user.name, value: user.userId?.toString()}
                         })}
                         value={valueLabel} // set default value
 

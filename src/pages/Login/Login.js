@@ -28,19 +28,16 @@ function Login(props) {
 
     return (
         <form onSubmit={handleSubmit} className='container' style={{height: window.innerHeight}}>
-            <div className='d-flex flex-column justify-content-center align-item-center'
-                 style={{height: window.innerHeight}}>
+            <div className='d-flex flex-column justify-content-center align-item-center' style={{height: window.innerHeight}}>
                 <h1 className='text-center'>Login</h1>
-                <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                </Box>
+                <Box fullWidth sx={{mb: 2, minWidth: 120}} error/>
                 <Box sx={{display: 'flex', alignItems: 'flex-end', mb: 1}}>
                     <AccountCircle sx={{color: 'action.active', mr: 1, my: 0.5}}/>
                     <TextField onBlur={handleBlur} onChange={handleChange} fullWidth name="email"
                                id="outlined-basic" placeholder="Email" variant="standard"
                     />
                 </Box>
-                <FormHelperText required style={{marginLeft: 30}}
-                                error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <FormHelperText required style={{marginLeft: 30}} error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
                 <FormHelperText required style={{marginLeft: 30}} error>{messageServer}</FormHelperText>
                 <Box fullWidth sx={{display: 'flex', alignItems: 'flex-end', minWidth: 120}} error>
                     <LockIcon sx={{color: 'action.active', mr: 1, my: 0.5}}/>
@@ -48,12 +45,9 @@ function Login(props) {
                                id="standard-basic" placeholder="Password" variant="standard"
                     />
                 </Box>
-                <FormHelperText required style={{marginLeft: 30, marginBottom: 30}}
-                                error>{touched.password && errors.password ? `${errors.password}` : null}</FormHelperText>
+                <FormHelperText required style={{marginLeft: 30, marginBottom: 30}} error>{touched.password && errors.password ? `${errors.password}` : null}</FormHelperText>
                 <ButtonMui fullWidth color='primary' type='submit' variant="contained">Login</ButtonMui>
-
-                <p className='text-center mt-3'>Don’t have an account? <a className='font-weight-bold'
-                                                                          href={'/register'}>Create Account</a></p>
+                <p className='text-center mt-3'>Don’t have an account? <a className='font-weight-bold' href={'/register'}>Create Account</a></p>
             </div>
         </form>
     );
@@ -75,7 +69,6 @@ const LoginWithFormik = withFormik({
             email: email,
             password: password
         }
-
         props.dispatch({type: USER_LOGIN_SAGA, userLogin});
     }, displayName: 'Login to continuous',
 

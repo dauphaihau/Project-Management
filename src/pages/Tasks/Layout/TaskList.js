@@ -28,6 +28,7 @@ export default function TaskList(props) {
     }
 
     const handleDragEnd = (result) => {
+        console.log({result})
 
         let {source, destination} = result;
         let {projectId, taskId} = JSON.parse(result.draggableId);
@@ -52,63 +53,69 @@ export default function TaskList(props) {
 
                 return <Droppable key={index} droppableId={task.statusId}>
                     {(provided) => {
-                        return <div className="task-col" key={index} style={{paddingBottom: 1, paddingTop: 8}}
+                        return <div className="task-col"
+                                    key={index}
+                                    style={{paddingBottom: 1, paddingTop: 8}}
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}>
-                            <h3 className="task-list-name mb-3 pb-2 ">{task.statusName}</h3>
+                            <h3 className="task-list-name mb-3 pb-2">{task.statusName}</h3>
                             {task.lstTaskDeTail.map((taskDetail, index) => {
-
-                                return <Draggable key={taskDetail.taskId.toString()} index={index}
-                                    // draggableId={taskDetail.taskId.toString()}
-                                                  draggableId={JSON.stringify({
-                                                      projectId: taskDetail.projectId,
-                                                      taskId: taskDetail.taskId
-                                                  })}>
-                                    {(provided) => {
-                                        return <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                        >
-                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a style={{display: 'block'}} onClick={() =>
-                                                // handleUpdateTask(taskDetail.taskId)}
-                                                setModal2Visible(true, taskDetail.taskId)
-                                            }>
-                                                <TaskCard
-                                                    taskDetail={taskDetail}
-                                                    index={index}
-                                                    key={taskDetail.taskId}
-                                                />
-                                            </a>
-                                            <Modal
-                                                maskClosable={() => {
-                                                    dispatch({
-                                                        type: GET_TASK_DETAIL_SAGA,
-                                                        taskId: taskDetail.taskId
-                                                    })
-                                                }}
-                                                closeIcon={<CloseIcon
-                                                    style={{marginTop:'5px', marginRight: '20px',
-                                                        width: '30px', height: '30px',
-                                                        color: 'rgb(66,82,110)'
-                                                    }}
-                                                className='custom-btn-edit-form'
-                                                />}
-                                                centered
-                                                visible={state.modal2Visible}
-                                                // onOk={() => setModal2Visible(false)}
-                                                onCancel={() => setModal2Visible(false, taskDetail.taskId)}
-                                                width={1000}
-                                                footer={null}
-                                            >
-                                                <EditTaskForm
-                                                    projectId={props.projectId} taskId={taskDetail.taskId}
-                                                />
-                                            </Modal>
-                                        </div>
-                                    }}
-                                </Draggable>
+                                return (
+                                    <Draggable key={taskDetail.taskId.toString()} index={index}
+                                        // draggableId={taskDetail.taskId.toString()}
+                                               draggableId={JSON.stringify({
+                                                   projectId: taskDetail.projectId,
+                                                   taskId: taskDetail.taskId
+                                               })}>
+                                        {(provided) => {
+                                            return (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
+                                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                                    <a style={{display: 'block'}} onClick={() =>
+                                                        // handleUpdateTask(taskDetail.taskId)}
+                                                        setModal2Visible(true, taskDetail.taskId)
+                                                    }>
+                                                        <TaskCard
+                                                            taskDetail={taskDetail}
+                                                            index={index}
+                                                            key={taskDetail.taskId}
+                                                        />
+                                                    </a>
+                                                    <Modal
+                                                        maskClosable={() => {
+                                                            dispatch({
+                                                                type: GET_TASK_DETAIL_SAGA,
+                                                                taskId: taskDetail.taskId
+                                                            })
+                                                        }}
+                                                        closeIcon={<CloseIcon
+                                                            style={{
+                                                                marginTop: '5px', marginRight: '20px',
+                                                                width: '30px', height: '30px',
+                                                                color: 'rgb(66,82,110)'
+                                                            }}
+                                                            className='custom-btn-edit-form'
+                                                        />}
+                                                        centered
+                                                        visible={state.modal2Visible}
+                                                        // onOk={() => setModal2Visible(false)}
+                                                        onCancel={() => setModal2Visible(false, taskDetail.taskId)}
+                                                        width={1000}
+                                                        footer={null}
+                                                    >
+                                                        <EditTaskForm
+                                                            projectId={props.projectId} taskId={taskDetail.taskId}
+                                                        />
+                                                    </Modal>
+                                                </div>
+                                            )
+                                        }}
+                                    </Draggable>
+                                )
                             })}
                             {provided.placeholder}
                         </div>
@@ -119,7 +126,7 @@ export default function TaskList(props) {
     };
 
     return <Fragment>
-        <div className='row ' style={{marginLeft: 14, marginBottom: 15}}>
+        <div className='row' style={{marginLeft: 14, marginBottom: 15}}>
             <Button type="primary" className='mr-3'
                     onClick={() => {
                         dispatch({
@@ -135,7 +142,7 @@ export default function TaskList(props) {
                     {props.member?.map((mem, index) => {
                         return <Tooltip title={mem.name} key={index} placement="top">
                             <Avatar style={{backgroundColor: "#3a87f7"}}>
-                                {mem.name[0].toUpperCase()}
+                                {mem.name[0]?.toUpperCase()}
                             </Avatar>
                         </Tooltip>
                     })}
