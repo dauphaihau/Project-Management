@@ -1,12 +1,10 @@
-import React, {useState, useEffect, Fragment, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {Form, Table, Tag, Space, Avatar, Tooltip, Button, Popover} from "antd";
-import {
-    EditOutlined,
-    CloseOutlined,
-    UserAddOutlined
-} from "@ant-design/icons";
-import Modal from "../../HOC/Modal";
+import {NavLink} from "react-router-dom";
+import {Form, Table, Tag, Space, Button} from "antd";
+import {Popconfirm} from 'antd';
+import {EditOutlined, CloseOutlined} from "@ant-design/icons";
+
 import CreateProjectForm from "../../components/Modals/CreateProjectForm";
 import {
     GET_ALL_PROJECT_SAGA,
@@ -14,26 +12,16 @@ import {
     DELETE_PROJECT_SAGA,
     EDIT_PROJECT,
     OPEN_FORM_EDIT_PROJECT,
-    ADD_USER_SAGA,
-    DELETE_USER_FROM_PROJECT_SAGA,
-    GET_USER_SAGA,
 } from "../../store/types/Type";
-import DeleteIcon from '@mui/icons-material/Delete';
-import {Popconfirm, message} from 'antd';
 import EditProjectForm from "../../components/Modals/EditProjectForm";
-import {AutoComplete} from "antd/es";
 import Search from "antd/es/input/Search";
-import {NavLink} from "react-router-dom";
+import AvatarGroup from "../../components/AvatarGroup/AvatarGroup";
 
 export default function ProjectList() {
-    const cancel = (e) => {
-        console.log(e);
-        message.error('Click on No');
-    }
 
     const dispatch = useDispatch();
-    const {listProject} = useSelector((state) => state.ProjectReducer);
-    const {listUser, isAddMember} = useSelector((state) => state.UserReducer);
+
+    const {listProject} = useSelector(state => state.ProjectReducer);
 
     const [state, setState] = useState({
         data: [],
@@ -44,18 +32,10 @@ export default function ProjectList() {
         loading: false,
     });
 
-    const [valueLabel, setValueLabel] = useState('')
-
-    useEffect(() => {
-        setValueLabel('')
-    }, [isAddMember])
-
     useEffect(() => {
         const {pagination} = state;
         fetch({pagination});
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-    const searchRef = useRef(null)
 
     const columns = [
         {
@@ -121,8 +101,8 @@ export default function ProjectList() {
             title: "Members",
             key: "members",
             dataIndex: "members",
-            render: (record, index) => <span>{renderAvatarGroups(record, index)}</span>,
-            // width: '15%',
+            render: (record, index) => <span><AvatarGroup members={record} projectId={index}/></span>,
+            width: '15%',
         },
         {
             title: "Action",
@@ -152,12 +132,14 @@ export default function ProjectList() {
                                 idProject: record.id
                             })
                         }}
-                        onCancel={cancel}
+                        // onCancel={cancel}
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button type="primary" danger onClick={() => {
-                        }} icon={<CloseOutlined/>}
+                        <Button
+                            type="primary" danger
+                            onClick={() => {}}
+                            icon={<CloseOutlined/>}
                         />
                     </Popconfirm>
                 </Space>
@@ -212,126 +194,18 @@ export default function ProjectList() {
                 >
                     Create Project
                 </Button>
-                {/*<Modal/>*/}
                 <Form className='ml-2' name="basic" layout="inline">
-                    <Search placeholder="Search projects ..." onSearch={(keyWord) => {
-                        dispatch({
-                            type: GET_ALL_PROJECT_SAGA,
-                            keyWord: keyWord
-                        })
-                    }}/>
-                </Form>
-            </div>
-        );
-    };
-
-    const renderAvatarGroups = (members = [], projectId) => {
-
-        return (
-            <Fragment>
-                <Avatar.Group
-                    maxCount={2}
-                    maxStyle={{
-                        color: "#4091f7",
-                        backgroundColor: "#cfe4fd",
-                    }}
-                >
-                    {members.map((member, index) => {
-                        return (
-                            <Popover key={index} placement='top'
-                                     content={() => {
-                                         return <table className='table table-borderless table-light'>
-                                             <thead>
-                                             <tr>
-                                                 <th scope="col">Id</th>
-                                                 <th scope="col">Avatar</th>
-                                                 <th scope="col">Name</th>
-                                                 <th scope="col">Action</th>
-                                             </tr>
-                                             </thead>
-                                             <tbody>
-                                             {members.map((item, index) => {
-                                                 // eslint-disable-next-line jsx-a11y/scope
-                                                 return <tr scope='row' key={index}>
-                                                     <td>{item.userId}</td>
-                                                     <td>
-                                                         <img alt='avatar'
-                                                              className="img-fluid img-responsive rounded-circle mr-2"
-                                                              src={`https://i.pravatar.cc/150?u=${item.avatar}`}
-                                                              width="38"/>
-                                                     </td>
-
-                                                     <td>{item.name}</td>
-                                                     <td>
-                                                         <DeleteIcon
-                                                             style={{cursor: "pointer", marginLeft: 8}}
-                                                             onClick={() => {
-                                                                 dispatch({
-                                                                     type: DELETE_USER_FROM_PROJECT_SAGA,
-                                                                     userProject: {
-                                                                         "projectId": projectId.id,
-                                                                         "userId": item.userId
-                                                                     }
-                                                                 })
-                                                             }}
-                                                         />
-                                                     </td>
-                                                 </tr>
-                                             })}
-                                             </tbody>
-                                         </table>
-                                     }}>
-                                <Tooltip
-                                    key={index} placement="top">
-                                    <Avatar style={{backgroundColor: "#3a87f7",}}>
-                                        {member.name[0]?.toUpperCase()}
-                                    </Avatar>
-
-                                </Tooltip>
-                            </Popover>
-                        );
-                    })}
-                </Avatar.Group>
-
-                <Popover placement="top" title={'Add user'} trigger="click" content={() => {
-                    return <AutoComplete
-                        style={{width: '100%'}}
-                        options={listUser?.map(user => {
-                            return {label: user.name, value: user.userId?.toString()}
-                        })}
-                        value={valueLabel} // set default value
-
-                        onChange={text => {
-                            setValueLabel(text)
-                        }}
-                        onSelect={(valueSelect, option) => {
-                            setValueLabel(option.label)
+                    <Search
+                        placeholder="Search projects ..."
+                        onSearch={(keyWord) => {
                             dispatch({
-                                type: ADD_USER_SAGA,
-                                userProject: {
-                                    "projectId": projectId.id, // record.id
-                                    "userId": valueSelect
-                                }
+                                type: GET_ALL_PROJECT_SAGA,
+                                keyWord: keyWord
                             })
                         }}
-                        onSearch={(value) => {
-
-                            // Debounce for search input
-                            if (searchRef.current) {
-                                clearTimeout(searchRef.current)
-                            }
-
-                            searchRef.current = setTimeout(() => {
-                                dispatch({
-                                    type: GET_USER_SAGA,
-                                    keyWord: value
-                                })
-                            }, 300)
-                        }}/>
-                }}>
-                    <Button shape="circle" icon={<UserAddOutlined/>}/>
-                </Popover>
-            </Fragment>
+                    />
+                </Form>
+            </div>
         );
     };
 

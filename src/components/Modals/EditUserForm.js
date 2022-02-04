@@ -5,7 +5,6 @@ import {
     SET_SUBMIT_CONTENT_MODAL,
 } from "../../store/types/Type";
 import {withFormik} from "formik";
-import * as yup from 'yup';
 import {connect} from "react-redux";
 import * as Yup from "yup";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
@@ -13,6 +12,7 @@ import {Box, FormHelperText, TextField} from "@material-ui/core";
 function EditUserForm(props) {
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch({
             type: SET_SUBMIT_CONTENT_MODAL,
@@ -75,7 +75,7 @@ const EditUserFormByFormik = withFormik({
             phoneNumber: formUserEdit.phoneNumber
         }
     },
-    validationSchema: yup.object().shape({
+    validationSchema: Yup.object().shape({
         email: Yup.string().required('Email is required').email('Email should be valid and contain @'),
         passWord: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters.').max(32, 'Password have max 32 characters'),
         name: Yup.string().required('Name is required').matches(/^[A-Z a-z]+$/, 'Names cannot contain numbers !'),

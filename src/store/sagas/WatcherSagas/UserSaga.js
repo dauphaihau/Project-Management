@@ -94,7 +94,6 @@ export function* WatcherGetUser() {
 function* addUserSaga({userProject}) {
     try {
         yield call(() => userServices.addUserProject(userProject))
-        yield put({type: 'CLEAR_FIELD_ADD_MEMBER'})
         yield put({type: GET_ALL_PROJECT_SAGA})
     } catch (error) {
         console.log({error})
@@ -118,11 +117,11 @@ function* createUserSaga({dataRegister}) {
     try {
         const {data} = yield call(() => userServices.register(dataRegister))
         if (data.statusCode === STATUS_CODE.SUCCESS) {
+            yield put({type: GET_USER_SAGA})
             yield put({type: CLOSE_USER_MODAL})
             yield put({type: DISPLAY_ALERT, message: 'Create user successfully'})
             yield put({type: ERROR_FROM_SERVER, messageServer: ''})
         }
-
     } catch (error) {
         console.log({error});
         if (error.response?.status === STATUS_CODE.NOT_FOUND) {
@@ -140,6 +139,7 @@ function* editUserSaga({dataEdited}) {
     try {
         const {data} = yield call(() => userServices.editUser(dataEdited))
         if (data.statusCode === STATUS_CODE.SUCCESS) {
+            yield put({type: GET_USER_SAGA})
             yield put({type: CLOSE_USER_MODAL})
             yield put({type: DISPLAY_ALERT, message: 'Edit info successfully'})
         }
@@ -158,7 +158,6 @@ function* deleteUserSaga(action) {
         yield call(() => userServices.deleteUser(action.userId))
         yield put({type: GET_USER_SAGA})
         yield put({type: DISPLAY_ALERT, message: 'Delete user successfully'})
-
     } catch (err) {
         console.log({err});
         yield put({type: DISPLAY_ALERT, message: 'you cannot delete registered users in the project'})

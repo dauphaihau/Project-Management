@@ -58,7 +58,7 @@ function CreateTaskForm(props) {
         errors,
         handleChange,
         handleSubmit,
-        setFieldValue
+        setFieldValue,
     } = props;
 
     const handleEditorChange = (content) => {
@@ -88,23 +88,25 @@ function CreateTaskForm(props) {
     return (
         <form className="container-fluid" onSubmit={handleSubmit}>
             <Box fullWidth sx={{mb: 2, mt: 2, minWidth: 120}} error>
-                <TextField onChange={handleChange} fullWidth name="taskName"
-                           id="outlined-basic" label="TASK NAME" variant="outlined"
-                           defaultValue=""
+                <TextField
+                    onChange={handleChange} fullWidth name="taskName"
+                    id="outlined-basic" label="TASK NAME" variant="outlined"
+                    defaultValue=""
                 />
-                <FormHelperText
-                    required error>{touched.taskName && errors.taskName ? `${errors.taskName}` : null}
+                <FormHelperText required error>
+                    {touched.taskName && errors.taskName ? `${errors.taskName}` : null}
                 </FormHelperText>
             </Box>
             <div className='row'>
                 <div className="col-md-6">
                     <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                        <TextField fullWidth select variant="outlined"
-                                   color='primary' label='PRIORITY' name='priorityId'
-                                   defaultValue={1}
-                                   onChange={(e) => {
-                                       setFieldValue('priorityId', e.target.value)
-                                   }}
+                        <TextField
+                            fullWidth select variant="outlined"
+                            color='primary' label='PRIORITY' name='priorityId'
+                            defaultValue={1}
+                            onChange={(e) => {
+                                setFieldValue('priorityId', e.target.value)
+                            }}
                         >
                             {arrPriority.map((priority, index) => {
                                 return <MenuItem key={index} value={priority.priorityId}>
@@ -114,37 +116,39 @@ function CreateTaskForm(props) {
                         </TextField>
                     </Box>
                     <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                        <TextField fullWidth select variant="outlined"
-                                   name='statusId'
-                                   color='primary'
-                                   label='Status'
-                                   defaultValue={1}
-                                   onChange={(e) => {
-                                       setFieldValue('statusId', e.target.value)
-                                   }}
+                        <TextField
+                            fullWidth select variant="outlined"
+                            name='statusId'
+                            color='primary'
+                            label='Status'
+                            defaultValue={1}
+                            onChange={(e) => {
+                                setFieldValue('statusId', e.target.value)
+                            }}
                         >
-                            {arrStatus.map((status, index) => {
-                                return <MenuItem key={index} value={status.statusId}>
+                            {arrStatus.map((status, index) => (
+                                <MenuItem key={index} value={status.statusId}>
                                     {status.statusName}
                                 </MenuItem>
-                            })}
+                            ))}
                         </TextField>
                     </Box>
                     <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                        <TextField fullWidth select variant="outlined"
-                                   name='typeId'
-                                   color='primary'
-                                   label='TASK TYPE'
-                                   // defaultValue={1}
-                                   onChange={(e) => {
-                                       setFieldValue('typeId', e.target.value)
-                                   }}
+                        <TextField
+                            fullWidth select variant="outlined"
+                            name='typeId'
+                            color='primary'
+                            label='TASK TYPE'
+                            // defaultValue={1}
+                            onChange={(e) => {
+                                setFieldValue('typeId', e.target.value)
+                            }}
                         >
-                            {arrTaskType.map((taskType, index) => {
-                                return <MenuItem key={index} value={taskType.id}>
+                            {arrTaskType.map((taskType, index) => (
+                                <MenuItem key={index} value={taskType.id}>
                                     {taskType.taskType}
                                 </MenuItem>
-                            })}
+                            ))}
                         </TextField>
                     </Box>
                 </div>
@@ -171,13 +175,15 @@ function CreateTaskForm(props) {
                                 setFieldValue('originalEstimate', e.target.value)
                             }}
                         />
-                        <FormHelperText required
-                                        error>{touched.originalEstimate && errors.originalEstimate ? `${errors.originalEstimate}` : null}</FormHelperText>
+                        <FormHelperText required error>
+                            {touched.originalEstimate && errors.originalEstimate ? `${errors.originalEstimate}` : null}
+                        </FormHelperText>
                     </Box>
 
                     <h6 color={`rgba(0, 0, 0, 0.54)`}>Time Tracking</h6>
-                    <Slider defaultValue={30} color='primary' value={timeTracking.timeTrackingSpent}
-                            max={Number(timeTracking.timeTrackingSpent) + Number(timeTracking.timeTrackingRemaining)}
+                    <Slider
+                        defaultValue={30} color='primary' value={timeTracking.timeTrackingSpent}
+                        max={Number(timeTracking.timeTrackingSpent) + Number(timeTracking.timeTrackingRemaining)}
                     />
                     <div className="row">
                         <div className='col-6 text-left'>{timeTracking.timeTrackingSpent}h logged</div>
@@ -185,28 +191,30 @@ function CreateTaskForm(props) {
                     </div>
                     <div className="row">
                         <div className="col-6">
-                            <TextField type='number' placeholder='Time Spent' min='0'
-                                       name="timeTrackingSpent" className='form-control'
-                                       onChange={(e) => {
-                                           setTimeTracking({
-                                               ...timeTracking, timeTrackingSpent: e.target.value
-                                           })
-                                           setFieldValue('timeTrackingSpent', e.target.value);
-                                       }}
+                            <TextField
+                                type='number' placeholder='Time Spent' min='0'
+                                name="timeTrackingSpent" className='form-control'
+                                onChange={(e) => {
+                                    setTimeTracking({
+                                        ...timeTracking, timeTrackingSpent: e.target.value
+                                    })
+                                    setFieldValue('timeTrackingSpent', e.target.value);
+                                }}
                             />
                             <FormHelperText required error>
                                 {touched.timeTrackingSpent && errors.timeTrackingSpent ? `${errors.timeTrackingSpent}` : null}
                             </FormHelperText>
                         </div>
                         <div className="col-6">
-                            <TextField type='number' placeholder='Time Remaining' min='0'
-                                       name="timeTrackingSpent" className='form-control'
-                                       onChange={(e) => {
-                                           setTimeTracking({
-                                               ...timeTracking, timeTrackingRemaining: e.target.value
-                                           })
-                                           setFieldValue('timeTrackingRemaining', e.target.value);
-                                       }}
+                            <TextField
+                                type='number' placeholder='Time Remaining' min='0'
+                                name="timeTrackingSpent" className='form-control'
+                                onChange={(e) => {
+                                    setTimeTracking({
+                                        ...timeTracking, timeTrackingRemaining: e.target.value
+                                    })
+                                    setFieldValue('timeTrackingRemaining', e.target.value);
+                                }}
                             />
                             <FormHelperText required error>
                                 {touched.timeTrackingRemaining && errors.timeTrackingRemaining ? `${errors.timeTrackingRemaining}` : null}

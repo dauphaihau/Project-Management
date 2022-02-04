@@ -2,12 +2,11 @@ import React from 'react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {withFormik} from 'formik';
 import LockIcon from '@mui/icons-material/Lock';
-import * as yup from 'yup';
 import {connect, useSelector} from "react-redux";
 import {Redirect} from "react-router-dom";
 import {Box, FormHelperText, TextField} from "@material-ui/core";
-import ButtonMui from "@material-ui/core/Button";
 import * as Yup from "yup";
+import ButtonMui from "@material-ui/core/Button";
 import {USER_LOGIN_SAGA} from "../../store/types/Type";
 
 function Login(props) {
@@ -60,7 +59,7 @@ const LoginWithFormik = withFormik({
         email: '',
         password: '',
     }),
-    validationSchema: yup.object().shape({
+    validationSchema: Yup.object().shape({
         email: Yup.string().required('Email is required').email('Email should be valid and contain @'),
         password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters.').max(32, 'Password have max 32 characters'),
     }),

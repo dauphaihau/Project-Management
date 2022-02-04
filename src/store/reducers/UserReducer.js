@@ -48,7 +48,6 @@ const initialState = {
             "phoneNumber": "string"
         }
     ],
-    isAddMember: false,
     messageServer: ''
 }
 
@@ -65,9 +64,6 @@ export const UserReducer = (state = initialState, action) => {
         }
         case EDIT_USER: {
             return {...state, formUserEdit: action.currentDataOfUser}
-        }
-        case 'CLEAR_FIELD_ADD_MEMBER': {
-            return {...state, isAddMember: true}
         }
         case ERROR_FROM_SERVER: {
             return {...state, messageServer: action.messageServer}

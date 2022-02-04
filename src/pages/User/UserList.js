@@ -8,17 +8,12 @@ import {
     OPEN_FORM_EDIT_USER,
 } from "../../store/types/Type";
 import EditUserForm from "../../components/Modals/EditUserForm";
-import {Popconfirm, message} from 'antd';
+import {Popconfirm} from 'antd';
 import CreateUserForm from "../../components/Modals/CreateUserForm";
 import Search from "antd/es/input/Search";
 import UserModal from "../../HOC/UserModal";
 
 import Avatar from '@mui/material/Avatar';
-
-const cancel = (e) => {
-    console.log(e);
-    message.error('Click on No');
-}
 
 function UserList() {
 
@@ -103,7 +98,6 @@ function UserList() {
                                 userId: record.userId
                             })
                         }}
-                        onCancel={cancel}
                         okText="Yes"
                         cancelText="No"
                     >

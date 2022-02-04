@@ -23,19 +23,18 @@ const useStyle = makeStyles((theme) => ({
 function EditProjectForm(props) {
 
     useEffect(() => {
-        setFieldValue('description', values.description)
-        dispatch({type: GET_PROJECT_CATEGORY_SAGA})
-
+        setFieldValue('description', values.description);
+        dispatch({type: GET_PROJECT_CATEGORY_SAGA});
         dispatch({
             type: SET_SUBMIT_CONTENT,
             submitFn: handleSubmit
-        })
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        });
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const {projectCategory} = useSelector(state => state.ProjectReducer)
+    const {projectCategory} = useSelector(state => state.ProjectReducer);
     const dispatch = useDispatch();
     const editorRef = useRef(null);
-    const classes = useStyle()
+    const classes = useStyle();
 
     const {
         values,
@@ -48,44 +47,48 @@ function EditProjectForm(props) {
 
     const handleEditorChange = (content) => {
         values.description = content;
-        console.log('desc',values.description);
-    }
+    };
 
     return (
         <form className='container' onSubmit={handleSubmit}>
             <div className='row'>
                 <div className='col-md-4 col-12'>
                     <FormControl className={classes.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
-                        <TextField defaultValue={values.id} disabled fullWidth name="id"
-                                   id="outlined-error-helper-text"
-                                   label="Id Project" variant="outlined"
+                        <TextField
+                            value={values.id}
+                            disabled fullWidth name="id"
+                            id="outlined-error-helper-text"
+                            label="Id Project" variant="outlined"
                         />
                     </FormControl>
                 </div>
                 <div className='col-md-4 col-12'>
                     <FormControl className={classes.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
-                        <TextField defaultValue={values.projectName} onChange={handleChange} fullWidth
-                                   name="projectName"
-                                   id="outlined-error-helper-text"
-                                   label="Project Name" variant="outlined"
+                        <TextField
+                            value={values.projectName}
+                            onChange={handleChange} fullWidth
+                            name="projectName"
+                            id="outlined-error-helper-text"
+                            label="Project Name" variant="outlined"
                         />
-                        <FormHelperText
-                            error>{touched.projectName && errors.projectName ? `${errors.projectName}` : null}</FormHelperText>
+                        <FormHelperText error>
+                            {touched.projectName && errors.projectName ? `${errors.projectName}` : null}
+                        </FormHelperText>
                     </FormControl>
                 </div>
                 <div className='col-md-4 col-12'>
                     <FormControl className={classes.textField} fullWidth sx={{m: 1, minWidth: 120}} error>
-                        <TextField select variant="outlined" color='primary' name='categoryId' label='Category'
-                                   defaultValue={values.categoryId}
-                                   onChange={(e) => {
-                                       setFieldValue('categoryId', e.target.value)
-                                   }}
+                        <TextField
+                            select variant="outlined" color='primary'
+                            name='categoryId' label='Category'
+                            value={values.categoryId}
+                            onChange={e => setFieldValue('categoryId', e.target.value)}
                         >
-                            {projectCategory.map((item, index) => {
-                                return <MenuItem key={index} value={item.id}>
+                            {projectCategory.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>
                                     {item.projectCategoryName}
                                 </MenuItem>
-                            })}
+                            ))}
                         </TextField>
                     </FormControl>
                 </div>
@@ -136,7 +139,6 @@ const EditProjectFormByFormik = withFormik({
     }),
     handleSubmit: (values, {props}) => {
         console.log('values', values)
-
         props.dispatch({
             type: UPDATE_PROJECT_SAGA,
             dataEdited: values

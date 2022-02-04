@@ -1,0 +1,32 @@
+[
+  {
+    "members": [
+      {
+        "userId": 884,
+        "name": "Trang",
+        "avatar": "https://ui-avatars.com/api/?name=Trang"
+      },
+      {
+        "userId": 833,
+        "name": "PHAN THI MY",
+        "avatar": "https://ui-avatars.com/api/?name=PHAN THI MY"
+      },
+      {
+        "userId": 825,
+        "name": "Trần Trọng Nghĩa",
+        "avatar": "https://ui-avatars.com/api/?name=Trần Trọng Nghĩa"
+      }
+    ],
+    "creator": {
+      "id": 884,
+      "name": "Trang"
+    },
+    "id": 2297,
+    "projectName": "Project Quản lý dự án Jira",
+    "description": "<p><strong><span style=\"background-color: #e03e2d;\">Đ&acirc;y l&agrave; Project quản l&yacute; Jira được tạo bởi c&aacute;c Developer.</span></strong></p>",
+    "categoryId": 1,
+    "categoryName": "Dự án web",
+    "alias": "project-quan-ly-du-an-jira",
+    "deleted": false
+  }
+]

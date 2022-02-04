@@ -20,15 +20,14 @@ import {
 // -------- get all project
 function* getAllProjectSaga({keyWord}) {
     try {
-        yield put({type: DISPLAY_LOADING})
-        yield delay(600)
+        // yield put({type: DISPLAY_LOADING})
+        // yield delay(600)
         const {data, status} = yield call(() => projectServices.getAllProject(keyWord))
         if (status === STATUS_CODE.SUCCESS) {
             yield put({
                 type: GET_ALL_PROJECT,
                 listProject: data.content
             })
-
             console.log({data})
             yield put({type: HIDE_LOADING})
             yield put({
@@ -108,7 +107,6 @@ export function* WatcherCreateProject() {
 
 // -------- update project
 function* updateProjectSaga({dataEdited}) {
-
     try {
         const {status} = yield call(() => projectServices.updateProject(dataEdited))
         if (status === STATUS_CODE.SUCCESS) {
@@ -129,7 +127,6 @@ export function* WatcherUpdateProject() {
 
 // -------- delete project
 function* deleteProjectSaga({idProject}) {
-
     try {
         const {status} = yield call(() => projectServices.deleteProject(idProject))
         if (status === STATUS_CODE.SUCCESS) {
