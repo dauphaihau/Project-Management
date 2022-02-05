@@ -20,7 +20,7 @@ import {
 // -------- get all project
 function* getAllProjectSaga({keyWord}) {
     try {
-        yield put({type: DISPLAY_LOADING})
+        // yield put({type: DISPLAY_LOADING})
         const {data, status} = yield call(() => projectServices.getAllProject(keyWord))
         if (status === STATUS_CODE.SUCCESS) {
             yield put({

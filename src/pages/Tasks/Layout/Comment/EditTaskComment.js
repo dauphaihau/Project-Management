@@ -3,7 +3,6 @@ import {DELETE_COMMENT_SAGA, INSERT_COMMENT_SAGA, UPDATE_COMMENT_SAGA} from "../
 import {useDispatch, useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
 import {Link, TextField} from "@material-ui/core";
-import reactHtmlParse from "react-html-parser";
 import _ from "lodash";
 
 function EditTaskComment({taskId}) {

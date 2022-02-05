@@ -1,6 +1,6 @@
 # Tracker
 a software application used for issue tracking and project management -
-<a href="http://petpm.surge.sh/login">Visit the live app</a>
+<a href="http://pettracker.surge.sh/login">Visit the live app</a>
 
 Use email: hauuuu@gmail.com / password: 111111
 
