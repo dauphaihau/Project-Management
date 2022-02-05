@@ -135,7 +135,8 @@ export default function TaskList(props) {
                             title: 'Create task'
                         })
                     }}
-            >Create Task
+            >
+                Create Task
             </Button>
             <div style={{display: 'flex'}} className='avatar-group'>
                 <Avatar.Group maxCount={9}>

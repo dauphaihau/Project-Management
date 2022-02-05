@@ -31,33 +31,52 @@ function EditUserForm(props) {
     return (
         <form onSubmit={handleSubmit}>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField defaultValue={values.id} disabled onChange={handleChange} fullWidth
-                           name="id" id="outlined-basic" label="Id" variant="outlined"
+                <TextField
+                    defaultValue={values.id} disabled
+                    onChange={handleChange} fullWidth
+                    name="id" id="outlined-basic" label="Id"
+                    variant="outlined"
                 />
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField defaultValue={values.email} onChange={handleChange} fullWidth name="email"
-                           id="outlined-basic" label="Email" variant="outlined"
+                <TextField
+                    defaultValue={values.email}
+                    onChange={handleChange} fullWidth name="email"
+                    id="outlined-basic" label="Email" variant="outlined"
                 />
-                <FormHelperText required error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.email && errors.email ? `${errors.email}` : null}
+                </FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField defaultValue={values.passWord} onChange={handleChange} fullWidth name="passWord"
-                           id="outlined-basic" label="Password" variant="outlined"
+                <TextField
+                    defaultValue={values.passWord}
+                    onChange={handleChange} fullWidth name="passWord"
+                    id="outlined-basic" label="Password" variant="outlined"
                 />
-                <FormHelperText required error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.passWord && errors.passWord ? `${errors.passWord}` : null}
+                </FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField defaultValue={values.name} onChange={handleChange} fullWidth name="name"
-                           id="outlined-basic" label="Name" variant="outlined"
+                <TextField
+                    defaultValue={values.name}
+                    onChange={handleChange} fullWidth name="name"
+                    id="outlined-basic" label="Name" variant="outlined"
                 />
-                <FormHelperText required error>{touched.name && errors.name ? `${errors.name}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.name && errors.name ? `${errors.name}` : null}
+                </FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField defaultValue={values.phoneNumber} onChange={handleChange} fullWidth name="phoneNumber"
-                           id="outlined-basic" label="Phone Number" variant="outlined"
+                <TextField
+                    defaultValue={values.phoneNumber}
+                    onChange={handleChange} fullWidth name="phoneNumber"
+                    id="outlined-basic" label="Phone Number" variant="outlined"
                 />
-                <FormHelperText required error>{touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}
+                </FormHelperText>
             </Box>
         </form>
     );

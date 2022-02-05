@@ -54,7 +54,6 @@ export default function ProjectList() {
             key: "projectName",
             render: (text, record) => <NavLink to={`/project/task/${record.id}`}>{text}</NavLink>
             ,
-            // width: '25%',
             sorter: (item2, item1) => {
                 let projectName1 = item1.projectName.trim().toLowerCase();
                 let projectName2 = item2.projectName.trim().toLowerCase();
@@ -68,7 +67,6 @@ export default function ProjectList() {
             title: "Category",
             dataIndex: "categoryName",
             key: "categoryName",
-            // width: '15%',
             sorter: (item2, item1) => {
                 let categoryName1 = item1.categoryName?.trim().toLowerCase();
                 let categoryName2 = item2.categoryName?.trim().toLowerCase();
@@ -87,7 +85,6 @@ export default function ProjectList() {
                   <Tag color="geekblue">{records.name.toUpperCase()}</Tag>
                 </span>
             ),
-            // width: '15%',
             sorter: (item2, item1) => {
                 let creator1 = item1.creator.name?.trim().toLowerCase();
                 let creator2 = item2.creator.name?.trim().toLowerCase();
@@ -112,17 +109,18 @@ export default function ProjectList() {
                 <Space size="small">
                     <Button
                         icon={<EditOutlined/>}
-                        type="primary" onClick={() => {
-                        dispatch({
-                            type: OPEN_FORM_EDIT_PROJECT,
-                            Component: <EditProjectForm/>,
-                            title: 'Edit project'
-                        });
-                        dispatch({
-                            type: EDIT_PROJECT,
-                            currentDataOfProject: record
-                        })
-                    }}
+                        type="primary"
+                        onClick={() => {
+                            dispatch({
+                                type: OPEN_FORM_EDIT_PROJECT,
+                                Component: <EditProjectForm/>,
+                                title: 'Edit project'
+                            });
+                            dispatch({
+                                type: EDIT_PROJECT,
+                                currentDataOfProject: record
+                            })
+                        }}
                     />
                     <Popconfirm
                         title="Are you sure to delete this project?"
@@ -132,19 +130,13 @@ export default function ProjectList() {
                                 idProject: record.id
                             })
                         }}
-                        // onCancel={cancel}
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button
-                            type="primary" danger
-                            onClick={() => {}}
-                            icon={<CloseOutlined/>}
-                        />
+                        <Button type="primary" danger icon={<CloseOutlined/>}/>
                     </Popconfirm>
                 </Space>
             ),
-            // width: '20%',
         },
     ];
 

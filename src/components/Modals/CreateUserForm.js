@@ -27,32 +27,45 @@ function CreateUserForm(props) {
     return (
         <form onSubmit={handleSubmit}>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField onChange={handleChange} fullWidth name="email"
-                           id="outlined-basic" label="Email" variant="outlined"
+                <TextField
+                    onChange={handleChange} fullWidth name="email"
+                    id="outlined-basic"
+                    label="Email" variant="outlined"
                 />
-                <FormHelperText required
-                                error>{touched.email && errors.email ? `${errors.email}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.email && errors.email ? `${errors.email}` : null}
+                </FormHelperText>
                 <FormHelperText required error>{messageServer}</FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField onChange={handleChange} fullWidth name="passWord"
-                           id="outlined-basic" label="Password" variant="outlined"
+                <TextField
+                    onChange={handleChange}
+                    fullWidth name="passWord"
+                    id="outlined-basic" label="Password" variant="outlined"
                 />
-                <FormHelperText required
-                                error>{touched.passWord && errors.passWord ? `${errors.passWord}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.passWord && errors.passWord ? `${errors.passWord}` : null}
+                </FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField onChange={handleChange} fullWidth name="name"
-                           id="outlined-basic" label="Name" variant="outlined"
+                <TextField
+                    onChange={handleChange}
+                    fullWidth name="name"
+                    id="outlined-basic" label="Name" variant="outlined"
                 />
-                <FormHelperText required error>{touched.name && errors.name ? `${errors.name}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.name && errors.name ? `${errors.name}` : null}
+                </FormHelperText>
             </Box>
             <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                <TextField onChange={handleChange} fullWidth name="phoneNumber"
-                           id="outlined-basic" label="Phone Number" variant="outlined"
+                <TextField
+                    onChange={handleChange}
+                    fullWidth name="phoneNumber"
+                    id="outlined-basic" label="Phone Number" variant="outlined"
                 />
-                <FormHelperText required
-                                error>{touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}</FormHelperText>
+                <FormHelperText required error>
+                    {touched.phoneNumber && errors.phoneNumber ? `${errors.phoneNumber}` : null}
+                </FormHelperText>
             </Box>
         </form>
     );
@@ -70,7 +83,7 @@ const CreateUserFormByFormik = withFormik({
         email: Yup.string().required('Email is required').email('Email should be valid and contain @'),
         passWord: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters.').max(32, 'Password have max 32 characters'),
         name: Yup.string().required('Name is required').matches(/^[A-Z a-z]+$/, 'Names cannot contain numbers !'),
-        phoneNumber: Yup.string().required('Phone Number is required').matches(/^[0-9]*$/, 'number phone must be a number').min(6, 'Phone Number must be at least 6 characters.').max(32, 'Phone Number have max 32 characters'),
+        phoneNumber: Yup.string().required('Phone Number is required').matches(/^[0-12]*$/, 'number phone must be a number').min(9, 'Phone Number must be at least 9 characters.').max(12, 'Phone Number have max 12 characters'),
     }),
     handleSubmit: (values, {props}) => {
 

@@ -45,10 +45,11 @@ function Register() {
             >
                 <h3 className='text-left mt-5'>Create Account</h3>
                 <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                    <TextField onChange={formik.handleChange}
-                               fullWidth name="email"
-                               id="outlined-basic" label="Email"
-                               variant="standard"
+                    <TextField
+                        onChange={formik.handleChange}
+                        fullWidth name="email"
+                        id="outlined-basic" label="Email"
+                        variant="standard"
                     />
                     <FormHelperText required error>{messageServer}</FormHelperText>
                     <FormHelperText required error>
@@ -56,30 +57,33 @@ function Register() {
                     </FormHelperText>
                 </Box>
                 <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                    <TextField onChange={formik.handleChange}
-                               fullWidth name="passWord"
-                               id="standard-basic" label="Password"
-                               variant="standard"
+                    <TextField
+                        onChange={formik.handleChange}
+                        fullWidth name="passWord"
+                        id="standard-basic" label="Password"
+                        variant="standard"
                     />
                     <FormHelperText required error>
                         {formik.touched.passWord && formik.errors.passWord ? `${formik.errors.passWord}` : null}
                     </FormHelperText>
                 </Box>
                 <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                    <TextField onChange={formik.handleChange}
-                               fullWidth name="name"
-                               id="standard-basic" label="Name"
-                               variant="standard"
+                    <TextField
+                        onChange={formik.handleChange}
+                        fullWidth name="name"
+                        id="standard-basic" label="Name"
+                        variant="standard"
                     />
                     <FormHelperText required error>
                         {formik.touched.name && formik.errors.name ? `${formik.errors.name}` : null}
                     </FormHelperText>
                 </Box>
                 <Box fullWidth sx={{mb: 2, minWidth: 120}} error>
-                    <TextField onChange={formik.handleChange}
-                               fullWidth name="phoneNumber"
-                               id="standard-basic" label="Phone Number"
-                               variant="standard"
+                    <TextField
+                        onChange={formik.handleChange}
+                        fullWidth name="phoneNumber"
+                        id="standard-basic" label="Phone Number"
+                        variant="standard"
                     />
                     <FormHelperText required error>
                         {formik.touched.phoneNumber && formik.errors.phoneNumber ? `${formik.errors.phoneNumber}` : null}
@@ -94,7 +98,8 @@ function Register() {
                         Register
                     </ButtonMui>
                 </div>
-                <p className='text-center mt-4 '>have already an account ?<a className='font-weight-bold' href={'/login'}>Login Here</a></p>
+                <p className='text-center mt-4 '>have already an account ?<a className='font-weight-bold'
+                                                                             href={'/login'}>Login Here</a></p>
             </div>
         </form>
     );
